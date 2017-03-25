@@ -6,7 +6,7 @@ import RackSummaryTable from "../component/RackSummaryTable";
 
 class Rack extends React.Component {
     getRackSummaryTable(serviceSummary){
-        return <RackSummaryTable rackSummary={serviceSummary}/>
+        return <RackSummaryTable data={serviceSummary}/>
     }
 
     getRackSummarys(){
