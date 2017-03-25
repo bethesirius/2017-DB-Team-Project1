@@ -1,6 +1,8 @@
 import React from "react";
 import {Link} from "react-router";
-import {Container, Menu} from "semantic-ui-react";
+import {Container, Dimmer, Menu, Divider, Header, Icon} from "semantic-ui-react";
+
+const flagDim = false;
 
 class App extends React.Component {
 
@@ -12,24 +14,36 @@ class App extends React.Component {
         const {activeItem} = this.state;
         const {children} = this.props;
         return (
-            <div>
-                <Menu fixed={true} inverted={true}>
+            <Dimmer.Dimmable blurring={flagDim} dimmed={flagDim}>
+                <Dimmer active={flagDim} inverted={flagDim}>
+                    <Header as='h1' icon={true} inverted={!flagDim}>
+                        <Icon name='wait' />
+                        아직 보여 드릴 수 없어요!!!
+                    </Header>
+                </Dimmer>
+                <Menu fixed="top" inverted={true}>
                     <Container>
                         <Menu.Header as={Menu.Item}>IT Assets MS</Menu.Header>
-                        <Menu.Item as={Link} name='home'  to="/" active={activeItem === 'home'} onClick={this.handleItemClick}  />
-                        <Menu.Item as={Link} name='locations' to="foo" active={activeItem === 'locations'} onClick={this.handleItemClick}/>
+                        <Menu.Item as={Link} name='home' to="/" active={activeItem === 'home'}
+                                   onClick={this.handleItemClick}/>
+                        <Menu.Item as={Link} name='locations' to="foo" active={activeItem === 'locations'}
+                                   onClick={this.handleItemClick}/>
                         <Menu.Menu position='right'>
-                            <Menu.Item as={Link} name='aboutUs' to="bar" active={activeItem === 'aboutUs'} onClick={this.handleItemClick}/>
+                            <Menu.Item as={Link} name='aboutUs' to="bar" active={activeItem === 'aboutUs'}
+                                       onClick={this.handleItemClick}/>
                         </Menu.Menu>
                     </Container>
                 </Menu>
-                <Container>
+                <Divider hidden={true}/> {/* margin trick. do not delete these*/}
+                <Divider hidden={true}/> {/* margin trick. do not delete these*/}
+                <Container as={Dimmer.Dimmable} blurring={flagDim} dimmed={flagDim}>
+                    <Dimmer active={flagDim} inverted={flagDim}/>
                     {children}
                 </Container>
                 <Container >
                     footer will be here.
                 </Container>
-            </div>
+            </Dimmer.Dimmable>
         );
     }
 }
