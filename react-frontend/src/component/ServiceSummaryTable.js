@@ -2,38 +2,38 @@
  * Created by rino0 on 2017-03-25.
  */
 import React from "react";
-import { Button, Icon, Image, Item, Label, Table } from 'semantic-ui-react'
+import {Table} from "semantic-ui-react";
 
-const statisticShape=React.PropTypes.shape({
-    cpu:React.PropTypes.number,
-    san:React.PropTypes.number,
-    nas:React.PropTypes.number,
-    total:React.PropTypes.number,
-    tape:React.PropTypes.number,
+const statisticShape = React.PropTypes.shape({
+    cpu: React.PropTypes.number,
+    san: React.PropTypes.number,
+    nas: React.PropTypes.number,
+    total: React.PropTypes.number,
+    tape: React.PropTypes.number,
 });
 
 class ServiceSummaryTable extends React.Component {
     static propTypes = {
-        data:React.PropTypes.shape({
-            service:statisticShape,
+        data: React.PropTypes.shape({
+            service: statisticShape,
             not: statisticShape,
         })
     };
     static defaultProps = {
-        data:{
-            service:{
-                cpu:-1,
-                san:-1,
-                nas:-1,
-                total:-1,
-                tape:-1,
+        data: {
+            service: {
+                cpu: -1,
+                san: -1,
+                nas: -1,
+                total: -1,
+                tape: -1,
             },
-            not:{
-                cpu:-1,
-                san:-1,
-                nas:-1,
-                total:-1,
-                tape:-1,
+            not: {
+                cpu: -1,
+                san: -1,
+                nas: -1,
+                total: -1,
+                tape: -1,
             }
         }
     };
@@ -51,7 +51,7 @@ class ServiceSummaryTable extends React.Component {
 
     render() {
         const {
-            data:{service, not},
+            data: {service, not},
         } = this.props;
         return (
             <Table definition>

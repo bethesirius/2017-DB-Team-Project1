@@ -2,11 +2,14 @@
  * Created by rino0 on 2017-03-25.
  */
 import React from "react";
-import {Button, Icon, Item, Label} from "semantic-ui-react";
-import ServiceSummaryTable from "../component/ServiceSummaryTable";
+import {Link} from "react-router";
+import {Button, Icon, Item} from "semantic-ui-react";
 
 class TableVariationItem extends React.Component {
-    static propTypes = {};
+    static propTypes = {
+        header: React.PropTypes.string,
+        description: React.PropTypes.node,
+    };
     // static defaultProps = {};
     // static  childContextTypes = {};
     // static contextTypes = {};
@@ -21,20 +24,23 @@ class TableVariationItem extends React.Component {
     // componentWillUnmount(){}
     render() {
         const {
-            ...others,
+            to,
+            header,
+            description,
         } = this.props;
         return (
             <Item>
                 <Item.Content>
-                    <Item.Header as='a'>{this.props.header}</Item.Header>
-                    <Item.Meta>
-                        <span className='cinema'>{this.props.description}</span>
-                    </Item.Meta>
+                    <Item.Header as='a'>{header}</Item.Header>
                     <Item.Description>
-                        {this.props.view}
+                        {description}
                     </Item.Description>
-                    <Item.Extra>
-                    </Item.Extra>
+                    {to && <Item.Extra>
+                        <Button as={Link} primary floated='right' to={to}>
+                            Show Detail
+                            <Icon name='right chevron'/>
+                        </Button>
+                    </Item.Extra>}
                 </Item.Content>
             </Item>
         );

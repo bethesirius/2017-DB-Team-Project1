@@ -27,9 +27,7 @@ class TotalUseStatisticGroup extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
-        const {
-            ...others,
-        } = this.props;
+        const {} = this.props;
         return (
             <Statistic.Group>
                 {items.map((item, index) => (
