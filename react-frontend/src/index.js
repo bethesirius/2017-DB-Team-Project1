@@ -11,6 +11,7 @@ import "./index.css";
 
 import App from "./pages/App";
 import Home from "./pages/Home";
+import Rack from "./pages/Rack";
 import NotFound from "./pages/NotFound";
 
 const store = createStore(reducers, composeWithDevTools(
@@ -25,6 +26,7 @@ ReactDOM.render(
         <Router history={history}>
             <Route path="/" component={App}>
                 <IndexRoute component={Home}/>
+                <Route path="rack" component={Rack}/>
                 <Route path="*" component={NotFound}/>
             </Route>
         </Router>

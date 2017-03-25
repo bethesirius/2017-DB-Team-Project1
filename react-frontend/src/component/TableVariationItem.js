@@ -25,22 +25,15 @@ class TableVariationItem extends React.Component {
         } = this.props;
         return (
             <Item>
-
                 <Item.Content>
                     <Item.Header as='a'>12 Years a Slave</Item.Header>
                     <Item.Meta>
                         <span className='cinema'>Union Square 14</span>
                     </Item.Meta>
                     <Item.Description>
-                        <ServiceSummaryTable />
+                        {this.props.view}
                     </Item.Description>
                     <Item.Extra>
-                        <Label>IMAX</Label>
-                        <Button primary floated='right'>
-                            Buy tickets
-                            <Icon name='right chevron'/>
-                        </Button>
-                        <Label icon='globe' content='Additional Languages'/>
                     </Item.Extra>
                 </Item.Content>
             </Item>
