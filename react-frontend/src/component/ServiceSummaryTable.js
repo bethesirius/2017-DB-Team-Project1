@@ -12,7 +12,7 @@ const statisticShape=React.PropTypes.shape({
     tape:React.PropTypes.number,
 });
 
-class ServiceSummayTable extends React.Component {
+class ServiceSummaryTable extends React.Component {
     static propTypes = {
         data:React.PropTypes.shape({
             service:statisticShape,
@@ -89,4 +89,4 @@ class ServiceSummayTable extends React.Component {
     }
 }
 
-export default ServiceSummayTable;
+export default ServiceSummaryTable;
