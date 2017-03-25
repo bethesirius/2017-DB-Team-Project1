@@ -26,9 +26,9 @@ class TableVariationItem extends React.Component {
         return (
             <Item>
                 <Item.Content>
-                    <Item.Header as='a'>12 Years a Slave</Item.Header>
+                    <Item.Header as='a'>{this.props.header}</Item.Header>
                     <Item.Meta>
-                        <span className='cinema'>Union Square 14</span>
+                        <span className='cinema'>{this.props.description}</span>
                     </Item.Meta>
                     <Item.Description>
                         {this.props.view}
