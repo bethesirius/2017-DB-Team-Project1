@@ -4,18 +4,18 @@ import {Container, Dimmer, Divider, Header, Icon, Menu} from "semantic-ui-react"
 
 const flagDim = false;
 
+const LinkMenuItem = ({to, pathname, ...rest}) => (
+    <Menu.Item as={Link} to={to} active={pathname.startsWith(to)} {...rest}/>
+);
+LinkMenuItem.propTypes = {to: React.PropTypes.string.isRequired, pathname: React.PropTypes.string.isRequired};
+
 class App extends React.Component {
     static propTypes = {
         children: React.PropTypes.node,
     };
 
-    state = {};
-
-    handleItemClick = (e, {name}) => this.setState({activeItem: name});
-
     render() {
-        const {activeItem} = this.state;
-        const {children} = this.props;
+        const {children, location: {pathname}} = this.props;
         return (
             <Dimmer.Dimmable blurring={flagDim} dimmed={flagDim}>
                 <Dimmer active={flagDim} inverted={flagDim}>
@@ -27,21 +27,14 @@ class App extends React.Component {
                 <Menu fixed="top" inverted={true}>
                     <Container>
                         <Menu.Header as={Menu.Item}>IT Assets MS</Menu.Header>
-                        <Menu.Item as={Link} name='service' to="/service" active={activeItem === 'service'}
-                                   onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='asset' to="/asset" active={activeItem === 'asset'}
-                                   onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='rack' to="/rack" active={activeItem === 'rack'}
-                                   onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='switch' to="/switch" active={activeItem === 'switch'}
-                                   onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='server' to="/server" active={activeItem === 'server'}
-                                   onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='storage' to="/storage" active={activeItem === 'storage'}
-                                   onClick={this.handleItemClick}/>
+                        <LinkMenuItem name='service' to="/service" pathname={pathname}/>
+                        <LinkMenuItem name='asset' to="/asset" pathname={pathname}/>
+                        <LinkMenuItem name='rack' to="/rack" pathname={pathname}/>
+                        <LinkMenuItem name='switch' to="/switch" pathname={pathname}/>
+                        <LinkMenuItem name='server' to="/server" pathname={pathname}/>
+                        <LinkMenuItem name='storage' to="/storage" pathname={pathname}/>
                         <Menu.Menu position='right'>
-                            <Menu.Item as={Link} name='aboutUs' to="/bar" active={activeItem === 'aboutUs'}
-                                       onClick={this.handleItemClick}/>
+                            <LinkMenuItem name='aboutUs' to="/bar" pathname={pathname}/>
                         </Menu.Menu>
                     </Container>
                 </Menu>
