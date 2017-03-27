@@ -7,6 +7,10 @@ import {Table} from "semantic-ui-react";
 const statisticShape = React.PropTypes.shape({
     id: React.PropTypes.string,
     size: React.PropTypes.number,
+    servers: React.PropTypes.number,
+    storages: React.PropTypes.number,
+    networks: React.PropTypes.number,
+    emptys: React.PropTypes.number,
     mounted: React.PropTypes.arrayOf(React.PropTypes.shape({
         id: React.PropTypes.string,
         size: React.PropTypes.number,
@@ -23,6 +27,10 @@ class RackSummaryTable extends React.Component {
         data: {
             id: 'R00000',
             size: 46,
+            servers: 5,
+            storages: 10,
+            networks: 1,
+            emptys: 20,
             mounted: [{
                 id: 'S00000',
                 size: 2,
@@ -44,7 +52,7 @@ class RackSummaryTable extends React.Component {
     // componentWillUnmount(){}
 
     render() {
-        const {data} = this.props;
+        const {data: {id, size, mounted}} = this.props;
         return (
             <Table definition>
                 <Table.Header>
@@ -53,13 +61,14 @@ class RackSummaryTable extends React.Component {
                         <Table.HeaderCell>IP</Table.HeaderCell>
                         <Table.HeaderCell>ID</Table.HeaderCell>
                     </Table.Row>
-                    {Array.from(new Array(data.size).keys()).map((i) => (
-                        <Table.Row key={i}>
+                    {Array.from(new Array(size).keys()).reverse().map((i) => {
+                        const unit= mounted.filter( (x) => x.mount_lv=== i+1)[0];
+                        return (<Table.Row key={i}>
                             <Table.Cell>{i + 1}</Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell></Table.Cell>
-                        </Table.Row>
-                    ))}
+                            <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.id:null}</Table.Cell>
+                            <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.ip:null}</Table.Cell>
+                        </Table.Row>)
+                    })}
                 </Table.Header>
             </Table>
         );
