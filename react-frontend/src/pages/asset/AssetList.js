@@ -30,10 +30,10 @@ class AssetList extends React.Component {
                 </Segment>
                 <Button.Group attached='bottom'>
                     <Button as={Link} to="/asset/form" primary={true} icon="add" labelPosition='left'
-                            content={"새 자원 등록 하기"}/>
+                            content={"새 자산 등록 하기"}/>
                 </Button.Group>
                 <Item.Group as={Segment} divided={true}>
-                    <Header>등록된 자원</Header>
+                    <Header>등록된 자산</Header>
 
                 </Item.Group>
             </div>

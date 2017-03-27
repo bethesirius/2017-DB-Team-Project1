@@ -1,7 +1,8 @@
 import React from "react";
-import {Item, Accordion} from "semantic-ui-react";
+import {Accordion, Button, Header, Item, Segment, Divider} from "semantic-ui-react";
 import RackUseStatisticGroup from "../component/RackUseStatisticGroup";
 import RackSummaryTable from "../component/RackSummaryTable";
+import {Link} from "react-router";
 
 class Rack extends React.Component {
 
@@ -48,27 +49,40 @@ class Rack extends React.Component {
     render() {
         const rackSummarys = this.getRackSummarys();
         return (
-            <Accordion exclusive={false}>
-                {rackSummarys.map((summary) => ([
-                    <Accordion.Title key={summary.id}>
-                        <Item.Group>
-                        <Item>
-                            <Item.Content>
-                                <Item.Header as='a'>{summary.id}</Item.Header>
-                                <RackUseStatisticGroup data={{servers:summary.servers,
-                                    storages:summary.storages,
-                                    networks:summary.networks,
-                                    emptys:summary.emptys,
-                                }}/>
-                            </Item.Content>
-                        </Item>
-                        </Item.Group>
-                    </Accordion.Title>,
-                    <Accordion.Content>
-                        <RackSummaryTable data={summary}/>
-                    </Accordion.Content>
-                ]))}{/* React JSX에서 map 쓸때 key 사용 필수. */}
-            </Accordion>
+            <div>
+                <Segment attached={true}>
+
+                </Segment>
+                <Button.Group attached='bottom'>
+                    <Button as={Link} to="/rack/form" primary={true} icon="add" labelPosition='left'
+                            content={"새 Rack 등록 하기"}/>
+                </Button.Group>
+
+                <Accordion as={Segment} exclusive={false}>
+                    <Header>등록된 Rack</Header>
+                    {rackSummarys.map((summary) => ([
+                        <Divider/>,
+                        <Accordion.Title key={summary.id}>
+                            <Item.Group>
+                                <Item>
+                                    <Item.Content>
+                                        <Item.Header as='a'>{summary.id}</Item.Header>
+                                        <RackUseStatisticGroup data={{
+                                            servers: summary.servers,
+                                            storages: summary.storages,
+                                            networks: summary.networks,
+                                            emptys: summary.emptys,
+                                        }}/>
+                                    </Item.Content>
+                                </Item>
+                            </Item.Group>
+                        </Accordion.Title>,
+                        <Accordion.Content>
+                            <RackSummaryTable data={summary}/>
+                        </Accordion.Content>
+                    ]))}{/* React JSX에서 map 쓸때 key 사용 필수. */}
+                </Accordion>
+            </div>
         );
     }
 }
