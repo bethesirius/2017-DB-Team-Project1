@@ -24,32 +24,23 @@ class RackUseStatisticGroup extends React.Component {
     // componentWillUnmount(){}
     render() {
         const {data:{servers, storages, networks, emptys}} = this.props;
+        const items = [
+            {icon: "server", label: 'SERVER', value: servers},
+            {icon: "database", label: 'STORAGE', value: storages},
+            {icon: "move", label: 'NETWORK', value: networks},
+            {icon: "add", label: 'EMPTY', value: emptys},
+        ];
         return (
             <Statistic.Group>
-                <Statistic>
-                    <Statistic.Value>
-                        <Icon name='server'/>
-                        {servers}
-                    </Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Value>
-                        <Icon name='database'/>
-                        {storages}
-                    </Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Value>
-                        <Icon name='move'/>
-                        {networks}
-                    </Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Value>
-                        <Icon name='add'/>
-                        {emptys}
-                    </Statistic.Value>
-                </Statistic>
+                {items.map((item, index) => (
+                    <Statistic key={item.label}>
+                        <Statistic.Value>
+                            <Icon name={item.icon}/>
+                            {item.value}
+                        </Statistic.Value>
+                        <Statistic.Label>{item.label}</Statistic.Label>
+                    </Statistic>
+                ))}
             </Statistic.Group>
         );
     }
