@@ -3,12 +3,12 @@ import {Item} from "semantic-ui-react";
 import TableVariationItem from "../component/TableVariationItem";
 import TotalUseStatisticGroup from "../component/TotalUseStatisticGroup";
 import ServiceSummaryTable from "../component/ServiceSummaryTable";
-class Home extends React.Component {
+class Service extends React.Component {
     render() {
         return (
             <div>
                 <Item.Group divided={true}>
-                    <TotalUseStatisticGroup />
+                    <TableVariationItem header="총 사용량" description={<TotalUseStatisticGroup />} />
                     <TableVariationItem header="Service00" description={<ServiceSummaryTable />} to="/"/>
                     <TableVariationItem header="Service00" description={<ServiceSummaryTable />} to="/rack"/>
                     <TableVariationItem header="Service00" description={<ServiceSummaryTable />}/>
@@ -20,4 +20,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default Service;
