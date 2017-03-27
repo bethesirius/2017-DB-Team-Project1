@@ -52,7 +52,7 @@ class RackSummaryTable extends React.Component {
     // componentWillUnmount(){}
 
     render() {
-        const {data: {id, size, mounted}} = this.props;
+        const {data: {size, mounted}} = this.props;
         return (
             <Table definition>
                 <Table.Header>
