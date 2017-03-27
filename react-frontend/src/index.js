@@ -30,9 +30,10 @@ ReactDOM.render(
                 <Route path="asset">
                     <IndexRoute component={AssetList}/>
                     <Route path="form" component={AssetForm}>
+                        <IndexRedirect to="create"/>
                         <Route path="create" component={AssetCreate}/>
-                        <Route path=":id/edit" component={AssetDetail}/>
-                        <Route path=":id" component={AssetDetail}/>
+                        <Route path="edit" component={AssetDetail}/>
+                        <Route path="confirm" component={AssetDetail}/>
                     </Route>
                 </Route>
                 <Route path="service" component={Service}/>

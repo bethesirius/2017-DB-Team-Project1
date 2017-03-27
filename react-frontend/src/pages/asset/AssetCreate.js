@@ -2,6 +2,7 @@
  * Created by rino0 on 2017-03-27.
  */
 import React from "react";
+import {Segment} from "semantic-ui-react";
 
 class AssetCreate extends React.Component {
     static propTypes = {};
@@ -18,11 +19,9 @@ class AssetCreate extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
-        const {
-            ...others,
-        } = this.props;
+        const {} = this.props;
         return (
-            <div {...others}/>
+            <Segment />
         );
     }
 }
