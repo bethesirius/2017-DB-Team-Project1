@@ -5,6 +5,9 @@ import {Container, Dimmer, Divider, Header, Icon, Menu} from "semantic-ui-react"
 const flagDim = false;
 
 class App extends React.Component {
+    static propTypes = {
+        children: React.PropTypes.node,
+    };
 
     state = {};
 
@@ -24,20 +27,20 @@ class App extends React.Component {
                 <Menu fixed="top" inverted={true}>
                     <Container>
                         <Menu.Header as={Menu.Item}>IT Assets MS</Menu.Header>
-                        <Menu.Item as={Link} name='home' to="/" active={activeItem === 'home'}
+                        <Menu.Item as={Link} name='service' to="/service" active={activeItem === 'service'}
                                    onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='service' to="service" active={activeItem === 'service'}
+                        <Menu.Item as={Link} name='asset' to="/asset" active={activeItem === 'asset'}
                                    onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='rack' to="rack" active={activeItem === 'rack'}
+                        <Menu.Item as={Link} name='rack' to="/rack" active={activeItem === 'rack'}
                                    onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='switch' to="switch" active={activeItem === 'switch'}
+                        <Menu.Item as={Link} name='switch' to="/switch" active={activeItem === 'switch'}
                                    onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='server' to="server" active={activeItem === 'server'}
+                        <Menu.Item as={Link} name='server' to="/server" active={activeItem === 'server'}
                                    onClick={this.handleItemClick}/>
-                        <Menu.Item as={Link} name='storage' to="storage" active={activeItem === 'storage'}
+                        <Menu.Item as={Link} name='storage' to="/storage" active={activeItem === 'storage'}
                                    onClick={this.handleItemClick}/>
                         <Menu.Menu position='right'>
-                            <Menu.Item as={Link} name='aboutUs' to="bar" active={activeItem === 'aboutUs'}
+                            <Menu.Item as={Link} name='aboutUs' to="/bar" active={activeItem === 'aboutUs'}
                                        onClick={this.handleItemClick}/>
                         </Menu.Menu>
                     </Container>
