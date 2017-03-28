@@ -8,37 +8,37 @@ class Rack extends React.Component {
 
     getRackSummarys() {
         return [{
-            id: 'R00000',
+            assetId: 'R00000',
             size: 46,
             servers: 3,
             storages: 5,
             networks: 7,
             emptys: 24,
             mounted: [{
-                id: 'S00000',
+                assetId: 'S00000',
                 size: 2,
                 mount_lv: 2,
                 ip: '0.0.0.0',
             }, {
-                id: 'N00000',
+                assetId: 'N00000',
                 size: 2,
                 mount_lv: 5,
                 ip: '0.0.0.1',
             }],
         }, {
-            id: 'R00001',
+            assetId: 'R00001',
             size: 24,
             servers: 5,
             storages: 10,
             networks: 1,
             emptys: 2,
             mounted: [{
-                id: 'S00001',
+                assetId: 'S00001',
                 size: 2,
                 mount_lv: 3,
                 ip: '0.0.1.0',
             }, {
-                id: 'N00001',
+                assetId: 'N00001',
                 size: 2,
                 mount_lv: 7,
                 ip: '0.0.1.1',

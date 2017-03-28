@@ -3,9 +3,10 @@
  */
 import React from "react";
 import {Table} from "semantic-ui-react";
+import AssetModal from "../component/AssetModal";
 
 const statisticShape = React.PropTypes.shape({
-    id: React.PropTypes.string,
+    assetId: React.PropTypes.string,
     size: React.PropTypes.number,
     servers: React.PropTypes.number,
     storages: React.PropTypes.number,
@@ -25,14 +26,14 @@ class RackSummaryTable extends React.Component {
     };
     static defaultProps = {
         data: {
-            id: 'R00000',
+            assetId: 'R00000',
             size: 46,
             servers: 5,
             storages: 10,
             networks: 1,
             emptys: 20,
             mounted: [{
-                id: 'S00000',
+                assetId: 'S00000',
                 size: 2,
                 mount_lv: 1,
                 ip: '0.0.0.0',
@@ -70,7 +71,7 @@ class RackSummaryTable extends React.Component {
                         no_row--;
                         return (<Table.Row key={i}>
                             <Table.Cell>{i + 1}</Table.Cell>
-                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.assetId:null}</Table.Cell>}
+                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?<AssetModal assetId={unit.assetId} />:null}</Table.Cell>}
                             { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.ip:null}</Table.Cell>}
                         </Table.Row>)
                     })}
