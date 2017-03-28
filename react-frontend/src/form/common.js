@@ -17,19 +17,6 @@ import {
     TextArea
 } from "semantic-ui-react";
 
-//한종이가 구현한거랑 쬬금다름 ..
-export const LRFieldLazyInput = ({input: {onChange, onBlur,}, meta, ...custom}) => (
-    <Form.Field error={meta.touched && meta.invalid}>
-        <Input type="text"
-               loading={meta.asyncValidating}
-               onBlur={(e, data) => {
-                   onBlur(e);
-               }}
-               {...custom}
-        />
-        {(meta.touched && meta.invalid) && <label>{meta.error}</label>}
-    </Form.Field>
-);
 export const FieldLazyInput = ({input: {onChange, onBlur,}, meta, label, ...custom}) => (
     <Form.Field error={meta.touched && meta.invalid}>
         <label>{label}</label>
@@ -112,13 +99,13 @@ export const FieldCheckbox = ({input: {onChange, value, ...left}, meta, label, .
 
 export class InteractiveForm extends React.PureComponent {
     static propTypes = {
-        reduxFromProps: React.PropTypes.object.isRequired,
+        reduxFormProps: React.PropTypes.object.isRequired,
         children: React.PropTypes.node,
         header: React.PropTypes.node,
     };
 
     render() {
-        const {error, submitFailed, handleSubmit, submitting} = this.props.reduxFromProps;
+        const {error, submitFailed, handleSubmit, submitting} = this.props.reduxFormProps;
         return (
             <Form onSubmit={handleSubmit}
                   error={submitFailed}

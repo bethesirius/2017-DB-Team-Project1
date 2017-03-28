@@ -3,6 +3,8 @@
  */
 import React from "react";
 import {Segment} from "semantic-ui-react";
+import {browserHistory} from "react-router";
+import AssetCreateForm, {fieldNames} from "../../form/AssetCreateForm";
 
 class AssetCreate extends React.Component {
     static propTypes = {};
@@ -18,10 +20,16 @@ class AssetCreate extends React.Component {
     // getChildContext() {}
     // componentDidMount(){}
     // componentWillUnmount(){}
+    handleSubmit = (values, dispatch) => {
+        browserHistory.push(`/asset/form/edit/${values[fieldNames.assetId]}`);
+    };
+
     render() {
         const {} = this.props;
         return (
-            <Segment />
+            <Segment>
+                <AssetCreateForm onSubmit={this.handleSubmit}/>
+            </Segment>
         );
     }
 }

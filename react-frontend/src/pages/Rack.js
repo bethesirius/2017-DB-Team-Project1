@@ -50,23 +50,15 @@ class Rack extends React.Component {
         const rackSummarys = this.getRackSummarys();
         return (
             <div>
-                <Segment attached={true}>
-
-                </Segment>
-                <Button.Group attached='bottom'>
-                    <Button as={Link} to="/rack/form" primary={true} icon="add" labelPosition='left'
-                            content={"새 Rack 등록 하기"}/>
-                </Button.Group>
-
                 <Accordion as={Segment} exclusive={false}>
                     <Header>등록된 Rack</Header>
                     {rackSummarys.map((summary) => ([
                         <Divider/>,
-                        <Accordion.Title key={summary.id}>
+                        <Accordion.Title key={summary.assetId}>
                             <Item.Group>
                                 <Item>
                                     <Item.Content>
-                                        <Item.Header as='a'>{summary.id}</Item.Header>
+                                        <Item.Header as='a'>{summary.assetId}</Item.Header>
                                         <RackUseStatisticGroup data={{
                                             servers: summary.servers,
                                             storages: summary.storages,

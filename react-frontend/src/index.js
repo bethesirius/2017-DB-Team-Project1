@@ -32,8 +32,8 @@ ReactDOM.render(
                     <Route path="form" component={AssetForm}>
                         <IndexRedirect to="create"/>
                         <Route path="create" component={AssetCreate}/>
-                        <Route path="edit" component={AssetDetail}/>
-                        <Route path="confirm" component={AssetDetail}/>
+                        <Route path="edit/:id" component={AssetDetail}/>
+                        <Route path="confirm/:id" component={AssetDetail}/>
                     </Route>
                 </Route>
                 <Route path="service" component={Service}/>

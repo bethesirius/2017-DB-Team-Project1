@@ -12,8 +12,8 @@ const stepPaths = [
 ];
 
 const conditionalProps = (to, pathname) => { // redux 연결로 바꿀까 고민 중...
-    const targetIndex = stepPaths.findIndex(str => str.startsWith(to));
-    const currentIndex = stepPaths.findIndex(str => str.startsWith(pathname));
+    const targetIndex = stepPaths.findIndex(str => to.match(str));
+    const currentIndex = stepPaths.findIndex(str => pathname.match(str));
     return {
         completed: currentIndex > targetIndex,
         disabled: currentIndex < targetIndex,

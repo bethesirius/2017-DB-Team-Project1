@@ -12,7 +12,7 @@ const statisticShape = React.PropTypes.shape({
     networks: React.PropTypes.number,
     emptys: React.PropTypes.number,
     mounted: React.PropTypes.arrayOf(React.PropTypes.shape({
-        id: React.PropTypes.string,
+        assetId: React.PropTypes.string,
         size: React.PropTypes.number,
         mount_lv: React.PropTypes.number,
         ip: React.PropTypes.string,
@@ -70,7 +70,7 @@ class RackSummaryTable extends React.Component {
                         no_row--;
                         return (<Table.Row key={i}>
                             <Table.Cell>{i + 1}</Table.Cell>
-                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.id:null}</Table.Cell>}
+                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.assetId:null}</Table.Cell>}
                             { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.ip:null}</Table.Cell>}
                         </Table.Row>)
                     })}
