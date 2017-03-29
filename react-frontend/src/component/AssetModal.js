@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Header, Icon, Modal } from 'semantic-ui-react'
+import { Header, Modal } from 'semantic-ui-react'
 
 class AssetModal extends React.Component {
     static propTypes= {
@@ -7,27 +7,32 @@ class AssetModal extends React.Component {
     }
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            assetData: {
+                assetId: 'N00000',
+                assetKind: 'Switch',
+            }
+        };
     }
     getData(assetId){
-        console.log(assetId);
+        ((assetId)=> {
+            this.setState({
+                assetData: {
+                    assetId: assetId,
+                    assetKind: 'Server',
+                }
+            })
+        })(assetId)
     }
     render(){
         const {assetId} = this.props;
+        const {assetData} = this.state;
         return(
             <Modal trigger={<a style={{cursor:'pointer'}}>{assetId}</a>} onOpen={(ev, data) => this.getData(assetId)} closeIcon='close'>
-                <Header icon='archive' content='Archive Old Messages' />
+                <Header icon='info' content='Asset Description' />
                 <Modal.Content>
-                    <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+                    {Object.keys(assetData).map( (key) => <p>{key}: {assetData[key]}</p>)}
                 </Modal.Content>
-                <Modal.Actions>
-                    <Button color='red'>
-                        <Icon name='remove' /> No
-                    </Button>
-                    <Button color='green'>
-                        <Icon name='checkmark' /> Yes
-                    </Button>
-                </Modal.Actions>
             </Modal>
         );
     }
