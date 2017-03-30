@@ -1,16 +1,12 @@
-# 관리 번호
 from sqlalchemy import Column
 from sqlalchemy import Integer
+from sqlalchemy import String
 
 from orm.session import Base
 
 
-class ManageModel(Base):
-    __tablename__ = "manage"
+class SwitchSpecModel(Base):
+    __tablename__ = "switch_spec"
     id = Column(Integer, primary_key=True, autoincrement=True)
-
-
-
-
-
+    spec = Column(String(100))
 

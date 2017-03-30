@@ -1,13 +1,11 @@
-# 서비스
 from sqlalchemy import Column
 from sqlalchemy import Integer
 
 from orm.session import Base
 
 
-class ServiceModel(Base):
-    __tablename__ = "service"
+class RackLocationModel(Base):
+    __tablename__ = "rack_location"
     id = Column(Integer, primary_key=True, autoincrement=True)
-
-
-
+    start_index = Column(Integer)
+    end_index = Column(Integer)
