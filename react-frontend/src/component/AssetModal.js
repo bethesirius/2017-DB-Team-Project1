@@ -31,7 +31,7 @@ class AssetModal extends React.Component {
             <Modal trigger={<a style={{cursor:'pointer'}} onClick={ (ev) => ev.stopPropagation() }>{assetId}</a>} onOpen={(ev, data) => this.getData(assetId)} closeIcon='close'>
                 <Header icon='info' content='Asset Description' />
                 <Modal.Content>
-                    {Object.keys(assetData).map( (key) => <p>{key}: {assetData[key]}</p>)}
+                    {Object.keys(assetData).map( (key) => <p key={key}>{key}: {assetData[key]}</p>)}
                 </Modal.Content>
             </Modal>
         );

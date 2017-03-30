@@ -1,9 +1,8 @@
 import React from "react";
-import {Accordion, Button, Header, Item, Segment, Divider} from "semantic-ui-react";
+import {Accordion, Header, Item, Segment, Divider} from "semantic-ui-react";
 import RackUseStatisticGroup from "../component/RackUseStatisticGroup";
 import RackSummaryTable from "../component/RackSummaryTable";
 import AssetModal from "../component/AssetModal";
-import {Link} from "react-router";
 
 class Rack extends React.Component {
 
