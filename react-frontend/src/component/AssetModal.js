@@ -28,7 +28,7 @@ class AssetModal extends React.Component {
         const {assetId} = this.props;
         const {assetData} = this.state;
         return(
-            <Modal trigger={<a style={{cursor:'pointer'}}>{assetId}</a>} onOpen={(ev, data) => this.getData(assetId)} closeIcon='close'>
+            <Modal trigger={<a style={{cursor:'pointer'}} onClick={ (ev) => ev.stopPropagation() }>{assetId}</a>} onOpen={(ev, data) => this.getData(assetId)} closeIcon='close'>
                 <Header icon='info' content='Asset Description' />
                 <Modal.Content>
                     {Object.keys(assetData).map( (key) => <p>{key}: {assetData[key]}</p>)}

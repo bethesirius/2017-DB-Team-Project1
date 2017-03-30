@@ -2,6 +2,7 @@ import React from "react";
 import {Accordion, Button, Header, Item, Segment, Divider} from "semantic-ui-react";
 import RackUseStatisticGroup from "../component/RackUseStatisticGroup";
 import RackSummaryTable from "../component/RackSummaryTable";
+import AssetModal from "../component/AssetModal";
 import {Link} from "react-router";
 
 class Rack extends React.Component {
@@ -58,13 +59,16 @@ class Rack extends React.Component {
                             <Item.Group>
                                 <Item>
                                     <Item.Content>
-                                        <Item.Header as='a'>{summary.assetId}</Item.Header>
-                                        <RackUseStatisticGroup data={{
-                                            servers: summary.servers,
-                                            storages: summary.storages,
-                                            networks: summary.networks,
-                                            emptys: summary.emptys,
-                                        }}/>
+                                        <Item.Header><AssetModal assetId={summary.assetId} /></Item.Header>
+                                        <Item.Meta>rough descriptions</Item.Meta>
+                                        <Item.Description>
+                                            <RackUseStatisticGroup data={{
+                                                servers: summary.servers,
+                                                storages: summary.storages,
+                                                networks: summary.networks,
+                                                emptys: summary.emptys,
+                                            }}/>
+                                        </Item.Description>
                                     </Item.Content>
                                 </Item>
                             </Item.Group>
