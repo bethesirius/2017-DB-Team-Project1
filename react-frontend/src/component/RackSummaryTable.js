@@ -71,8 +71,8 @@ class RackSummaryTable extends React.Component {
                         no_row--;
                         return (<Table.Row key={i}>
                             <Table.Cell>{i + 1}</Table.Cell>
-                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?<AssetModal assetId={unit.assetId} />:null}</Table.Cell>}
                             { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.ip:null}</Table.Cell>}
+                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?<AssetModal assetId={unit.assetId} />:null}</Table.Cell>}
                         </Table.Row>)
                     })}
                 </Table.Header>
