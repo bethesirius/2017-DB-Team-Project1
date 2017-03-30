@@ -1,13 +1,12 @@
-# Rack
 from sqlalchemy import Column
 from sqlalchemy import Integer
+from sqlalchemy import String
 
 from orm.session import Base
 
 
-class RackModel(Base):
-    __tablename__ = "rack"
+class LocationModel(Base):
+    __tablename__ = "location"
     id = Column(Integer, primary_key=True, autoincrement=True)
-
-
+    location = Column(String(100))
 
