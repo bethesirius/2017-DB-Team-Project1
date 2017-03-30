@@ -10,16 +10,7 @@ def init_db():
     sqlalchemy_utils.create_database(engine.url)
 
 
-def step_1():
-    from table_model.device.spec.rack_spec_model import RackSpecModel
-    from table_model.device.spec.server_spec_model import ServerSpecModel
-    from table_model.device.spec.storage.storage_spec_model import StorageSpecModel
-    from table_model.device.spec.storage.storage_spec_name_model import StorageSpecNameModel
-    from table_model.device.spec.storage.storage_spec_type_model import StorageSpecTypeModel
-    from table_model.device.spec.switch_spec_model import SwitchSpecModel
-
-    from table_model.location.detail_location_model import DetailLocationModel
-    from table_model.location.location_model import LocationModel
+def step_3():
     from table_model.number.asset_model import AssetModel
 
     from table_model.number.asset_name_model import AssetNameModel
@@ -30,6 +21,17 @@ def step_1():
     StandardModel.metadata.create_all(engine)
     BuyModel.metadata.create_all(engine)
     AssetModel.metadata.create_all(engine)
+
+
+def step_1():
+    from table_model.device.spec.rack_spec_model import RackSpecModel
+    from table_model.device.spec.server_spec_model import ServerSpecModel
+    from table_model.device.spec.storage.storage_spec_model import StorageSpecModel
+    from table_model.device.spec.storage.storage_spec_name_model import StorageSpecNameModel
+    from table_model.device.spec.storage.storage_spec_type_model import StorageSpecTypeModel
+    from table_model.device.spec.switch_spec_model import SwitchSpecModel
+    from table_model.location.detail_location_model import DetailLocationModel
+    from table_model.location.location_model import LocationModel
 
     StorageSpecNameModel.metadata.create_all(engine)
     StorageSpecTypeModel.metadata.create_all(engine)
@@ -61,27 +63,33 @@ def step_2():
     SwitchModel.metadata.create_all(engine)
 
 
-def step_3():
+def step_4():
     from table_model.rack_location.device_info import DeviceInfo
     from table_model.rack_location.for_server_model import DeviceInfoForServerModel
     from table_model.rack_location.for_switch_model import DeviceInfoForSwitchModel
-    from table_model.rack_location.rack_location_for_server_model import RackLocationForServerModel
-    from table_model.rack_location.rack_location_for_switch_model import RackLocationForSwitchModel
     from table_model.service.service_model import ServiceModel
     from table_model.service.service_name_model import ServiceNameModel
 
     DeviceInfo.metadata.create_all(engine)
     DeviceInfoForServerModel.metadata.create_all(engine)
     DeviceInfoForSwitchModel.metadata.create_all(engine)
-    RackLocationForServerModel.metadata.create_all(engine)
-    RackLocationForSwitchModel.metadata.create_all(engine)
-
     ServiceNameModel.metadata.create_all(engine)
     ServiceModel.metadata.create_all(engine)
 
 
+def step_5():
+    from table_model.rack_location.rack_location_for_server_model import RackLocationForServerModel
+    from table_model.rack_location.rack_location_for_switch_model import RackLocationForSwitchModel
+    from table_model.rack_location.rack_location_model import RackLocationModel
+    RackLocationModel.metadata.create_all(engine)
+    RackLocationForServerModel.metadata.create_all(engine)
+    RackLocationForSwitchModel.metadata.create_all(engine)
+
+
 if __name__ == '__main__':
     init_db()
+    step_3()
     step_1()
     step_2()
-    step_3()
+    step_4()
+    step_5()
