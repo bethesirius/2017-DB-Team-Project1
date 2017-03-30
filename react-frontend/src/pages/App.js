@@ -1,6 +1,8 @@
 import React from "react";
 import {Link} from "react-router";
 import {Container, Dimmer, Divider, Header, Icon, Menu} from "semantic-ui-react";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import "./App.css";
 
 const flagDim = false;
 
@@ -42,9 +44,18 @@ class App extends React.Component {
                 <Divider hidden={true}/> {/* margin trick. do not delete these*/}
                 <Container as={Dimmer.Dimmable} blurring={flagDim} dimmed={flagDim}>
                     <Dimmer active={flagDim} inverted={flagDim}/>
-                    {children}
+                    <ReactCSSTransitionGroup
+                        component="div"
+                        transitionName="example"
+                        transitionEnterTimeout={500}
+                        transitionLeaveTimeout={500}
+                    >
+                        {React.cloneElement(children, {
+                            key: location.pathname
+                        })}
+                    </ReactCSSTransitionGroup>
                 </Container>
-                <Container >
+                <Container>
                     footer will be here.
                 </Container>
             </Dimmer.Dimmable>
