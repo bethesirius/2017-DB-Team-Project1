@@ -21,7 +21,7 @@ class AssetCreate extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     handleSubmit = (values, dispatch) => {
-        browserHistory.push(`/asset/form/edit/${values[fieldNames.assetId]}`);
+        browserHistory.push(`/asset/form/edit/${values[fieldNames.deviceId]}`);
     };
 
     render() {

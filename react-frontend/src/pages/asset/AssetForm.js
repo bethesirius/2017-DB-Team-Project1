@@ -11,7 +11,7 @@ const stepPaths = [
     "/asset/form/confirm",
 ];
 
-const conditionalProps = (to, pathname) => { // redux 연결로 바꿀까 고민 중...
+const conditionalProps = (to, pathname) => { // redux 연결로 바꿀까 고민 중... // 바꿔야 할 수 있는 기능이 있음;
     const targetIndex = stepPaths.findIndex(str => to.match(str));
     const currentIndex = stepPaths.findIndex(str => pathname.match(str));
     return {

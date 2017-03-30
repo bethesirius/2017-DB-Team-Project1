@@ -2,12 +2,17 @@
  * Created by rino0 on 2017-03-27.
  */
 import React from "react";
-import {Button, Dropdown, Header, Segment, Form} from "semantic-ui-react";
-
+import {Button, Form, Header, Segment} from "semantic-ui-react";
+import ServerCreateForm from "../../form/ServerCreateForm";
+import SwitchCreateForm from "../../form/SwitchCreateForm";
+import StorageCreateForm from "../../form/StorageCreateForm";
+import RackCreateForm from "../../form/RackCreateForm";
 const options = [
-    { key: 'm', text: 'Male', value: 'male' },
-    { key: 'f', text: 'Female', value: 'female' },
-]
+    {text: '서버', value: 'server', form: ServerCreateForm},
+    {text: '스위치', value: 'switch', form: SwitchCreateForm},
+    {text: '스토리지', value: 'storage', form: StorageCreateForm},
+    {text: '랙', value: 'rack', form: RackCreateForm},
+];
 
 class AssetDetail extends React.Component {
     static propTypes = {};
@@ -26,7 +31,8 @@ class AssetDetail extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
 
-    handleTypeChange = (value) => {
+    handleTypeChange = (e, {value}) => {
+        e.preventDefault();
         this.setState({
             type: value,
         })
@@ -34,6 +40,8 @@ class AssetDetail extends React.Component {
 
     render() {
         const {params: {id},} = this.props;
+        const type = options.find((opt) => opt.value === this.state.type);
+        const DeviceForm = type && type.form;
         return (
             <div>
                 <Segment>
@@ -43,6 +51,9 @@ class AssetDetail extends React.Component {
                                      options={options}
                         />
                     </Form>
+                    {type && <DeviceForm onSubmit={(values, dispatch) => {
+
+                    }}/>}
                 </Segment>
                 <Segment attached={true}>
                     <Header>자산:{id}에 등록된 장비 목록</Header>
