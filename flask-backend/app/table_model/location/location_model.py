@@ -10,3 +10,4 @@ class LocationModel(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     location = Column(String(100))
 
+

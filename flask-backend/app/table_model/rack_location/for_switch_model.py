@@ -10,4 +10,4 @@ from table_model.rack_location.device_info import DeviceInfo
 class DeviceInfoForSwitchModel(DeviceInfo):
     __tablename__ = "device_info_for_switch"
     id = Column(Integer, ForeignKey(DeviceInfo.id), primary_key=True)
-    switch_id = Column(Integer, ForeignKey(DeviceModel.id))
+    switch_id = Column(Integer, ForeignKey(SwitchModel.id))
