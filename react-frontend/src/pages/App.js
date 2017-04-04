@@ -42,16 +42,22 @@ class App extends React.Component {
                 </Menu>
                 <Divider hidden={true}/> {/* margin trick. do not delete these*/}
                 <Divider hidden={true}/> {/* margin trick. do not delete these*/}
-                <Container as={Dimmer.Dimmable} blurring={flagDim} dimmed={flagDim}>
+                <Container as={Dimmer.Dimmable} blurring={flagDim} dimmed={flagDim}
+                           style={{position: "relative"}}
+                >
                     <Dimmer active={flagDim} inverted={flagDim}/>
                     <ReactCSSTransitionGroup
                         component="div"
-                        transitionName="example"
-                        transitionEnterTimeout={500}
-                        transitionLeaveTimeout={500}
+                        transitionName="urban-mask-1"
+                        transitionAppear={true}
+                        transitionAppearTimeout={1400}
+                        transitionEnterTimeout={1400}
+                        transitionLeaveTimeout={1400}
+                        transitionEnter={true}
+                        transitionLeave={true}
                     >
                         {React.cloneElement(children, {
-                            key: location.pathname
+                            key: location.pathname,
                         })}
                     </ReactCSSTransitionGroup>
                 </Container>
