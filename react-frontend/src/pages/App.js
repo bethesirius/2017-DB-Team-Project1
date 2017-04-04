@@ -1,10 +1,8 @@
 import React from "react";
 import {Link} from "react-router";
-import {Container, Dimmer, Divider, Header, Icon, Menu} from "semantic-ui-react";
+import {Container, Divider, Menu} from "semantic-ui-react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import "./App.css";
-
-const flagDim = false;
 
 const LinkMenuItem = ({to, pathname, ...rest}) => (
     <Menu.Item as={Link} to={to} active={pathname.startsWith(to)} {...rest}/>
@@ -19,13 +17,7 @@ class App extends React.Component {
     render() {
         const {children, location: {pathname}} = this.props;
         return (
-            <Dimmer.Dimmable blurring={flagDim} dimmed={flagDim}>
-                <Dimmer active={flagDim} inverted={flagDim}>
-                    <Header as='h1' icon={true} inverted={!flagDim}>
-                        <Icon name='wait'/>
-                        아직 보여 드릴 수 없어요!!!
-                    </Header>
-                </Dimmer>
+            <div>
                 <Menu fixed="top" inverted={true}>
                     <Container>
                         <Menu.Header as={Menu.Item}>IT Assets MS</Menu.Header>
@@ -42,12 +34,10 @@ class App extends React.Component {
                 </Menu>
                 <Divider hidden={true}/> {/* margin trick. do not delete these*/}
                 <Divider hidden={true}/> {/* margin trick. do not delete these*/}
-                <Container as={Dimmer.Dimmable} blurring={flagDim} dimmed={flagDim}
-                           style={{position: "relative"}}
-                >
-                    <Dimmer active={flagDim} inverted={flagDim}/>
+                <Container>
                     <ReactCSSTransitionGroup
                         component="div"
+                        className="trans-content"
                         transitionName="urban-mask-1"
                         transitionAppear={true}
                         transitionAppearTimeout={1400}
@@ -61,12 +51,10 @@ class App extends React.Component {
                         })}
                     </ReactCSSTransitionGroup>
                 </Container>
-                <Container>
-                    footer will be here.
-                </Container>
-            </Dimmer.Dimmable>
+            </div>
         );
     }
 }
-
+// note
+// https://www.npmjs.com/package/react-router-page-transition
 export default App;

@@ -1,3 +1,100 @@
+.trans-content {
+    min-height: 600px;
+    position: relative;
+}
+.trans-content > * {
+    min-height: 800px;
+    position: absolute;
+    overflow: hidden;
+    background: white;
+    padding: 5px;
+    width: 100%;
+    top: 0;
+}
+
+
+@keyframes slide-in-bottom {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(0%); }
+}
+
+@-webkit-keyframes slide-in-bottom {
+    0% { -webkit-transform: translateY(-100%); }
+    100% { -webkit-transform: translateY(0%); }
+}
+
+@keyframes slide-out-bottom {
+    0% { transform: translateY(0%); }
+    100% { transform: translateY(100%); }
+}
+
+@-webkit-keyframes slide-out-bottom {
+    0% { -webkit-transform: translateY(0%); }
+    100% { -webkit-transform: translateY(100%); }
+}
+
+@keyframes slide-in-top {
+    0% { transform: translateY(100%); }
+    100% { transform: translateY(0%); }
+}
+
+@-webkit-keyframes slide-in-top {
+    0% { -webkit-transform: translateY(100%); }
+    100% { -webkit-transform: translateY(0%); }
+}
+
+@keyframes slide-out-top {
+    0% { transform: translateY(0%); }
+    100% { transform: translateY(-100%); }
+}
+
+@-webkit-keyframes slide-out-top {
+    0% { -webkit-transform: translateY(0%); }
+    100% { -webkit-transform: translateY(-100%); }
+}
+
+@keyframes slide-in {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in {
+    0% { -webkit-transform: translateX(100%); }
+    100% { -webkit-transform: translateX(0%); }
+}
+
+@keyframes slide-out {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+}
+
+@-webkit-keyframes slide-out {
+    0% { -webkit-transform: translateX(0%); }
+    100% { -webkit-transform: translateX(-100%); }
+}
+
+@-webkit-keyframes mask-play {
+    from {
+        -webkit-mask-position: 0% 0;
+        mask-position: 0% 0;
+    }
+    to {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+}
+
+@keyframes mask-play {
+    from {
+        -webkit-mask-position: 0% 0;
+        mask-position: 0% 0;
+    }
+    to {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+    }
+}
+
 .example-enter {
     opacity: 0.01;
 }
@@ -101,88 +198,6 @@
     transition: opacity 1s ease-in;
     animation: slide-out-bottom 1s forwards;
     -webkit-animation: slide-out-bottom 1s forwards;
-}
-
-@keyframes slide-in-bottom {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(0%); }
-}
-
-@-webkit-keyframes slide-in-bottom {
-    0% { -webkit-transform: translateY(-100%); }
-    100% { -webkit-transform: translateY(0%); }
-}
-
-@keyframes slide-out-bottom {
-    0% { transform: translateY(0%); }
-    100% { transform: translateY(100%); }
-}
-
-@-webkit-keyframes slide-out-bottom {
-    0% { -webkit-transform: translateY(0%); }
-    100% { -webkit-transform: translateY(100%); }
-}
-
-@keyframes slide-in-top {
-    0% { transform: translateY(100%); }
-    100% { transform: translateY(0%); }
-}
-
-@-webkit-keyframes slide-in-top {
-    0% { -webkit-transform: translateY(100%); }
-    100% { -webkit-transform: translateY(0%); }
-}
-
-@keyframes slide-out-top {
-    0% { transform: translateY(0%); }
-    100% { transform: translateY(-100%); }
-}
-
-@-webkit-keyframes slide-out-top {
-    0% { -webkit-transform: translateY(0%); }
-    100% { -webkit-transform: translateY(-100%); }
-}
-
-@keyframes slide-in {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(0%); }
-}
-
-@-webkit-keyframes slide-in {
-    0% { -webkit-transform: translateX(100%); }
-    100% { -webkit-transform: translateX(0%); }
-}
-
-@keyframes slide-out {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-100%); }
-}
-
-@-webkit-keyframes slide-out {
-    0% { -webkit-transform: translateX(0%); }
-    100% { -webkit-transform: translateX(-100%); }
-}
-
-@-webkit-keyframes mask-play {
-    from {
-        -webkit-mask-position: 0% 0;
-        mask-position: 0% 0;
-    }
-    to {
-        -webkit-mask-position: 100% 0;
-        mask-position: 100% 0;
-    }
-}
-
-@keyframes mask-play {
-    from {
-        -webkit-mask-position: 0% 0;
-        mask-position: 0% 0;
-    }
-    to {
-        -webkit-mask-position: 100% 0;
-        mask-position: 100% 0;
-    }
 }
 
 .nature-mask-1-enter {
