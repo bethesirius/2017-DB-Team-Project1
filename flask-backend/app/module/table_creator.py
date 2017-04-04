@@ -10,7 +10,7 @@ def init_db():
     sqlalchemy_utils.create_database(engine.url)
 
 
-def step_3():
+def step_1():
     from table_model.number.asset_model import AssetModel
 
     from table_model.number.asset_name_model import AssetNameModel
@@ -23,7 +23,7 @@ def step_3():
     AssetModel.metadata.create_all(engine)
 
 
-def step_1():
+def step_2():
     from table_model.device.spec.rack_spec_model import RackSpecModel
     from table_model.device.spec.server_spec_model import ServerSpecModel
     from table_model.device.spec.storage.storage_spec_model import StorageSpecModel
@@ -49,7 +49,7 @@ def step_1():
 # 대체적으로 Type Error라는 글이 많은데
 # local import로 바꿨을때 동작함
 # 임포트 과정에서 먼저 validation을 체크해서 그런걸지도?
-def step_2():
+def step_3():
     from table_model.device.device_model import DeviceModel
     from table_model.device.rack_model import RackModel
     from table_model.device.server_model import ServerModel
@@ -88,8 +88,8 @@ def step_5():
 
 if __name__ == '__main__':
     init_db()
-    step_3()
     step_1()
     step_2()
+    step_3()
     step_4()
     step_5()
