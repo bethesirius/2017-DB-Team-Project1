@@ -8,7 +8,7 @@ import ServerCreateForm from "../../form/ServerCreateForm";
 import SwitchCreateForm from "../../form/SwitchCreateForm";
 import StorageCreateForm from "../../form/StorageCreateForm";
 import RackCreateForm from "../../form/RackCreateForm";
-import ServerItemGroup from "../../component/ServerItemGroup";
+import ItemGroup from "../../component/ItemGroup";
 
 
 class AssetDetail extends React.Component {
@@ -90,7 +90,7 @@ class AssetDetail extends React.Component {
                 </Segment>
                 <Segment attached={true}>
                     <Header>자산:{id}에 등록된 장비 목록</Header>
-                    <ServerItemGroup items={this.state.servers}/>
+                    <ItemGroup.Server items={this.state.servers}/>
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button primary={true} content={"다음으로"} icon='right arrow' labelPosition='right'/>

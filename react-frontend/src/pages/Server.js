@@ -4,7 +4,7 @@
 import React from "react";
 import {Header, Segment} from "semantic-ui-react";
 import TotalUseStatisticGroup from "../component/TotalUseStatisticGroup";
-import ServerItemGroup from "../component/ServerItemGroup";
+import ItemGroup from "../component/ItemGroup";
 
 class Server extends React.Component {
     static propTypes = {};
@@ -36,7 +36,7 @@ class Server extends React.Component {
                     <Header>총 사용량</Header>
                     <TotalUseStatisticGroup />
                 </Segment>
-                <ServerItemGroup items={items}/>
+                <ItemGroup.Server items={items}/>
             </div>
         );
     }
