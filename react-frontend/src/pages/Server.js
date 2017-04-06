@@ -2,7 +2,9 @@
  * Created by rino0 on 2017-03-27.
  */
 import React from "react";
-import {Item} from "semantic-ui-react";
+import {Header, Segment} from "semantic-ui-react";
+import TotalUseStatisticGroup from "../component/TotalUseStatisticGroup";
+import ServerItemGroup from "../component/ServerItemGroup";
 
 class Server extends React.Component {
     static propTypes = {};
@@ -12,20 +14,30 @@ class Server extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            items: [
+                {id: 1, cpu: 16},
+                {id: 2, cpu: 8},
+                {id: 3, cpu: 4},
+                {id: 4, cpu: 2},
+                {id: 5, cpu: 1},
+            ],
+        };
     }
 
     // getChildContext() {}
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
-        const {
-            ...others,
-        } = this.props;
+        const {items} = this.state;
         return (
-            <Item.Group divided={true}>
-
-            </Item.Group>
+            <div>
+                <Segment>
+                    <Header>총 사용량</Header>
+                    <TotalUseStatisticGroup />
+                </Segment>
+                <ServerItemGroup items={items}/>
+            </div>
         );
     }
 }

@@ -11,6 +11,7 @@ import "./index.css";
 
 import App from "./pages/App";
 import Service from "./pages/Service";
+import Server from "./pages/Server";
 import Rack from "./pages/Rack";
 import {AssetCreate, AssetDetail, AssetForm, AssetList} from "./pages/asset";
 import NotFound from "./pages/NotFound";
@@ -37,6 +38,7 @@ ReactDOM.render(
                     </Route>
                 </Route>
                 <Route path="service" component={Service}/>
+                <Route path="server" component={Server}/>
                 <Route path="rack" component={Rack}/>
                 <Route path="*" component={NotFound}/>
             </Route>
