@@ -7,7 +7,7 @@ import {Button, Icon, Item} from "semantic-ui-react";
 
 class TableVariationItem extends React.Component {
     static propTypes = {
-        header: React.PropTypes.string,
+        header: React.PropTypes.node,
         description: React.PropTypes.node,
     };
     // static defaultProps = {};

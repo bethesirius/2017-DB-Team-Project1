@@ -7,8 +7,8 @@ import {Table} from "semantic-ui-react";
 class ServerTable extends React.Component {
     static propTypes = {
         data: React.PropTypes.shape({
-            id: React.PropTypes.string,
-            cpu: React.PropTypes.number,
+            id: React.PropTypes.node,
+            cpu: React.PropTypes.node,
         })
     };
     // static defaultProps = {};

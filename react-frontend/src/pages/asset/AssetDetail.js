@@ -2,6 +2,7 @@
  * Created by rino0 on 2017-03-27.
  */
 import React from "react";
+import {browserHistory} from "react-router";
 import {SubmissionError} from "redux-form";
 import {Button, Form, Header, Segment} from "semantic-ui-react";
 import ServerCreateForm from "../../form/ServerCreateForm";
@@ -10,9 +11,27 @@ import StorageCreateForm from "../../form/StorageCreateForm";
 import RackCreateForm from "../../form/RackCreateForm";
 import ItemGroup from "../../component/ItemGroup";
 
+const temp_rack = {
+    assetId: 'R00000',
+    size: 46,
+    servers: 5,
+    storages: 10,
+    networks: 1,
+    emptys: 20,
+    mounted: [{
+        assetId: 'S00000',
+        size: 2,
+        mount_lv: 1,
+        ip: '0.0.0.0',
+    }],
+};
 
 class AssetDetail extends React.Component {
     static propTypes = {};
+    handleNext = (event) => {
+        event.preventDefault();
+        browserHistory.push(`/asset/form/confirm/${this.props.params.id}`);
+    };
     // static defaultProps = {};
     // static  childContextTypes = {};
     // static contextTypes = {};
@@ -20,14 +39,19 @@ class AssetDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: null,
+            type: "none",
             options: [
-                {text: '서버', value: 'server', form: ServerCreateForm, submit: this.handleServerSubmit},
-                {text: '스위치', value: 'switch', form: SwitchCreateForm, submit: this.handleSwitchSubmit},
-                {text: '스토리지', value: 'storage', form: StorageCreateForm, submit: this.handleStorageSubmit},
-                {text: '랙', value: 'rack', form: RackCreateForm, submit: this.handleRackSubmit},
+                {text: "--- 추가할 장비를 선택하세요 ---", value: "none"},
+                {text: '서버', value: 'server',},
+                {text: '스위치', value: 'network',},
+                {text: '스토리지', value: 'storage',},
+                {text: '랙', value: 'rack',},
             ],
-            servers: [],
+            none: {form: () => <Segment attached={true}/>, submit: null, list: [],},
+            server: {form: ServerCreateForm, submit: this.handleServerSubmit, list: [],},
+            network: {form: SwitchCreateForm, submit: this.handleSwitchSubmit, list: [],},
+            storage: {form: StorageCreateForm, submit: this.handleStorageSubmit, list: [],},
+            rack: {form: RackCreateForm, submit: this.handleRackSubmit, list: [],}
         };
     }
 
@@ -35,47 +59,74 @@ class AssetDetail extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
 
-
-    handleServerSubmit = (values, dispatch) => {
+    _postDevice(url, onSuccess) {
         return fetch(
-            "/dummy_ok.json",
+            url,
         ).then(res => {
             if (!res.ok) {
                 throw SubmissionError({_error: "Failed Fetch"});
             }
             return res.json();
         }).then(json => {
+            onSuccess(json);
+        }).catch(err => {
+            return Promise.reject(new SubmissionError({_error: `Failed Fetch by:${err}`}));
+        });
+    }
+
+    handleServerSubmit = (values, dispatch) => {
+        return this._postDevice("/dummy_ok.json", (json) => {
             this.setState((state, props) => {
-                state.type = null;
-                state.servers.push({
+                state.type = "none";
+                state.server.list.push({
                     id: Math.random(),
                     cpu: Math.random(),
                 });
                 return state;
             });
-        }).catch(err => {
-            return Promise.reject(new SubmissionError({_error: `Failed Fetch by:${err}`}));
         });
     };
-
     handleSwitchSubmit = (values, dispatch) => {
-
+        return this._postDevice("/dummy_ok.json", (json) => {
+            this.setState((state, props) => {
+                state.type = "none";
+                state.network.list.push({
+                    id: Math.random(),
+                    cpu: Math.random(),
+                });
+                return state;
+            });
+        });
     };
     handleStorageSubmit = (values, dispatch) => {
-
+        return this._postDevice("/dummy_ok.json", (json) => {
+            this.setState((state, props) => {
+                state.type = "none";
+                state.storage.list.push({
+                    id: Math.random(),
+                    cpu: Math.random(),
+                });
+                return state;
+            });
+        });
     };
     handleRackSubmit = (values, dispatch) => {
-
+        return this._postDevice("/dummy_ok.json", (json) => {
+            this.setState((state, props) => {
+                state.type = "none";
+                state.rack.list.push(temp_rack);
+                return state;
+            });
+        });
     };
-
     handleTypeChange = (e, {value}) => {
         this.setState({type: value,});
     };
 
     render() {
         const {params: {id},} = this.props;
-        const type = this.state.options.find((opt) => opt.value === this.state.type);
-        const DeviceForm = type && type.form;
+        const device = this.state[this.state.type];
+        const DeviceForm = device.form;
         return (
             <div>
                 <Segment>
@@ -86,14 +137,20 @@ class AssetDetail extends React.Component {
                                      options={this.state.options}
                         />
                     </Form>
-                    {type && <DeviceForm onSubmit={type.submit}/>}
+                    <DeviceForm onSubmit={device.submit}/>
                 </Segment>
                 <Segment attached={true}>
                     <Header>자산:{id}에 등록된 장비 목록</Header>
-                    <ItemGroup.Server items={this.state.servers}/>
+                    <ItemGroup.Server items={this.state.server.list}/>
+                    <ItemGroup.Storage items={this.state.storage.list}/>
+                    <ItemGroup.Switch items={this.state.network.list}/>
+                    <ItemGroup.Rack items={this.state.rack.list}/>
                 </Segment>
                 <Button.Group attached={"bottom"}>
-                    <Button primary={true} content={"다음으로"} icon='right arrow' labelPosition='right'/>
+                    <Button
+                        primary={true} content={"다음으로"} icon='right arrow' labelPosition='right'
+                        onClick={this.handleNext}
+                    />
                 </Button.Group>
             </div>
         );

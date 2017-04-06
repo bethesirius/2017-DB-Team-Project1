@@ -5,6 +5,7 @@ import React from "react";
 import TableVariationItem from "./TableVariationItem";
 import {Header, Item, Message, Segment} from "semantic-ui-react";
 import ServerTable from "./ServerTable";
+import RackUseStatisticGroup from "./RackUseStatisticGroup";
 import ServiceSummaryTable from "./ServiceSummaryTable";
 
 class ItemGroup extends React.Component {
@@ -40,6 +41,24 @@ class ItemGroup extends React.Component {
 ItemGroup.Server = ({items}) => (
     <ItemGroup
         type={"서버"} items={items} description={ServerTable}
+        header={item => item.id}
+    />
+);
+ItemGroup.Switch = ({items}) => (
+    <ItemGroup
+        type={"스위치"} items={items} description={ServerTable}
+        header={item => item.id}
+    />
+);
+ItemGroup.Storage = ({items}) => (
+    <ItemGroup
+        type={"스토리지"} items={items} description={ServerTable}
+        header={item => item.id}
+    />
+);
+ItemGroup.Rack = ({items}) => (
+    <ItemGroup
+        type={"Rack"} items={items} description={RackUseStatisticGroup}
         header={item => item.id}
     />
 );
