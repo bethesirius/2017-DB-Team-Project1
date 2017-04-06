@@ -20,9 +20,6 @@ class AssetList extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
-        const {
-            ...others,
-        } = this.props;
         return (
             <div>
                 <Segment attached={true}>

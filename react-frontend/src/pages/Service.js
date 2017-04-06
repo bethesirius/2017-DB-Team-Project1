@@ -1,9 +1,27 @@
 import React from "react";
-import {Button, Header, Item, Segment} from "semantic-ui-react";
-import TableVariationItem from "../component/TableVariationItem";
+import {Button, Header, Segment} from "semantic-ui-react";
+import ItemGroup from "../component/ItemGroup";
 import TotalUseStatisticGroup from "../component/TotalUseStatisticGroup";
-import ServiceSummaryTable from "../component/ServiceSummaryTable";
 import {Link} from "react-router";
+
+const temp = {
+    id:"test_id",
+    service: {
+        cpu: -1,
+        san: -1,
+        nas: -1,
+        total: -1,
+        tape: -1,
+    },
+    not: {
+        cpu: -1,
+        san: -1,
+        nas: -1,
+        total: -1,
+        tape: -1,
+    }
+}
+
 class Service extends React.Component {
     render() {
         return (
@@ -18,14 +36,7 @@ class Service extends React.Component {
                     <Button as={Link} to="/service/form" primary={true} icon="add" labelPosition='left'
                             content={"새 서비스 등록 하기"}/>
                 </Button.Group>
-                <Item.Group as={Segment} divided={true}>
-                    <Header>등록된 서비스</Header>
-                    <TableVariationItem header="Service00" description={<ServiceSummaryTable />} to="/"/>
-                    <TableVariationItem header="Service00" description={<ServiceSummaryTable />} to="/rack"/>
-                    <TableVariationItem header="Service00" description={<ServiceSummaryTable />}/>
-                    <TableVariationItem header="Service00" description={<ServiceSummaryTable />}/>
-                    <TableVariationItem header="Service00" description={<ServiceSummaryTable />}/>
-                </Item.Group>
+                <ItemGroup.Service items={[temp, temp, temp]}/>
             </div>
         );
     }

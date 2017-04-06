@@ -5,23 +5,27 @@ import React from "react";
 import TableVariationItem from "./TableVariationItem";
 import {Header, Item, Message, Segment} from "semantic-ui-react";
 import ServerTable from "./ServerTable";
+import ServiceSummaryTable from "./ServiceSummaryTable";
 
 class ItemGroup extends React.Component {
     static propTypes = {
         type: React.PropTypes.string.isRequired,
+        header: React.PropTypes.func,
         items: React.PropTypes.array.isRequired,
-        description: React.PropTypes.node.isRequired,
+        description: React.PropTypes.any,
     };
 
     render() {
-        const {type, items, description} = this.props;
+        const {type, items, description, header} = this.props;
         return (
             <Item.Group as={Segment} divided={true}>
                 <Header>{`등록된 ${type}` }</Header>
                 {items.length > 0
-                    ? items.map(item => (
-                        <TableVariationItem key={item.id} header={item.id}
-                                            description={React.createElement(description, {data: item})}/>
+                    ? items.map((item, index) => (
+                        <TableVariationItem
+                            key={index} header={header ? header(item) : null}
+                            description={React.createElement(description, {data: item})}
+                        />
                     ))
                     : <Message
                         header={`등록된 ${type}가 없습니다!` }
@@ -33,5 +37,16 @@ class ItemGroup extends React.Component {
     }
 }
 
-ItemGroup.Server = ({items}) => (<ItemGroup type={"서버"} items={items} description={ServerTable}/>);
+ItemGroup.Server = ({items}) => (
+    <ItemGroup
+        type={"서버"} items={items} description={ServerTable}
+        header={item => item.id}
+    />
+);
+ItemGroup.Service = ({items}) => (
+    <ItemGroup
+        type={"서비스"} items={items} description={ServiceSummaryTable}
+        header={item => item.id}
+    />
+);
 export default ItemGroup;

@@ -19,24 +19,7 @@ class ServiceSummaryTable extends React.Component {
             not: statisticShape,
         })
     };
-    static defaultProps = {
-        data: {
-            service: {
-                cpu: -1,
-                san: -1,
-                nas: -1,
-                total: -1,
-                tape: -1,
-            },
-            not: {
-                cpu: -1,
-                san: -1,
-                nas: -1,
-                total: -1,
-                tape: -1,
-            }
-        }
-    };
+    // static defaultProps = {};
     // static  childContextTypes = {};
     // static contextTypes = {};
 

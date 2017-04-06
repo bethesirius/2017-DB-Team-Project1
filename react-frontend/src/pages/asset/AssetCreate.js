@@ -25,7 +25,6 @@ class AssetCreate extends React.Component {
     };
 
     render() {
-        const {} = this.props;
         return (
             <Segment>
                 <AssetCreateForm onSubmit={this.handleSubmit}/>
