@@ -2,10 +2,20 @@
  * Created by rino0 on 2017-04-07.
  */
 import React from "react";
-import { Icon, Table } from 'semantic-ui-react'
+import {Table} from "semantic-ui-react";
 
 class AssetTable extends React.Component {
-    static propTypes = {};
+    static propTypes = {
+        data: React.PropTypes.shape({
+            id: React.PropTypes.any,
+            get_date: React.PropTypes.any,
+            name: React.PropTypes.any,
+            standard: React.PropTypes.any,
+            years: React.PropTypes.any,
+            price: React.PropTypes.any,
+            buy: React.PropTypes.any,
+        }),
+    };
     // static defaultProps = {};
     // static  childContextTypes = {};
     // static contextTypes = {};
@@ -19,8 +29,11 @@ class AssetTable extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
+        const {
+            data: {id, get_date, name, standard, years, price, buy,}
+        } = this.props;
         return (
-            <Table   celled definition>
+            <Table celled definition>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell />
@@ -41,9 +54,9 @@ class AssetTable extends React.Component {
                 <Table.Body>
                     <Table.Row>
                         <Table.Cell>기본 정보</Table.Cell>
-                        <Table.Cell>2010-07-08</Table.Cell>
-                        <Table.Cell textAlign='right'> 224,000,000 </Table.Cell>
-                        <Table.Cell textAlign='right'>5</Table.Cell>
+                        <Table.Cell>{get_date}</Table.Cell>
+                        <Table.Cell textAlign='right'> {price} </Table.Cell>
+                        <Table.Cell textAlign='right'>{years}</Table.Cell>
                         <Table.Cell textAlign='right'>5</Table.Cell>
                         <Table.Cell textAlign='right'>5</Table.Cell>
                         <Table.Cell textAlign='right'>5</Table.Cell>
@@ -52,11 +65,15 @@ class AssetTable extends React.Component {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>자산명</Table.Cell>
-                        <Table.Cell colSpan='8'>서버</Table.Cell>
+                        <Table.Cell colSpan='8'>{name}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>규격</Table.Cell>
-                        <Table.Cell colSpan='8'>블레이드 서버</Table.Cell>
+                        <Table.Cell colSpan='8'>{standard}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.Cell>구입처</Table.Cell>
+                        <Table.Cell colSpan='8'>{buy}</Table.Cell>
                     </Table.Row>
                 </Table.Body>
             </Table>
