@@ -2,9 +2,9 @@
  * Created by rino0 on 2017-03-27.
  */
 import React from "react";
-import {Button, Header, Item, Segment} from "semantic-ui-react";
+import {Button, Segment} from "semantic-ui-react";
 import {Link} from "react-router";
-
+import ItemGroup from "../../component/ItemGroup";
 class AssetList extends React.Component {
     static propTypes = {};
     // static defaultProps = {};
@@ -29,10 +29,7 @@ class AssetList extends React.Component {
                     <Button as={Link} to="/asset/form" primary={true} icon="add" labelPosition='left'
                             content={"새 자산 등록 하기"}/>
                 </Button.Group>
-                <Item.Group as={Segment} divided={true}>
-                    <Header>등록된 자산</Header>
-
-                </Item.Group>
+                <ItemGroup.Asset items={[]}/>
             </div>
         );
     }

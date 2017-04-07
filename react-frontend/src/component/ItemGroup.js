@@ -5,6 +5,7 @@ import React from "react";
 import TableVariationItem from "./TableVariationItem";
 import {Header, Item, Message, Segment} from "semantic-ui-react";
 import ServerTable from "./ServerTable";
+import AssetTable from "./AssetTable";
 import RackUseStatisticGroup from "./RackUseStatisticGroup";
 import ServiceSummaryTable from "./ServiceSummaryTable";
 
@@ -38,6 +39,12 @@ class ItemGroup extends React.Component {
     }
 }
 
+ItemGroup.Asset = ({items}) => (
+    <ItemGroup
+        type={"자산"} items={items} description={AssetTable}
+        header={item => item.id}
+    />
+);
 ItemGroup.Server = ({items}) => (
     <ItemGroup
         type={"서버"} items={items} description={ServerTable}
