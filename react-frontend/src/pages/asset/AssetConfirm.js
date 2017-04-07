@@ -46,11 +46,11 @@ class AssetDetail extends React.Component {
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button
-                        secondary={true} content={"취소하기"} icon='right arrow' labelPosition='right'
+                        negative={true} content={"삭제하기"} icon='trash' labelPosition='left'
                         onClick={this.handleDone}
                     />
                     <Button
-                        primary={true} content={"다음으로"} icon='right arrow' labelPosition='right'
+                        positive={true} content={"목록으로"} icon='list' labelPosition='right'
                         onClick={this.handleDone}
                     />
                 </Button.Group>

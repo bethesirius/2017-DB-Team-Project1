@@ -26,7 +26,7 @@ const temp_rack = {
     }],
 };
 
-class AssetDetail extends React.Component {
+class AssetEdit extends React.Component {
     static propTypes = {};
     handleNext = (event) => {
         event.preventDefault();
@@ -157,4 +157,4 @@ class AssetDetail extends React.Component {
     }
 }
 
-export default AssetDetail;
+export default AssetEdit;
