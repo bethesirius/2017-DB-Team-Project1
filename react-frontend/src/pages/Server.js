@@ -16,11 +16,7 @@ class Server extends React.Component {
         super(props);
         this.state = {
             items: [
-                {id: 1, cpu: 16},
-                {id: 2, cpu: 8},
-                {id: 3, cpu: 4},
-                {id: 4, cpu: 2},
-                {id: 5, cpu: 1},
+                {asset_id:'00000001', management_id:'S00001', get_date:'2010-01-01', core_num:16, standard:'블레이드 서버', year:5, spec:'IBM BladeCenter HS22 Chassis3', location:'본관 1층 공동서버실-C08'},
             ],
         };
     }
