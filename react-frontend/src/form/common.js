@@ -36,6 +36,7 @@ export const FieldDropDown = ({input: {onChange, onBlur, ...left}, meta, label, 
     <Form.Field error={meta.touched && meta.invalid}>
         <label>{label}</label>
         <Dropdown
+            search={true}
             selection={true}
             onChange={(e, {value}) => {
                 onChange(value);
@@ -134,7 +135,6 @@ export class InteractiveForm extends React.PureComponent {
 
 
 
-//TODO 용준아 스크롤바지워줘
 export const LRFieldLazyTextArea = ({input: {onChange, onBlur,}, meta, label, rows, hasTip, ...custom}) => (
     <Form.Field error={meta.touched && meta.invalid}>
         <div>

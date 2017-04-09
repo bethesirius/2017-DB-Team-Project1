@@ -3,6 +3,7 @@ import {Accordion, Header, Item, Segment, Divider} from "semantic-ui-react";
 import RackUseStatisticGroup from "../component/RackUseStatisticGroup";
 import RackSummaryTable from "../component/RackSummaryTable";
 import MountAsset from "../component/MountAsset";
+import UnmountAsset from "../component/UnmountAsset";
 import AssetModal from "../component/AssetModal";
 
 class Rack extends React.Component {
@@ -73,7 +74,7 @@ class Rack extends React.Component {
                                 </Item>
                                 <Item>
                                     <Item.Content>
-                                        <Item.Header><MountAsset/></Item.Header>
+                                        <Item.Header><MountAsset/><UnmountAsset/></Item.Header>
                                     </Item.Content>
                                 </Item>
                             </Item.Group>

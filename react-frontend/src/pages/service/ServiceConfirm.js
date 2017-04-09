@@ -6,9 +6,9 @@ import {browserHistory} from "react-router";
 import {Button, Confirm, Dimmer, Header, Icon, Loader, Segment} from "semantic-ui-react";
 import ItemGroup from "../../component/ItemGroup";
 import TableVariationItem from "../../component/TableVariationItem";
-import AssetTable from "../../component/AssetTable";
+import ServiceSummaryTable from "../../component/ServiceSummaryTable";
 
-class AssetConfirm extends React.Component {
+class ServiceConfirm extends React.Component {
     static propTypes = {};
 
 
@@ -21,11 +21,9 @@ class AssetConfirm extends React.Component {
         this.state = {
             isFetching: false,
             isDeleteConfirmOpen: false,
-            asset: {},
+            service: {service: {}, not: {}}, //todo modify this.
             server: {list: [],},
-            network: {list: [],},
-            storage: {list: [],},
-            rack: {list: [],}
+            volume: {list: [],},
         };
     }
 
@@ -52,7 +50,6 @@ class AssetConfirm extends React.Component {
                 };
                 this.setState({
                     isFetching: false,
-                    asset: data,
                 });
             })
             .catch(err => {
@@ -65,7 +62,7 @@ class AssetConfirm extends React.Component {
 
     handleDone = (event) => {
         event.preventDefault();
-        browserHistory.push(`/asset/`);
+        browserHistory.push(`/service/`);
     };
     handleDelete = (event) => {
         event.preventDefault();
@@ -89,16 +86,14 @@ class AssetConfirm extends React.Component {
                     <Loader size='massive'>Loading</Loader>
                 </Dimmer>
                 <Segment attached={true}>
-                    <TableVariationItem header={id} description={<AssetTable data={this.state.asset}/>}/>
-                    <Header>자산:{id}에 등록된 장비 목록</Header>
+                    <TableVariationItem header={id} description={<ServiceSummaryTable data={this.state.service}/>}/>
+                    <Header>서비스:{id}에 등록된 장비 목록</Header>
                     <ItemGroup.Server items={this.state.server.list}/>
-                    <ItemGroup.Storage items={this.state.storage.list}/>
-                    <ItemGroup.Switch items={this.state.network.list}/>
-                    <ItemGroup.Rack items={this.state.rack.list}/>
+                    <ItemGroup.Storage items={this.state.volume.list}/>
                     <Confirm
                         open={this.state.isDeleteConfirmOpen}
                         header={<Header><Icon name="warning sign"/> 되돌리기 불가능한 작업</Header>}
-                        content="정말로 이 자산을 삭제 하시겠습니까??"
+                        content="정말로 이 서비스를 삭제 하시겠습니까??"
                         cancelButton='취소하기'
                         confirmButton="삭제하기"
                         onCancel={this.handleDeleteCancel}
@@ -120,4 +115,4 @@ class AssetConfirm extends React.Component {
     }
 }
 
-export default AssetConfirm;
+export default ServiceConfirm;
