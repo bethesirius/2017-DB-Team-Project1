@@ -37,7 +37,7 @@ class TableVariationItem extends React.Component {
                     </Item.Description>
                     {to && <Item.Extra>
                         <Button as={Link} primary floated='right' to={to}>
-                            Show Detail
+                            상세 보기
                             <Icon name='right chevron'/>
                         </Button>
                     </Item.Extra>}

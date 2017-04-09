@@ -5,6 +5,7 @@ import React from "react";
 import TableVariationItem from "./TableVariationItem";
 import {Header, Item, Message, Segment} from "semantic-ui-react";
 import ServerTable from "./ServerTable";
+import SwitchTable from "./SwitchTable";
 import AssetTable from "./AssetTable";
 import RackUseStatisticGroup from "./RackUseStatisticGroup";
 import ServiceSummaryTable from "./ServiceSummaryTable";
@@ -12,13 +13,14 @@ import ServiceSummaryTable from "./ServiceSummaryTable";
 class ItemGroup extends React.Component {
     static propTypes = {
         type: React.PropTypes.string.isRequired,
-        header: React.PropTypes.func,
         items: React.PropTypes.array.isRequired,
+        header: React.PropTypes.func,
         description: React.PropTypes.any,
+        to: React.PropTypes.string,
     };
 
     render() {
-        const {type, items, description, header} = this.props;
+        const {type, items, description, header, to} = this.props;
         return (
             <Item.Group as={Segment} divided={true}>
                 <Header>{`등록된 ${type}` }</Header>
@@ -27,6 +29,7 @@ class ItemGroup extends React.Component {
                         <TableVariationItem
                             key={index} header={header ? header(item) : null}
                             description={React.createElement(description, {data: item})}
+                            to={`${to}/${item.id}`}
                         />
                     ))
                     : <Message
@@ -42,7 +45,7 @@ class ItemGroup extends React.Component {
 ItemGroup.Asset = ({items}) => (
     <ItemGroup
         type={"자산"} items={items} description={AssetTable}
-        header={item => item.id}
+        header={item => `자산 ID:${item.id}`} to="/asset"
     />
 );
 ItemGroup.Server = ({items}) => (
@@ -53,7 +56,7 @@ ItemGroup.Server = ({items}) => (
 );
 ItemGroup.Switch = ({items}) => (
     <ItemGroup
-        type={"스위치"} items={items} description={ServerTable}
+        type={"스위치"} items={items} description={SwitchTable}
         header={item => item.id}
     />
 );

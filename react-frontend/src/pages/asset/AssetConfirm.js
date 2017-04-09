@@ -3,17 +3,15 @@
  */
 import React from "react";
 import {browserHistory} from "react-router";
-import {Button, Dimmer, Header, Loader, Segment} from "semantic-ui-react";
+import {Button, Confirm, Dimmer, Header, Icon, Loader, Segment} from "semantic-ui-react";
 import ItemGroup from "../../component/ItemGroup";
 import TableVariationItem from "../../component/TableVariationItem";
 import AssetTable from "../../component/AssetTable";
 
 class AssetDetail extends React.Component {
     static propTypes = {};
-    handleDone = (event) => {
-        event.preventDefault();
-        browserHistory.push(`/asset/`);
-    };
+
+
     // static defaultProps = {};
     // static  childContextTypes = {};
     // static contextTypes = {};
@@ -22,6 +20,7 @@ class AssetDetail extends React.Component {
         super(props);
         this.state = {
             isFetching: false,
+            isDeleteConfirmOpen: false,
             asset: {},
             server: {list: [],},
             network: {list: [],},
@@ -64,6 +63,24 @@ class AssetDetail extends React.Component {
 
     // componentWillUnmount(){}
 
+    handleDone = (event) => {
+        event.preventDefault();
+        browserHistory.push(`/asset/`);
+    };
+    handleDelete = (event) => {
+        event.preventDefault();
+        this.setState({isDeleteConfirmOpen: true});
+    };
+    handleDeleteCancel = (event) => {
+        event.preventDefault();
+        this.setState({isDeleteConfirmOpen: false});
+    };
+    handleDeleteConfirm = (event) => {
+        event.preventDefault();
+        this.setState({isDeleteConfirmOpen: false});
+        // todo do fetch API DELTE.
+    };
+
     render() {
         const {params: {id},} = this.props;
         return (
@@ -78,11 +95,20 @@ class AssetDetail extends React.Component {
                     <ItemGroup.Storage items={this.state.storage.list}/>
                     <ItemGroup.Switch items={this.state.network.list}/>
                     <ItemGroup.Rack items={this.state.rack.list}/>
+                    <Confirm
+                        open={this.state.isDeleteConfirmOpen}
+                        header={<Header><Icon name="warning sign"/> 되돌리기 불가능한 작업</Header>}
+                        content="정말로 이 자산을 삭제 하시겠습니까??"
+                        cancelButton='취소하기'
+                        confirmButton="삭제하기"
+                        onCancel={this.handleDeleteCancel}
+                        onConfirm={this.handleDeleteConfirm}
+                    />
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button
                         negative={true} content={"삭제하기"} icon='trash' labelPosition='left'
-                        onClick={this.handleDone}
+                        onClick={this.handleDelete}
                     />
                     <Button
                         positive={true} content={"목록으로"} icon='list' labelPosition='right'
