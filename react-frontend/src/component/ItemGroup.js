@@ -5,6 +5,7 @@ import React from "react";
 import TableVariationItem from "./TableVariationItem";
 import {Header, Item, Message, Segment} from "semantic-ui-react";
 import ServerTable from "./ServerTable";
+import SwitchTable from "./SwitchTable";
 import AssetTable from "./AssetTable";
 import RackUseStatisticGroup from "./RackUseStatisticGroup";
 import ServiceSummaryTable from "./ServiceSummaryTable";
@@ -55,7 +56,7 @@ ItemGroup.Server = ({items}) => (
 );
 ItemGroup.Switch = ({items}) => (
     <ItemGroup
-        type={"스위치"} items={items} description={ServerTable}
+        type={"스위치"} items={items} description={SwitchTable}
         header={item => item.id}
     />
 );
