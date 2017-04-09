@@ -10,7 +10,7 @@ class DeviceModel(db.Model):
     __tablename__ = "device"
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     asset_id = Column(Integer, ForeignKey(AssetModel.id))
-    manage_num = Column(String)
+    manage_num = Column(String(6))
 
 
 
