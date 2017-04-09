@@ -3,12 +3,12 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 
-from orm.session import Base
-from table_model.device.rack_model import RackModel
-from table_model.location.location_model import LocationModel
+from app import db
+from app.table_model.device.rack_model import RackModel
+from app.table_model.location.location_model import LocationModel
 
 
-class DetailLocationModel(Base):
+class DetailLocationModel(db.Model):
     __tablename__ = "detail_location"
     id = Column(Integer, primary_key=True, autoincrement=True)
     location_id = Column(Integer, ForeignKey(LocationModel.id))

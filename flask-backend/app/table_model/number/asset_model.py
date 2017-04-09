@@ -3,15 +3,14 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
-from sqlalchemy import String
 
-from app.orm.session import Base
-from table_model.number.asset_name_model import AssetNameModel
-from table_model.number.buy_model import BuyModel
-from table_model.number.standard_model import StandardModel
+from app import db
+from app.table_model.number.asset_name_model import AssetNameModel
+from app.table_model.number.buy_model import BuyModel
+from app.table_model.number.standard_model import StandardModel
 
 
-class AssetModel(Base):
+class AssetModel(db.Model):
     __tablename__ = "asset"
     __table_args__ = {'mysql_engine': 'InnoDB'}
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)

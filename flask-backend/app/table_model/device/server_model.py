@@ -3,9 +3,9 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 
-from table_model.device.device_model import DeviceModel
-from table_model.device.spec.server_spec_model import ServerSpecModel
-from table_model.location.detail_location_model import DetailLocationModel
+from app.table_model.device.device_model import DeviceModel
+from app.table_model.device.spec.server_spec_model import ServerSpecModel
+from app.table_model.location.detail_location_model import DetailLocationModel
 
 
 class ServerModel(DeviceModel):
