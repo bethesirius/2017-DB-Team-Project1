@@ -16,11 +16,11 @@ class Switch extends React.Component {
         super(props);
         this.state = {
             items: [
-                {id: 1, cpu: 16},
-                {id: 2, cpu: 8},
-                {id: 3, cpu: 4},
-                {id: 4, cpu: 2},
-                {id: 5, cpu: 1},
+                {id: 1, ip: "1.2.3.4"},
+                {id: 2, ip: "2.3.4.5"},
+                {id: 3, ip: "3.4.5.6"},
+                {id: 4, ip: "4.5.6.7"},
+                {id: 5, ip: "5.6.7.8"},
             ],
         };
     }
