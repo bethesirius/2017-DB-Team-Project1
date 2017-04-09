@@ -10,8 +10,7 @@ from app.table_model.service.service_model import ServiceModel
 class RackLocationModel(db.Model):
     __tablename__ = "rack_location"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    start_index = Column(Integer)
-    end_index = Column(Integer)
     location_id = Column(Integer, ForeignKey(DetailLocationModel.id))
     service_id = Column(Integer, ForeignKey(ServiceModel.id))
     service_on_off = Column(Boolean)
+    index = Column(Integer)
