@@ -2,9 +2,9 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 
-from table_model.device.device_model import DeviceModel
-from table_model.device.server_model import ServerModel
-from table_model.rack_location.device_info import DeviceInfo
+from app.table_model.device.device_model import DeviceModel
+from app.table_model.device.server_model import ServerModel
+from app.table_model.rack_location.device_info import DeviceInfo
 
 
 class DeviceInfoForServerModel(DeviceInfo):

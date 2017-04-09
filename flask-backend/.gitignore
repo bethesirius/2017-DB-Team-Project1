@@ -8,7 +8,7 @@
 # User-specific stuff:
 .idea
 
-## File-based project format:
+## File-dbd project format:
 *.iws
 
 ## Plugin-specific files:
@@ -141,3 +141,5 @@ ENV/
 pyvenv.cfg
 pip-selfcheck.json
 /.virtualenv/
+static/
+templates/

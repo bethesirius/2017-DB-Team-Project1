@@ -16,7 +16,7 @@
     pip freeze > requirements.txt
     버전 및 패키지 추가시 꼭 freeze 해줄것!
 
-# DataBase
+# Datadb
     aws-RDS(maria DB) 사용
     모든 쿼리는 sqlAlchemy(ORM)로 관리하므로 되도록 직접 쿼리를 날려서 수정하지 말 것
     Table 생성시엔 app-module-table_creator.py를 이용해서 자동생성

@@ -2,8 +2,8 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 
-from table_model.rack_location.for_switch_model import DeviceInfoForSwitchModel
-from table_model.rack_location.rack_location_model import RackLocationModel
+from app.table_model.rack_location.for_switch_model import DeviceInfoForSwitchModel
+from app.table_model.rack_location.rack_location_model import RackLocationModel
 
 
 class RackLocationForSwitchModel(RackLocationModel):

@@ -2,10 +2,10 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 
-from orm.session import Base
-from table_model.rack_location.device_info import DeviceInfo
-from table_model.rack_location.for_server_model import DeviceInfoForServerModel
-from table_model.rack_location.rack_location_model import RackLocationModel
+from app import db
+from app.table_model.rack_location.device_info import DeviceInfo
+from app.table_model.rack_location.for_server_model import DeviceInfoForServerModel
+from app.table_model.rack_location.rack_location_model import RackLocationModel
 
 
 class RackLocationForServerModel(RackLocationModel):
