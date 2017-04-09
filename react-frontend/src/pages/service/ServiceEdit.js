@@ -5,32 +5,15 @@ import React from "react";
 import {browserHistory} from "react-router";
 import {SubmissionError} from "redux-form";
 import {Button, Form, Header, Segment} from "semantic-ui-react";
-import ServerCreateForm from "../../form/ServerCreateForm";
-import SwitchCreateForm from "../../form/SwitchCreateForm";
-import StorageCreateForm from "../../form/StorageCreateForm";
-import RackCreateForm from "../../form/RackCreateForm";
+import ServerSelectForm from "../../form/ServerSelectForm";
+import StorageSelectForm from "../../form/StorageSelectForm";
 import ItemGroup from "../../component/ItemGroup";
-
-const temp_rack = {
-    assetId: 'R00000',
-    size: 46,
-    servers: 5,
-    storages: 10,
-    networks: 1,
-    emptys: 20,
-    mounted: [{
-        assetId: 'S00000',
-        size: 2,
-        mount_lv: 1,
-        ip: '0.0.0.0',
-    }],
-};
 
 class ServiceEdit extends React.Component {
     static propTypes = {};
     handleNext = (event) => {
         event.preventDefault();
-        browserHistory.push(`/asset/form/confirm/${this.props.params.id}`);
+        browserHistory.push(`/service/form/confirm/${this.props.params.id}`);
     };
     // static defaultProps = {};
     // static  childContextTypes = {};
@@ -41,17 +24,13 @@ class ServiceEdit extends React.Component {
         this.state = {
             type: "none",
             options: [
-                {text: "--- 추가할 장비를 선택하세요 ---", value: "none"},
+                {text: "--- 추가할 장비/볼륨을 선택하세요 ---", value: "none"},
                 {text: '서버', value: 'server',},
-                {text: '스위치', value: 'network',},
-                {text: '스토리지', value: 'storage',},
-                {text: '랙', value: 'rack',},
+                {text: '볼륨(스토리지_스펙)', value: 'volume',},
             ],
             none: {form: () => <Segment attached={true}/>, submit: null, list: [],},
-            server: {form: ServerCreateForm, submit: this.handleServerSubmit, list: [],},
-            network: {form: SwitchCreateForm, submit: this.handleSwitchSubmit, list: [],},
-            storage: {form: StorageCreateForm, submit: this.handleStorageSubmit, list: [],},
-            rack: {form: RackCreateForm, submit: this.handleRackSubmit, list: [],}
+            server: {form: ServerSelectForm, submit: this.handleServerSubmit, list: [],},
+            volume: {form: StorageSelectForm, submit: this.handleVolumeSubmit, list: [],},
         };
     }
 
@@ -86,35 +65,14 @@ class ServiceEdit extends React.Component {
             });
         });
     };
-    handleSwitchSubmit = (values, dispatch) => {
+    handleVolumeSubmit = (values, dispatch) => {
         return this._postDevice("/dummy_ok.json", (json) => {
             this.setState((state, props) => {
                 state.type = "none";
-                state.network.list.push({
+                state.volume.list.push({
                     id: Math.random(),
                     cpu: Math.random(),
                 });
-                return state;
-            });
-        });
-    };
-    handleStorageSubmit = (values, dispatch) => {
-        return this._postDevice("/dummy_ok.json", (json) => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state.storage.list.push({
-                    id: Math.random(),
-                    cpu: Math.random(),
-                });
-                return state;
-            });
-        });
-    };
-    handleRackSubmit = (values, dispatch) => {
-        return this._postDevice("/dummy_ok.json", (json) => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state.rack.list.push(temp_rack);
                 return state;
             });
         });
@@ -140,11 +98,9 @@ class ServiceEdit extends React.Component {
                     <DeviceForm onSubmit={device.submit}/>
                 </Segment>
                 <Segment attached={true}>
-                    <Header>자산:{id}에 등록된 장비 목록</Header>
+                    <Header>서비스:{id}에 등록된 장비 목록</Header>
                     <ItemGroup.Server items={this.state.server.list}/>
-                    <ItemGroup.Storage items={this.state.storage.list}/>
-                    <ItemGroup.Switch items={this.state.network.list}/>
-                    <ItemGroup.Rack items={this.state.rack.list}/>
+                    <ItemGroup.Storage items={this.state.volume.list}/>
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button

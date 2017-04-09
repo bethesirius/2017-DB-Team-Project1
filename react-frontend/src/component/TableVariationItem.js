@@ -3,12 +3,14 @@
  */
 import React from "react";
 import {Link} from "react-router";
-import {Button, Icon, Item} from "semantic-ui-react";
+import {Button, Icon, Item, Label} from "semantic-ui-react";
 
 class TableVariationItem extends React.Component {
     static propTypes = {
         header: React.PropTypes.node,
         description: React.PropTypes.node,
+        to: React.PropTypes.string,
+        meta: React.PropTypes.array,
     };
     // static defaultProps = {};
     // static  childContextTypes = {};
@@ -27,6 +29,7 @@ class TableVariationItem extends React.Component {
             to,
             header,
             description,
+            meta,
         } = this.props;
         return (
             <Item>
@@ -35,6 +38,7 @@ class TableVariationItem extends React.Component {
                     <Item.Description>
                         {description}
                     </Item.Description>
+                    {meta && meta.map((item, index) => <Label key={index}>{item}</Label>)}
                     {to && <Item.Extra>
                         <Button as={Link} primary floated='right' to={to}>
                             상세 보기
