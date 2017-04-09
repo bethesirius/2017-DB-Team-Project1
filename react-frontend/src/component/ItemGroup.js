@@ -74,7 +74,7 @@ ItemGroup.Rack = ({items}) => (
 ItemGroup.Service = ({items}) => (
     <ItemGroup
         type={"서비스"} items={items} description={ServiceSummaryTable}
-        header={item => item.id}
+        header={item => item.id} to="/service"
     />
 );
 export default ItemGroup;

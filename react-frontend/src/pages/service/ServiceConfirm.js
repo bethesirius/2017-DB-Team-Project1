@@ -8,7 +8,7 @@ import ItemGroup from "../../component/ItemGroup";
 import TableVariationItem from "../../component/TableVariationItem";
 import AssetTable from "../../component/AssetTable";
 
-class AssetConfirm extends React.Component {
+class ServiceConfirm extends React.Component {
     static propTypes = {};
 
 
@@ -120,4 +120,4 @@ class AssetConfirm extends React.Component {
     }
 }
 
-export default AssetConfirm;
+export default ServiceConfirm;
