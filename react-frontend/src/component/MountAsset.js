@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Modal, Icon, Button } from 'semantic-ui-react'
+import { Header, Confirm, Icon } from 'semantic-ui-react'
 
 class MountAsset extends React.Component {
     static propTypes= {
@@ -11,30 +11,28 @@ class MountAsset extends React.Component {
             open: false,
         };
     }
-    mount(){
-        this.setState({open:false});
-    }
     show(ev){
         this.setState({open:true});
         ev.stopPropagation()
     }
-    close(ev){
+    handleCancel(ev){
+        this.setState({open:false});
+    }
+    handleConfirm(ev){
         this.setState({open:false});
     }
 
     render(){
+        const content=(<div>test</div>)
         return(
             <div>
                 <a style={{cursor:'pointer'}} onClick={ (ev) => this.show(ev) }><Icon name="add square"/> Mount Asset</a>
-                <Modal open={this.state.open}>
-                    <Header icon='cubes' content='Mount Asset on Rack' />
-                    <Modal.Content>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button color='red' onClick={ (ev) => this.close(ev) }>Cancel</Button>
-                        <Button color='green' onClick={(ev) => this.mount()}>Confirm</Button>
-                    </Modal.Actions>
-                </Modal>
+                <Confirm open={this.state.open}
+                    header={<Header><Icon name="cubes"/>Mount Asset</Header>}
+                    content={content}
+                    onCancel={ (ev) => this.handleCancel(ev) }
+                    onConfirm={ (ev) => this.handleConfirm(ev) }
+                />
             </div>
         );
     }
