@@ -4,7 +4,7 @@
 import React from "react";
 import {Field, reduxForm} from "redux-form";
 import {Button, FormGroup, Segment} from "semantic-ui-react";
-import {FieldLazyInput, InteractiveForm} from "./common";
+import {FieldDateInput, FieldDropDown, FieldLazyInput, InteractiveForm} from "./common";
 
 class AssetCreateForm extends React.Component {
     static propTypes = {
@@ -16,13 +16,30 @@ class AssetCreateForm extends React.Component {
 
     static formName = "assetCreate";
     static fieldNames = {
-        assetId: "assetId",
-        date: "date",
-        price: "price",
-        grantee: "grantee",
         name: "name",
-        spec: "spec",
-        company: "company",
+        buy: "buy",
+        get_date: "get_date",
+        price: "price",
+        years: "years",
+        standard: "standard",
+    };
+    handleAddName = (e, {value}) => {
+        this.setState((state, props) => {
+            state.names.push({value: value, text: value});
+            return state;
+        });
+    };
+    handleAddStandard = (e, {value}) => {
+        this.setState((state, props) => {
+            state.standards.push({value: value, text: value});
+            return state;
+        });
+    };
+    handleAddBuy = (e, {value}) => {
+        this.setState((state, props) => {
+            state.buys.push({value: value, text: value});
+            return state;
+        });
     };
 
     static validate(values) {
@@ -30,23 +47,67 @@ class AssetCreateForm extends React.Component {
         return errors;
     }
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFetching: false,
+            names: [],
+            standards: [],
+            buys: [],
+        }
+    }
+
     // getChildContext() {}
-    // componentDidMount(){}
+    componentDidMount() {
+        this.setState({isFetching: true});
+        Promise.all([
+            fetch("/api/asset_name").then(res => res.json()),
+            fetch("/api/standard").then(res => res.json()),
+            fetch("/api/buy").then(res => res.json()),
+        ]).then(([name, standard, buy]) => {
+            this.setState((state, props) => {
+                state.names = name.objects.map(item => {
+                    return {
+                        text: item.asset_name,
+                        value: item.id
+                    };
+                });
+                state.standards = standard.objects.map(item => {
+                    return {
+                        text: item.standard_name,
+                        value: item.id
+                    };
+                });
+                state.buys = buy.objects.map(item => {
+                    return {
+                        text: item.buy_name,
+                        value: item.id
+                    };
+                });
+                state.isFetching = false;
+            });
+        });
+    }
+
     // componentWillUnmount(){}
     render() {
-        const {assetId, date, price, grantee, name, spec, company} = AssetCreateForm.fieldNames;
+        const {get_date, price, years, name, standard, buy} = AssetCreateForm.fieldNames;
         return (
-            <InteractiveForm reduxFormProps={this.props}>
+            <InteractiveForm reduxFormProps={this.props}
+                             loading={this.state.isFetching}
+            >
                 <Segment attached={true}>
                     <FormGroup widths={"equal"}>
-                        <Field name={assetId} component={FieldLazyInput} label="자산번호"/>
-                        <Field name={date} component={FieldLazyInput} label="취득일"/>
+                        <Field name={get_date} component={FieldDateInput} label="취득일"/>
                         <Field name={price} component={FieldLazyInput} label="취득원가"/>
-                        <Field name={grantee} component={FieldLazyInput} label="내용연수"/>
+                        <Field name={years} component={FieldLazyInput} label="내용연수"/>
                     </FormGroup>
-                    <Field name={name} component={FieldLazyInput} label="자산명"/>
-                    <Field name={spec} component={FieldLazyInput} label="규격"/>
-                    <Field name={company} component={FieldLazyInput} label="구입처"/>
+                    <Field name={name} component={FieldDropDown} label="자산명" options={this.state.names}
+                           onAddItem={this.handleAddName}/>
+                    <Field name={standard} component={FieldDropDown} label="규격" options={this.state.standards}
+                           onAddItem={this.handleAddStandard}/>
+                    <Field name={buy} component={FieldDropDown} label="구입처" options={this.state.buys}
+                           onAddItem={this.handleAddBuy}/>
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button primary={true} content={"다음으로"} icon='right arrow' labelPosition='right'/>

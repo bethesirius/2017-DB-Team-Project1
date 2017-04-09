@@ -20,6 +20,8 @@ class AssetModel(db.Model):
     asset_name_id = Column(Integer, ForeignKey(AssetNameModel.id))
     asset_name = relationship("AssetNameModel")
     standard_id = Column(Integer, ForeignKey(StandardModel.id))
+    standard = relationship("StandardModel")
     years = Column(Integer)
     price = Column(Integer)
     buy = Column(Integer, ForeignKey(BuyModel.id))
+    buy_ = relationship("BuyModel")

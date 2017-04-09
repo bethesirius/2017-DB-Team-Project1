@@ -124,7 +124,7 @@ class AssetEdit extends React.Component {
     };
 
     render() {
-        const {params: {id},} = this.props;
+        const {params: {id, asset_num},} = this.props;
         const device = this.state[this.state.type];
         const DeviceForm = device.form;
         return (
@@ -140,7 +140,7 @@ class AssetEdit extends React.Component {
                     <DeviceForm onSubmit={device.submit}/>
                 </Segment>
                 <Segment attached={true}>
-                    <Header>자산:{id}에 등록된 장비 목록</Header>
+                    <Header>자산:{asset_num}에 등록된 장비 목록</Header>
                     <ItemGroup.Server items={this.state.server.list}/>
                     <ItemGroup.Storage items={this.state.storage.list}/>
                     <ItemGroup.Switch items={this.state.network.list}/>

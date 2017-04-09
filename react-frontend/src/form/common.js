@@ -16,6 +16,7 @@ import {
     Segment,
     TextArea
 } from "semantic-ui-react";
+import DatePicker from "react-datepicker";
 
 export const FieldLazyInput = ({input: {onChange, onBlur,}, meta, label, ...custom}) => (
     <Form.Field error={meta.touched && meta.invalid}>
@@ -32,10 +33,26 @@ export const FieldLazyInput = ({input: {onChange, onBlur,}, meta, label, ...cust
     </Form.Field>
 );
 
+export const FieldDateInput = ({input: {onChange, onBlur, value}, meta, label, ...custom}) => (
+    <Form.Field error={meta.touched && meta.invalid}>
+        <label>{label}</label>
+        <div className="my-date">
+            <DatePicker selected={value}
+                        onChange={(date) => {
+                            onChange(date);
+                        }}
+                        {...custom}
+            />
+        </div>
+        {(meta.touched && meta.invalid) && <label>{meta.error}</label>}
+    </Form.Field>
+);
+
 export const FieldDropDown = ({input: {onChange, onBlur, ...left}, meta, label, onChanged, ...custom}) => (
     <Form.Field error={meta.touched && meta.invalid}>
         <label>{label}</label>
         <Dropdown
+            allowAdditions={true}
             search={true}
             selection={true}
             onChange={(e, {value}) => {
@@ -103,6 +120,7 @@ export class InteractiveForm extends React.PureComponent {
         reduxFormProps: React.PropTypes.object.isRequired,
         children: React.PropTypes.node,
         header: React.PropTypes.node,
+        loading: React.PropTypes.bool,
     };
 
     render() {
@@ -110,6 +128,7 @@ export class InteractiveForm extends React.PureComponent {
         return (
             <Form onSubmit={handleSubmit}
                   error={submitFailed}
+                  loading={this.props.loading}
             >
                 {this.props.header}
                 {(submitFailed && !submitting) && <Message
@@ -132,7 +151,6 @@ export class InteractiveForm extends React.PureComponent {
         );
     }
 }
-
 
 
 export const LRFieldLazyTextArea = ({input: {onChange, onBlur,}, meta, label, rows, hasTip, ...custom}) => (

@@ -35,7 +35,7 @@ ReactDOM.render(
                     <Route path="form" component={AssetForm}>
                         <IndexRedirect to="create"/>
                         <Route path="create" component={AssetCreate}/>
-                        <Route path="edit/:id" component={AssetEdit}/>
+                        <Route path="edit/:id/:asset_num" component={AssetEdit}/>
                         <Route path="confirm/:id" component={AssetConfirm}/>
                     </Route>
                     <Route path=":id" component={AssetConfirm}/>
@@ -60,3 +60,7 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
+
+
+
+

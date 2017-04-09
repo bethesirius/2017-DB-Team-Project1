@@ -1,10 +1,22 @@
 {
-  "id": 1,
-  "asset_num": 10130490,
-  "get_date": "2010-07-08",
+  "asset_name": {
+    "asset_name": "서버 클러스터(서버 84대)",
+    "id": 1
+  },
   "asset_name_id": 1,
-  "standard_id": 1,
-  "years": 5,
-  "price": 224000000,
-  "buy": 1
+  "asset_num": null,
+  "buy": 41,
+  "buy_": {
+    "buy_name": "구입처",
+    "id": 41
+  },
+  "get_date": "2017-11-12T00:00:00",
+  "id": 1,
+  "price": 20000,
+  "standard": {
+    "id": 96,
+    "standard_name": "IntelliJ 씁시다."
+  },
+  "standard_id": 96,
+  "years": 5
 }
