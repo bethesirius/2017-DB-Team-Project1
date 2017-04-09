@@ -4,7 +4,7 @@
 import React from "react";
 import {Segment} from "semantic-ui-react";
 import {browserHistory} from "react-router";
-import AssetCreateForm, {fieldNames} from "../../form/AssetCreateForm";
+import ServiceCreateForm, {fieldNames} from "../../form/ServiceCreateForm";
 
 class ServiceCreate extends React.Component {
     static propTypes = {};
@@ -21,13 +21,13 @@ class ServiceCreate extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     handleSubmit = (values, dispatch) => {
-        browserHistory.push(`/asset/form/edit/${values[fieldNames.assetId]}`);
+        browserHistory.push(`/service/form/edit/${values[fieldNames.name]}`);
     };
 
     render() {
         return (
             <Segment>
-                <AssetCreateForm onSubmit={this.handleSubmit}/>
+                <ServiceCreateForm onSubmit={this.handleSubmit}/>
             </Segment>
         );
     }
