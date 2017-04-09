@@ -81,8 +81,8 @@ class MountAsset extends React.Component {
         const content=(
             <Modal.Content>
                 <span>
-                    Asset ID:
-                    <Dropdown onChange={ (ev, data) => this.handleAssetSelect(ev, data) } placeholder="Input Asset ID" search selection fluid options={this.state.unmounted_assets}/>
+                    Management ID:
+                    <Dropdown onChange={ (ev, data) => this.handleAssetSelect(ev, data) } placeholder="Input Management ID" search selection fluid options={this.state.unmounted_assets}/>
                 </span>
                 <span>
                     Mount Lv:
