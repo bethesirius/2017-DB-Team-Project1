@@ -29,7 +29,7 @@ class ItemGroup extends React.Component {
                         <TableVariationItem
                             key={index} header={header ? header(item) : null}
                             description={React.createElement(description, {data: item})}
-                            to={`${to}/${item.id}`}
+                            to={to && `${to}/${item.id}`}
                         />
                     ))
                     : <Message
