@@ -14,4 +14,4 @@ class ServerModel(DeviceModel):
     core_num = Column(Integer)
     spec_id = Column(Integer, ForeignKey(ServerSpecModel.id))
     location_id = Column(Integer, ForeignKey(DetailLocationModel.id))
-
+    size = Column(Integer)
