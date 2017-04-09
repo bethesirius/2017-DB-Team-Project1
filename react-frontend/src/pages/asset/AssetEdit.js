@@ -5,11 +5,12 @@ import React from "react";
 import {browserHistory} from "react-router";
 import {SubmissionError} from "redux-form";
 import {Button, Form, Header, Segment} from "semantic-ui-react";
-import ServerCreateForm from "../../form/ServerCreateForm";
+import ServerCreateForm, {fieldNames as serverField} from "../../form/ServerCreateForm";
 import SwitchCreateForm from "../../form/SwitchCreateForm";
 import StorageCreateForm from "../../form/StorageCreateForm";
 import RackCreateForm from "../../form/RackCreateForm";
 import ItemGroup from "../../component/ItemGroup";
+import moment from "moment";
 
 const temp_rack = {
     assetId: 'R00000',
@@ -27,7 +28,9 @@ const temp_rack = {
 };
 
 class AssetEdit extends React.Component {
-    static propTypes = {};
+    static propTypes = {
+        params: React.PropTypes.object,
+    };
     handleNext = (event) => {
         event.preventDefault();
         browserHistory.push(`/asset/form/confirm/${this.props.params.id}`);
@@ -75,13 +78,46 @@ class AssetEdit extends React.Component {
     }
 
     handleServerSubmit = (values, dispatch) => {
-        return this._postDevice("/dummy_ok.json", (json) => {
+        let location = values[serverField.location];
+        let spec = values[serverField.spec];
+        let core_num = parseInt(values[serverField.core_num]);
+        let asset_id = parseInt(this.props.params.id);
+        location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
+        spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
+
+        const body = {};
+        Object.assign(body, {
+            core_num,
+            device: {
+                asset_id,
+            }
+        }, location, spec);
+        return fetch("/api/server", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        }).then(res => res.json()).then(message => {
+            const {id, device, core_num, spec_id, spec, location_id, location,} = message;
+            const {asset: {get_date}} = device;
+            let manage_num = `S${moment(get_date).year() % 100}${id % 1000}`;
+  
+            return fetch(`/api/server/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    device: {
+                        manage_num,
+                    }
+                }),
+            });
+        }).then(res => res.json()).then(message => {
             this.setState((state, props) => {
                 state.type = "none";
-                state.server.list.push({
-                    id: Math.random(),
-                    cpu: Math.random(),
-                });
+                state.server.list.push(message);
                 return state;
             });
         });
@@ -92,7 +128,7 @@ class AssetEdit extends React.Component {
                 state.type = "none";
                 state.network.list.push({
                     id: Math.random(),
-                    cpu: Math.random(),
+                    core_num: Math.random(),
                 });
                 return state;
             });
@@ -104,7 +140,7 @@ class AssetEdit extends React.Component {
                 state.type = "none";
                 state.storage.list.push({
                     id: Math.random(),
-                    cpu: Math.random(),
+                    core_num: Math.random(),
                 });
                 return state;
             });

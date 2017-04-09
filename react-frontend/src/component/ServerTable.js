@@ -5,10 +5,16 @@ import React from "react";
 import {Table} from "semantic-ui-react";
 
 class ServerTable extends React.Component {
+    // const {id, device, core_num, spec_id, spec, location_id, location,} = message;
     static propTypes = {
         data: React.PropTypes.shape({
-            id: React.PropTypes.node,
-            cpu: React.PropTypes.node,
+            id: React.PropTypes.any,
+            device: React.PropTypes.any,
+            core_num: React.PropTypes.any,
+            spec_id: React.PropTypes.any,
+            spec: React.PropTypes.any,
+            location_id: React.PropTypes.any,
+            location: React.PropTypes.any,
         })
     };
     // static defaultProps = {};
