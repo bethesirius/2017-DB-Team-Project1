@@ -67,7 +67,6 @@ def step_3():
     SwitchModel.metadata.create_all(engine)
     print("Device 테이블 생성")
 
-
 def step_4():
     from app.table_model.rack_location.device_info import DeviceInfo
     from app.table_model.rack_location.for_server_model import DeviceInfoForServerModel
