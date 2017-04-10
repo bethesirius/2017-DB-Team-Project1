@@ -4,7 +4,7 @@
 import React from "react";
 import {browserHistory} from "react-router";
 import {SubmissionError} from "redux-form";
-import {Button, Form, Header, Segment} from "semantic-ui-react";
+import {Button, Dimmer, Form, Header, Loader, Segment} from "semantic-ui-react";
 import ServerCreateForm, {fieldNames as serverField} from "../../form/ServerCreateForm";
 import SwitchCreateForm from "../../form/SwitchCreateForm";
 import StorageCreateForm from "../../form/StorageCreateForm";
@@ -27,6 +27,10 @@ const temp_rack = {
     }],
 };
 
+function zerofill(num, length) {
+    return (num / Math.pow(10, length)).toFixed(length).substr(2);
+}
+
 class AssetEdit extends React.Component {
     static propTypes = {
         params: React.PropTypes.object,
@@ -42,6 +46,7 @@ class AssetEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isFetching: false,
             type: "none",
             options: [
                 {text: "--- 추가할 장비를 선택하세요 ---", value: "none"},
@@ -50,6 +55,7 @@ class AssetEdit extends React.Component {
                 {text: '스토리지', value: 'storage',},
                 {text: '랙', value: 'rack',},
             ],
+            asset: {},
             none: {form: () => <Segment attached={true}/>, submit: null, list: [],},
             server: {form: ServerCreateForm, submit: this.handleServerSubmit, list: [],},
             network: {form: SwitchCreateForm, submit: this.handleSwitchSubmit, list: [],},
@@ -59,7 +65,16 @@ class AssetEdit extends React.Component {
     }
 
     // getChildContext() {}
-    // componentDidMount(){}
+    componentDidMount() {
+        this.setState({isFetching: true,});
+        fetch(`/api/asset/${this.props.params.id}`).then(res => res.json()).then(message => {
+            this.setState({
+                isFetching: false,
+                asset: message
+            });
+        })
+    }
+
     // componentWillUnmount(){}
 
     _postDevice(url, onSuccess) {
@@ -92,22 +107,14 @@ class AssetEdit extends React.Component {
         }, location, spec);
         return fetch("/api/server", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: {"Content-Type": "application/json",},
             body: JSON.stringify(body),
         }).then(res => res.json()).then(message => {
-            const {id, asset: {get_date}} = message;
-            let manage_num = `S${moment(get_date).year() % 100}${id % 1000}`;
-
-            return fetch(`/api/server/${id}`, {
+            let manage_num = `S${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
+            return fetch(`/api/server/${message.id}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    manage_num,
-                }),
+                headers: {"Content-Type": "application/json",},
+                body: JSON.stringify({manage_num}),
             });
         }).then(res => res.json()).then(message => {
             this.setState((state, props) => {
@@ -159,7 +166,10 @@ class AssetEdit extends React.Component {
         const device = this.state[this.state.type];
         const DeviceForm = device.form;
         return (
-            <div>
+            <Dimmer.Dimmable as="div">
+                <Dimmer active={this.state.isFetching}>
+                    <Loader size='massive'>Loading</Loader>
+                </Dimmer>
                 <Segment>
                     <Form>
                         <Form.Select label='장비 타입' placeholder='추가 등록할 장비를 선택하세요.' fluid={true}
@@ -183,7 +193,7 @@ class AssetEdit extends React.Component {
                         onClick={this.handleNext}
                     />
                 </Button.Group>
-            </div>
+            </Dimmer.Dimmable>
         );
     }
 }
