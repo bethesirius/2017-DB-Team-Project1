@@ -29,6 +29,7 @@ class ServerTable extends React.Component {
             "location": React.PropTypes.any,
             "location_id": React.PropTypes.any,
             "manage_num": React.PropTypes.any,
+            "size": React.PropTypes.any,
             "spec": React.PropTypes.any,
             "spec_id": React.PropTypes.any,
         })

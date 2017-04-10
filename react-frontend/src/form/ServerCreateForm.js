@@ -20,20 +20,9 @@ class ServerCreateForm extends React.Component {
         location: "location",
         spec: "spec",
         core_num: "core_num",
-    };
-    handleAddLocation = (e, {value}) => {
-        this.setState((state, props) => {
-            state.locations.push({value: value, text: value});
-            return state;
-        });
+        size: "size",
     };
 
-    handleAddSpec = (e, {value}) => {
-        this.setState((state, props) => {
-            state.specs.push({value: value, text: value});
-            return state;
-        });
-    };
 // {
 //     "asset_id": null,
 //     "core_num": null,
@@ -83,15 +72,30 @@ class ServerCreateForm extends React.Component {
         });
     }
 
+    handleAddLocation = (e, {value}) => {
+        this.setState((state, props) => {
+            state.locations.push({value: value, text: value});
+            return state;
+        });
+    };
+
+    handleAddSpec = (e, {value}) => {
+        this.setState((state, props) => {
+            state.specs.push({value: value, text: value});
+            return state;
+        });
+    };
+
     // componentWillUnmount(){}
     render() {
-        const {manage_num, location, spec, core_num} = ServerCreateForm.fieldNames;
+        const {manage_num, location, spec, core_num, size} = ServerCreateForm.fieldNames;
         return (
-            <InteractiveForm reduxFormProps={this.props}>
+            <InteractiveForm reduxFormProps={this.props} loading={this.state.isFetching}>
                 <Segment attached={true}>
                     <FormGroup widths={"equal"}>
                         <Field name={manage_num} component={FieldLazyInput} label="관리번호"/>
                         <Field name={core_num} component={FieldLazyInput} label="CPU(core)"/>
+                        <Field name={size} component={FieldLazyInput} label="크기(Rack unit)"/>
                     </FormGroup>
                     <Field name={location} component={FieldDropDown} label="현재 위치" options={this.state.locations}
                            onAddItem={this.handleAddLocation}/>

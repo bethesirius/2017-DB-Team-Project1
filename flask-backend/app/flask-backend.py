@@ -1,5 +1,6 @@
 from app import manager, app
 from app.table_model.device.device_model import DeviceModel
+from app.table_model.device.switch_model import SwitchModel
 from app.table_model.device.rack_model import RackModel
 from app.table_model.device.server_model import ServerModel
 from app.table_model.device.spec.rack_spec_model import RackSpecModel
@@ -9,7 +10,6 @@ from app.table_model.device.spec.storage.storage_spec_name_model import StorageS
 from app.table_model.device.spec.storage.storage_spec_type_model import StorageSpecTypeModel
 from app.table_model.device.spec.switch_spec_model import SwitchSpecModel
 from app.table_model.device.storage_model import StorageModel
-from app.table_model.device.switch_model import SwitchModel
 from app.table_model.location.detail_location_model import DetailLocationModel
 from app.table_model.location.location_model import LocationModel
 from app.table_model.number.asset_model import AssetModel

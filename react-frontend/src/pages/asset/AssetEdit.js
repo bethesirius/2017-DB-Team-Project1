@@ -6,7 +6,7 @@ import {browserHistory} from "react-router";
 import {SubmissionError} from "redux-form";
 import {Button, Dimmer, Form, Header, Loader, Segment} from "semantic-ui-react";
 import ServerCreateForm, {fieldNames as serverField} from "../../form/ServerCreateForm";
-import SwitchCreateForm from "../../form/SwitchCreateForm";
+import SwitchCreateForm, {fieldNames as switchField} from "../../form/SwitchCreateForm";
 import StorageCreateForm from "../../form/StorageCreateForm";
 import RackCreateForm from "../../form/RackCreateForm";
 import ItemGroup from "../../component/ItemGroup";
@@ -94,10 +94,11 @@ class AssetEdit extends React.Component {
     }
 
     handleServerSubmit = (values, dispatch) => {
-        let location = values[serverField.location];
         let spec = values[serverField.spec];
-        let core_num = parseInt(values[serverField.core_num], 10);
+        let location = values[serverField.location];
+        let size = parseInt(values[serverField.size], 10);
         let asset_id = parseInt(this.props.params.id, 10);
+        let core_num = parseInt(values[serverField.core_num], 10);
         location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
         spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
 
@@ -105,7 +106,9 @@ class AssetEdit extends React.Component {
         Object.assign(body, {
             core_num,
             asset_id,
+            size,
         }, location, spec);
+        this.setState({isFetching: true});
         return fetch("/api/server", {
             method: "POST",
             headers: {"Content-Type": "application/json",},
@@ -121,8 +124,12 @@ class AssetEdit extends React.Component {
             this.setState((state, props) => {
                 state.type = "none";
                 state.server.list.push(message);
+                state.isFetching = false;
                 return state;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     };
     handleServerDelete = (e, {value}) => {
@@ -139,13 +146,49 @@ class AssetEdit extends React.Component {
         });
     };
     handleSwitchSubmit = (values, dispatch) => {
-        return this._postDevice("/dummy_ok.json", (json) => {
+        let spec = values[switchField.spec];
+        let location = values[switchField.location];
+        let size = parseInt(values[switchField.size], 10);
+        let asset_id = parseInt(this.props.params.id, 10);
+
+        const body = {};
+        Object.assign(body, {
+            asset_id,
+            size,
+        }, location, spec);
+        this.setState({isFetching: true});
+        return fetch("/api/switch", {
+            method: "POST",
+            headers: {"Content-Type": "application/json",},
+            body: JSON.stringify(body),
+        }).then(res => res.json()).then(message => {
+            let manage_num = `N${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
+            return fetch(`/api/switch/${message.id}`, {
+                method: "PUT",
+                headers: {"Content-Type": "application/json",},
+                body: JSON.stringify({manage_num}),
+            });
+        }).then(res => res.json()).then(message => {
             this.setState((state, props) => {
                 state.type = "none";
-                state.network.list.push({
-                    id: Math.random(),
-                    core_num: Math.random(),
-                });
+                state.network.list.push(message);
+                state.isFetching = false;
+                return state;
+            });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
+    };
+    handleSwitchDelete = (e, {value}) => {
+        this.setState({isFetching: true});
+        fetch(`/api/switch/${value}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        }).then(() => {
+            this.setState((state, props) => {
+                state.network.list = state.network.list.filter(item => item.id !== value);
+                state.isFetching = false;
                 return state;
             });
         });
@@ -197,8 +240,8 @@ class AssetEdit extends React.Component {
                 <Segment attached={true}>
                     <Header>자산:{asset_num}에 등록된 장비 목록</Header>
                     <ItemGroup.Server items={this.state.server.list} onDelete={this.handleServerDelete}/>
-                    <ItemGroup.Storage items={this.state.storage.list} del_path="/api/storage"/>
-                    <ItemGroup.Switch items={this.state.network.list} del_path="/api/switch"/>
+                    <ItemGroup.Switch items={this.state.network.list} onDelete={this.handleSwitchDelete}/>
+                    <ItemGroup.Storage items={this.state.storage.list}/>
                     <ItemGroup.Rack items={this.state.rack.list} del_path="/api/rack"/>
                 </Segment>
                 <Button.Group attached={"bottom"}>

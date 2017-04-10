@@ -7,6 +7,14 @@ import {Link} from "react-router";
 import ItemGroup from "../../component/ItemGroup";
 import TotalUseStatisticGroup from "../../component/TotalUseStatisticGroup";
 
+const items = [
+    {icon: "computer", label: 'CPU(core)', value: '22'},
+    {icon: "database", label: 'DISK_SAN(TB)', value: '22'},
+    {icon: "database", label: 'DISK_NAS(TB)', value: '22'},
+    {icon: "database", label: 'DISK_Total', value: '22'},
+    {icon: "disk outline", label: 'TAPE(TB)', value: '22'},
+];
+
 const temp = {
     id: "test_id",
     service: {
@@ -96,12 +104,6 @@ class ServerList extends React.Component {
     }
 }
 
-const items = [
-    {icon: "computer", label: 'CPU(core)', value: '22'},
-    {icon: "database", label: 'DISK_SAN(TB)', value: '22'},
-    {icon: "database", label: 'DISK_NAS(TB)', value: '22'},
-    {icon: "database", label: 'DISK_Total', value: '22'},
-    {icon: "disk outline", label: 'TAPE(TB)', value: '22'},
-];
+
 
 export default ServerList;

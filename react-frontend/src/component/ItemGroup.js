@@ -58,19 +58,19 @@ ItemGroup.Server = ({items, onDelete}) => (
 ItemGroup.Switch = ({items, onDelete}) => (
     <ItemGroup
         type={"스위치"} items={items} description={SwitchTable}
-        header={item => item.id} onDelete={onDelete}
+        header={item => item.manage_num} onDelete={onDelete}
     />
 );
 ItemGroup.Storage = ({items, onDelete}) => (
     <ItemGroup
         type={"스토리지"} items={items} description={ServerTable}
-        header={item => item.id} onDelete={onDelete}
+        header={item => item.manage_num} onDelete={onDelete}
     />
 );
 ItemGroup.Rack = ({items, onDelete}) => (
     <ItemGroup
         type={"Rack"} items={items} description={RackUseStatisticGroup}
-        header={item => item.id} onDelete={onDelete}
+        header={item => item.manage_num} onDelete={onDelete}
     />
 );
 ItemGroup.Service = ({items, onDelete}) => (

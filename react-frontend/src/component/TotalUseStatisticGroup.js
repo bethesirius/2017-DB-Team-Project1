@@ -24,8 +24,9 @@ class TotalUseStatisticGroup extends React.Component {
     // componentWillUnmount(){}
     render() {
         const {items} = this.props;
+        const widths = items.length > 0 ? items.length : 1;
         return (
-            <Statistic.Group widths={items.length}>
+            <Statistic.Group widths={widths}>
                 {items.map((item, index) => (
                     <Statistic key={item.label}>
                         <Statistic.Value>
