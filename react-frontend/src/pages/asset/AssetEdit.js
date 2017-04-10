@@ -39,6 +39,7 @@ class AssetEdit extends React.Component {
         event.preventDefault();
         browserHistory.push(`/asset/form/confirm/${this.props.params.id}`);
     };
+
     // static defaultProps = {};
     // static  childContextTypes = {};
     // static contextTypes = {};
@@ -124,6 +125,19 @@ class AssetEdit extends React.Component {
             });
         });
     };
+    handleServerDelete = (e, {value}) => {
+        this.setState({isFetching: true});
+        fetch(`/api/server/${value}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        }).then(() => {
+            this.setState((state, props) => {
+                state.server.list = state.server.list.filter(item => item.id !== value);
+                state.isFetching = false;
+                return state;
+            });
+        });
+    };
     handleSwitchSubmit = (values, dispatch) => {
         return this._postDevice("/dummy_ok.json", (json) => {
             this.setState((state, props) => {
@@ -182,10 +196,10 @@ class AssetEdit extends React.Component {
                 </Segment>
                 <Segment attached={true}>
                     <Header>자산:{asset_num}에 등록된 장비 목록</Header>
-                    <ItemGroup.Server items={this.state.server.list}/>
-                    <ItemGroup.Storage items={this.state.storage.list}/>
-                    <ItemGroup.Switch items={this.state.network.list}/>
-                    <ItemGroup.Rack items={this.state.rack.list}/>
+                    <ItemGroup.Server items={this.state.server.list} onDelete={this.handleServerDelete}/>
+                    <ItemGroup.Storage items={this.state.storage.list} del_path="/api/storage"/>
+                    <ItemGroup.Switch items={this.state.network.list} del_path="/api/switch"/>
+                    <ItemGroup.Rack items={this.state.rack.list} del_path="/api/rack"/>
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button

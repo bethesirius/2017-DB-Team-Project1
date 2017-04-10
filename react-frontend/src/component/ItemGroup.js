@@ -17,10 +17,11 @@ class ItemGroup extends React.Component {
         header: React.PropTypes.func,
         description: React.PropTypes.any,
         to: React.PropTypes.string,
+        onDelete: React.PropTypes.func,
     };
 
     render() {
-        const {type, items, description, header, to} = this.props;
+        const {type, items, description, header, to, onDelete} = this.props;
         return (
             <Item.Group as={Segment} divided={true}>
                 <Header>{`등록된 ${type}` }</Header>
@@ -29,7 +30,7 @@ class ItemGroup extends React.Component {
                         <TableVariationItem
                             key={index} header={header ? header(item) : null}
                             description={React.createElement(description, {data: item})}
-                            to={to && `${to}/${item.id}`}
+                            to={to && `${to}/${item.id}`} onDelete={onDelete} iid={item.id}
                         />
                     ))
                     : <Message
@@ -42,40 +43,40 @@ class ItemGroup extends React.Component {
     }
 }
 
-ItemGroup.Asset = ({items}) => (
+ItemGroup.Asset = ({items, onDelete}) => (
     <ItemGroup
         type={"자산"} items={items} description={AssetTable}
-        header={item => `자산 ID:${item.id}`} to="/asset"
+        header={item => `자산 ID:${item.id}`} to="/asset" onDelete={onDelete}
     />
 );
-ItemGroup.Server = ({items}) => (
+ItemGroup.Server = ({items, onDelete}) => (
     <ItemGroup
         type={"서버"} items={items} description={ServerTable}
-        header={item => item.manage_num}
+        header={item => item.manage_num} onDelete={onDelete}
     />
 );
-ItemGroup.Switch = ({items}) => (
+ItemGroup.Switch = ({items, onDelete}) => (
     <ItemGroup
         type={"스위치"} items={items} description={SwitchTable}
-        header={item => item.id}
+        header={item => item.id} onDelete={onDelete}
     />
 );
-ItemGroup.Storage = ({items}) => (
+ItemGroup.Storage = ({items, onDelete}) => (
     <ItemGroup
         type={"스토리지"} items={items} description={ServerTable}
-        header={item => item.id}
+        header={item => item.id} onDelete={onDelete}
     />
 );
-ItemGroup.Rack = ({items}) => (
+ItemGroup.Rack = ({items, onDelete}) => (
     <ItemGroup
         type={"Rack"} items={items} description={RackUseStatisticGroup}
-        header={item => item.id}
+        header={item => item.id} onDelete={onDelete}
     />
 );
-ItemGroup.Service = ({items}) => (
+ItemGroup.Service = ({items, onDelete}) => (
     <ItemGroup
         type={"서비스"} items={items} description={ServiceSummaryTable}
-        header={item => item.id} to="/service"
+        header={item => item.id} to="/service" onDelete={onDelete}
     />
 );
 export default ItemGroup;

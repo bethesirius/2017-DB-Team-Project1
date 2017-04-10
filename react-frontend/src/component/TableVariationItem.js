@@ -11,25 +11,17 @@ class TableVariationItem extends React.Component {
         description: React.PropTypes.node,
         to: React.PropTypes.string,
         meta: React.PropTypes.array,
+        onDelete: React.PropTypes.func,
+        iid: React.PropTypes.any,
     };
-    // static defaultProps = {};
-    // static  childContextTypes = {};
-    // static contextTypes = {};
 
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    // getChildContext() {}
-    // componentDidMount(){}
-    // componentWillUnmount(){}
     render() {
         const {
             to,
             header,
             description,
             meta,
+            onDelete, iid,
         } = this.props;
         return (
             <Item>
@@ -38,13 +30,20 @@ class TableVariationItem extends React.Component {
                     <Item.Description>
                         {description}
                     </Item.Description>
-                    {meta && meta.map((item, index) => <Label key={index}>{item}</Label>)}
-                    {to && <Item.Extra>
-                        <Button as={Link} primary floated='right' to={to}>
+                    <Item.Extra>
+                        {meta && meta.map((item, index) => <Label key={index}>{item}</Label>)}
+                        {to && <Button as={Link} primary floated='right' to={to}>
                             상세 보기
                             <Icon name='right chevron'/>
-                        </Button>
-                    </Item.Extra>}
+                        </Button>}
+                        {onDelete &&
+                        <Button animated='vertical' negative floated='right' value={iid} onClick={onDelete}>
+                            <Button.Content hidden>삭제</Button.Content>
+                            <Button.Content visible>
+                                <Icon name='trash'/>
+                            </Button.Content>
+                        </Button>}
+                    </Item.Extra>
                 </Item.Content>
             </Item>
         );
