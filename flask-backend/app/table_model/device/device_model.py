@@ -1,4 +1,4 @@
-from sqlalchemy import Column
+from sqlalchemy import Column, String
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
@@ -12,7 +12,7 @@ class DeviceModel(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     asset_id = Column(Integer, ForeignKey(AssetModel.id))
     asset = relationship('AssetModel')
-    manage_num = Column(Integer)
+    manage_num = Column(String(6))
 
 
 

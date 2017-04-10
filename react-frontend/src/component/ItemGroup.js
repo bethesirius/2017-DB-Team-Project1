@@ -51,7 +51,7 @@ ItemGroup.Asset = ({items}) => (
 ItemGroup.Server = ({items}) => (
     <ItemGroup
         type={"서버"} items={items} description={ServerTable}
-        header={item => item.id}
+        header={item => item.manage_num}
     />
 );
 ItemGroup.Switch = ({items}) => (

@@ -14,5 +14,5 @@ class SwitchModel(db.Model):
     id = Column(Integer, ForeignKey(DeviceModel.id), primary_key=True)
     spec_id = Column(Integer, ForeignKey(SwitchSpecModel.id))
     location_id = Column(Integer, ForeignKey(DetailLocationModel.id))
-
+    size = Column(Integer)
 

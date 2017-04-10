@@ -88,9 +88,7 @@ class AssetEdit extends React.Component {
         const body = {};
         Object.assign(body, {
             core_num,
-            device: {
-                asset_id,
-            }
+            asset_id,
         }, location, spec);
         return fetch("/api/server", {
             method: "POST",
@@ -99,19 +97,16 @@ class AssetEdit extends React.Component {
             },
             body: JSON.stringify(body),
         }).then(res => res.json()).then(message => {
-            const {id, device, core_num, spec_id, spec, location_id, location,} = message;
-            const {asset: {get_date}} = device;
+            const {id, asset: {get_date}} = message;
             let manage_num = `S${moment(get_date).year() % 100}${id % 1000}`;
-  
+
             return fetch(`/api/server/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    device: {
-                        manage_num,
-                    }
+                    manage_num,
                 }),
             });
         }).then(res => res.json()).then(message => {
