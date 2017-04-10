@@ -47,9 +47,13 @@ class ServerTable extends React.Component {
     // componentWillUnmount(){}
 
     render() {
-        const {
-            data: {asset: {asset_num, get_date, years,}, manage_num, core_num, spec: {spec}},
+        let {
+            data: {asset, manage_num, core_num, spec,},
         } = this.props;
+        let asset_num = asset && asset.asset_num;
+        let get_date = asset && asset.get_date;
+        let years = asset && asset.years;
+        spec = spec && spec.spec;
         return (
             <Table definition>
                 <Table.Header>
