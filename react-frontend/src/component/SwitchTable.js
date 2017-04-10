@@ -31,7 +31,7 @@ class ServerTable extends React.Component {
 
     render() {
         const {
-            data: {asset_id, management_id, get_date, core_num, standard, year, spec, location},
+            data: {asset_id, management_id, get_date, standard, year, spec, location},
         } = this.props;
         return (
             <Table definition>

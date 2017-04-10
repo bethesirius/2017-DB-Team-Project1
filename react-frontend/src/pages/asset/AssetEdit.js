@@ -80,8 +80,8 @@ class AssetEdit extends React.Component {
     handleServerSubmit = (values, dispatch) => {
         let location = values[serverField.location];
         let spec = values[serverField.spec];
-        let core_num = parseInt(values[serverField.core_num]);
-        let asset_id = parseInt(this.props.params.id);
+        let core_num = parseInt(values[serverField.core_num], 10);
+        let asset_id = parseInt(this.props.params.id, 10);
         location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
         spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
 
@@ -155,7 +155,7 @@ class AssetEdit extends React.Component {
     };
 
     render() {
-        const {params: {id, asset_num},} = this.props;
+        const {params: {asset_num},} = this.props;
         const device = this.state[this.state.type];
         const DeviceForm = device.form;
         return (

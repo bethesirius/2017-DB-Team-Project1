@@ -32,8 +32,8 @@ class AssetCreate extends React.Component {
         const body = {};
         Object.assign(body, {
             get_date: values[fieldNames.get_date],
-            price: parseInt(values[fieldNames.price]),
-            years: parseInt(values[fieldNames.years]),
+            price: parseInt(values[fieldNames.price], 10),
+            years: parseInt(values[fieldNames.years], 10),
         }, name, standard, buy);
         return fetch("/api/asset", {
             method: "POST",
