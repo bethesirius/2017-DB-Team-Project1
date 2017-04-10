@@ -4,17 +4,13 @@
 import React from "react";
 import {Icon, Statistic} from "semantic-ui-react";
 
-const items = [
-    {icon: "computer", label: 'CPU(core)', value: '22'},
-    {icon: "database", label: 'DISK_SAN(TB)', value: '22'},
-    {icon: "database", label: 'DISK_NAS(TB)', value: '22'},
-    {icon: "database", label: 'DISK_Total', value: '22'},
-    {icon: "disk outline", label: 'TAPE(TB)', value: '22'},
-];
-
 class TotalUseStatisticGroup extends React.Component {
-    static propTypes = {};
-    // static defaultProps = {};
+    static propTypes = {
+        items: React.PropTypes.array
+    };
+    static defaultProps = {
+        items: []
+    };
     // static  childContextTypes = {};
     // static contextTypes = {};
 
@@ -27,8 +23,9 @@ class TotalUseStatisticGroup extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
+        const {items} = this.props;
         return (
-            <Statistic.Group widths="5">
+            <Statistic.Group widths={items.length}>
                 {items.map((item, index) => (
                     <Statistic key={item.label}>
                         <Statistic.Value>

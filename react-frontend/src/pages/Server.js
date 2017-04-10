@@ -18,6 +18,10 @@ class Server extends React.Component {
         this.state = {
             isFetching: false,
             items: [],
+            statistic: [
+                {icon: "server", label: '서버 수', value: 0},
+                {icon: "microchip", label: 'CPU(core)', value: 0},
+            ]
         };
     }
 
@@ -25,10 +29,24 @@ class Server extends React.Component {
     componentDidMount() {
         this.setState({isFetching: true});
         fetch("/api/server").then(res => res.json()).then(message => {
-            this.setState({
-                isFetching: false,
-                items: message.objects,
-            });
+            this._updateState(message.objects);
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
+    }
+
+    _updateState(items) {
+        let serverCount = items.length;
+        let cpuCount = items.reduce((prev, current) => {
+            return prev + current.core_num;
+        }, 0);
+        this.setState((state, props) => {
+            state.statistic[0].value = serverCount;
+            state.statistic[1].value = cpuCount;
+            state.items = items;
+            state.isFetching = false;
+            return state;
         });
     }
 
@@ -38,10 +56,10 @@ class Server extends React.Component {
             method: "DELETE",
             headers: {"Content-Type": "application/json"}
         }).then(res => {
-            this.setState({
-                isFetching: false,
-                items: this.state.items.filter(item => item.id !== value),
-            });
+            this._updateState(this.state.items.filter(item => item.id !== value));
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     };
 
@@ -55,7 +73,7 @@ class Server extends React.Component {
                 </Dimmer>
                 <Segment>
                     <Header>총 사용량</Header>
-                    <TotalUseStatisticGroup />
+                    <TotalUseStatisticGroup items={this.state.statistic}/>
                 </Segment>
                 <ItemGroup.Server items={items} onDelete={this.handleDelete}/>
             </Dimmer.Dimmable>
