@@ -17,6 +17,7 @@ const statisticShape = React.PropTypes.shape({
         size: React.PropTypes.number,
         mount_lv: React.PropTypes.number,
         ip: React.PropTypes.string,
+        service: React.PropTypes.string,
     })),
 });
 
@@ -37,6 +38,7 @@ class RackSummaryTable extends React.Component {
                 size: 2,
                 mount_lv: 1,
                 ip: '0.0.0.0',
+                service: 'test',
             }],
         },
     };
@@ -62,9 +64,10 @@ class RackSummaryTable extends React.Component {
                         <Table.HeaderCell width={2}>Lv</Table.HeaderCell>
                         <Table.HeaderCell>IP</Table.HeaderCell>
                         <Table.HeaderCell>ID</Table.HeaderCell>
+                        <Table.HeaderCell>Service</Table.HeaderCell>
                     </Table.Row>
                     {Array.from(new Array(size).keys()).reverse().map((i) => {
-                        const unit= mounted.filter( (x) => x.mount_lv=== i+1)[0];
+                        const unit= mounted.filter( (x) => x.mount_lv=== i-x.size+2)[0];
                         if(unit){
                             no_row= unit.size;
                         }
@@ -73,6 +76,7 @@ class RackSummaryTable extends React.Component {
                             <Table.Cell>{i + 1}</Table.Cell>
                             { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.ip:null}</Table.Cell>}
                             { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?<AssetModal assetId={unit.assetId} />:null}</Table.Cell>}
+                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.service:null}</Table.Cell>}
                         </Table.Row>)
                     })}
                 </Table.Header>
