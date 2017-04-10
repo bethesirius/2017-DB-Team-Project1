@@ -32,28 +32,10 @@ class ServiceConfirm extends React.Component {
         this.setState({isFetching: true});
         fetch("/json/asset.json")
             .then(res => res.json())
-            .then(json => Promise.all([
-                json,
-                fetch("/json/asset_name.json").then(res => res.json()),
-                fetch("/json/standard.json").then(res => res.json()),
-                fetch("/json/buy.json").then(res => res.json())
-            ]))
-            .then(([asset, name, std, buy]) => {
-                const data = {
-                    id: asset.asset_num,
-                    get_date: asset.get_date,
-                    name: name.asset_name,
-                    standard: std.standard_name,
-                    years: asset.years,
-                    price: asset.price,
-                    buy: buy.buy_name,
-                };
-                this.setState({
-                    isFetching: false,
-                });
+            .then(() => {
+                this.setState({isFetching: false,});
             })
             .catch(err => {
-                alert(err);
                 this.setState({isFetching: false});
             });
     }

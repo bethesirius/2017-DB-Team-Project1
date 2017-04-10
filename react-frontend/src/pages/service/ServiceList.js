@@ -7,8 +7,16 @@ import {Link} from "react-router";
 import ItemGroup from "../../component/ItemGroup";
 import TotalUseStatisticGroup from "../../component/TotalUseStatisticGroup";
 
+const items = [
+    {icon: "computer", label: 'CPU(core)', value: '22'},
+    {icon: "database", label: 'DISK_SAN(TB)', value: '22'},
+    {icon: "database", label: 'DISK_NAS(TB)', value: '22'},
+    {icon: "database", label: 'DISK_Total', value: '22'},
+    {icon: "disk outline", label: 'TAPE(TB)', value: '22'},
+];
+
 const temp = {
-    id:"test_id",
+    id: "test_id",
     service: {
         cpu: -1,
         san: -1,
@@ -82,9 +90,9 @@ class ServerList extends React.Component {
                 </Dimmer>
                 <Segment attached={true}>
                     <Header>총 사용량</Header>
-                    <TotalUseStatisticGroup />
+                    <TotalUseStatisticGroup items={items}/>
                     <Header>잔여 자원</Header>
-                    <TotalUseStatisticGroup />
+                    <TotalUseStatisticGroup items={items}/>
                 </Segment>
                 <Button.Group attached='bottom'>
                     <Button as={Link} to="/service/form" primary={true} icon="add" labelPosition='left'
@@ -95,5 +103,7 @@ class ServerList extends React.Component {
         );
     }
 }
+
+
 
 export default ServerList;

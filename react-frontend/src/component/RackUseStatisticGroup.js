@@ -23,7 +23,7 @@ class RackUseStatisticGroup extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
-        const {data:{servers, storages, networks, emptys}} = this.props;
+        const {data: {servers, storages, networks, emptys}} = this.props;
         const items = [
             {icon: "server", label: 'SERVER', value: servers},
             {icon: "database", label: 'STORAGE', value: storages},

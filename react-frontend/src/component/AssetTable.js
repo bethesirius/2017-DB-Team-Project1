@@ -30,7 +30,7 @@ class AssetTable extends React.Component {
     // componentWillUnmount(){}
     render() {
         const {
-            data: {id, get_date, name, standard, years, price, buy,}
+            data: {get_date, name, standard, years, price, buy,}
         } = this.props;
         return (
             <Table celled definition>

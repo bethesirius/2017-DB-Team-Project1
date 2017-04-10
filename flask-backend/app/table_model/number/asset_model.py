@@ -3,6 +3,7 @@ from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy.orm import relationship
 
 from app import db
 from app.table_model.number.asset_name_model import AssetNameModel
@@ -17,7 +18,10 @@ class AssetModel(db.Model):
     asset_num = Column(Integer)
     get_date = Column(DateTime)
     asset_name_id = Column(Integer, ForeignKey(AssetNameModel.id))
+    asset_name = relationship("AssetNameModel")
     standard_id = Column(Integer, ForeignKey(StandardModel.id))
+    standard = relationship("StandardModel")
     years = Column(Integer)
     price = Column(Integer)
     buy = Column(Integer, ForeignKey(BuyModel.id))
+    buy_ = relationship("BuyModel")
