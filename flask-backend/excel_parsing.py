@@ -35,7 +35,7 @@ def parsing_asset():
     sheet = x.sheet_by_name(ASSET_SHEETS[0])
     assetServerSheet = x.sheet_by_name(ASSET_SHEETS[1])
     assetSwitchSheet = x.sheet_by_name(ASSET_SHEETS[2])
-    assetStoageSheet = x.sheet_by_name(ASSET_SHEETS[3])
+    assetStorageSheet = x.sheet_by_name(ASSET_SHEETS[3])
     assetRackSheet = x.sheet_by_name(ASSET_SHEETS[4])
     storageFile = xlrd.open_workbook(os.path.join(os.path.dirname(os.path.abspath(__file__)), "2_Storage-201703.xlsx"))
     storageSheet = storageFile.sheet_by_name('Sheet2')
@@ -44,7 +44,7 @@ def parsing_asset():
     nlow = sheet.nrows
     
     """
-    ######################################
+    #####################################
     print("-------- "+ASSET_SHEETS[0]+" --------")
     print("Number of col: " + str(ncol))
     print("Number of low: " + str(nlow))
@@ -204,20 +204,35 @@ def parsing_asset():
     ############################################# 
     """
     
-    """
+    """ 
     value = set()
     for row in range(1,23):
         asset_id = assetRackSheet.row_values(row)[0]
-        manage_num = (assetRackSheet.row_values(row)[1]).replace('R', '')
+        manage_num = assetRackSheet.row_values(row)[1]
+        spec_id = assetRackSheet.row_values(row)[4]
+        rack_size = 42
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
-        newData = DeviceModel(manage_num=manage_num)
-        newData.asset_id = asset_id
+        spec_id = session.query(RackSpecModel).filter_by(spec=spec_id).first().id
+        newData = RackModel(asset_id=asset_id, manage_num=manage_num, rack_size=rack_size, spec_id=spec_id)
         session.add(newData)
     session.commit()
+    """
+    values = set()
+    for row in range(1,62):
+        asset_id = assetStorageSheet.row_values(row)[0]
+        manage_num = assetStorageSheet.row_values(row)[1]
+        spec_id = assetStorageSheet.row_values(row)[4]
+        asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
+        spec_id = session.query(StorageSpecModel).filter_by(spec_id=spec_id).first().id
+        newData = StorageModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id)
+        session.add(newData)
+    session.commit()
+ 
+    """
     value = set()
     for row in range(1,535):
         asset_id = assetServerSheet.row_values(row)[0]
-        manage_num = (assetServerSheet.row_values(row)[1]).replace('S','')
+        manage_num = assetServerSheet.row_values(row)[1]
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
         newData = DeviceModel(manage_num=manage_num)
         newData.asset_id = asset_id
@@ -226,32 +241,37 @@ def parsing_asset():
     value = set()
     for row in range(1,62):
         asset_id = assetSwitchSheet.row_values(row)[0]
-        manage_num = (assetSwitchSheet.row_values(row)[1]).replace('N','')
+        manage_num = assetSwitchSheet.row_values(row)[1]
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
         newData = DeviceModel(manage_num=manage_num)
         newData.asset_id = asset_id
         session.add(newData)
     session.commit()
     
-
+    
     for row in range(1,23):
-        _id = (assetRackSheet.row_values(row)[1]).replace('R','')
+        manage_num = assetRackSheet.row_values(row)[1]
         rack_size = 42
+        print(manage_num)
         spec_id = assetRackSheet.row_values(row)[4]
-        print(_id)
-        _id = session.query(DeviceModel).filter_by(manage_num=_id).first().id
-        print(_id)
+        print(session.query(DeviceModel).filter_by(manage_num=manage_num).first())
+        manage_num = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
+        print(1)
         spec_id = session.query(RackSpecModel).filter_by(spec=spec_id).first().id
         print(2)
-        newData = RackModel(rack_size=rack_size)
+        newData = RackModel(rack_size=3)
         print(3)
-        newData.id = _id
+        newData.id = manage_num
         print(4)
         newData.spec_id = spec_id
         print(5)
         session.add(newData)
-        print(6)
-    session.commit()
+        print(newData)
+        print(newData.id)
+        print(newData.rack_size)
+        print(newData.spec_id)
+        session.commit()
+        print(7)
     """
     
    
