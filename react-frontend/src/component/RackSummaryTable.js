@@ -54,7 +54,7 @@ class RackSummaryTable extends React.Component {
 
     render() {
         const {data: {size, mounted}} = this.props;
-        let no_row=0;
+        let no_row = 0;
         return (
             <Table definition>
                 <Table.Header>
@@ -64,15 +64,17 @@ class RackSummaryTable extends React.Component {
                         <Table.HeaderCell>ID</Table.HeaderCell>
                     </Table.Row>
                     {Array.from(new Array(size).keys()).reverse().map((i) => {
-                        const unit= mounted.filter( (x) => x.mount_lv=== i+1)[0];
-                        if(unit){
-                            no_row= unit.size;
+                        const unit = mounted.filter((x) => x.mount_lv === i + 1)[0];
+                        if (unit) {
+                            no_row = unit.size;
                         }
                         no_row--;
                         return (<Table.Row key={i}>
                             <Table.Cell>{i + 1}</Table.Cell>
-                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?unit.ip:null}</Table.Cell>}
-                            { (unit||no_row<0) && <Table.Cell rowSpan={unit?unit.size:1}>{unit?<AssetModal assetId={unit.assetId} />:null}</Table.Cell>}
+                            { (unit || no_row < 0) &&
+                            <Table.Cell rowSpan={unit ? unit.size : 1}>{unit ? unit.ip : null}</Table.Cell>}
+                            { (unit || no_row < 0) && <Table.Cell rowSpan={unit ? unit.size : 1}>{unit ?
+                                <AssetModal assetId={unit.assetId}/> : null}</Table.Cell>}
                         </Table.Row>)
                     })}
                 </Table.Header>

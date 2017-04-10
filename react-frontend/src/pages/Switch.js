@@ -16,7 +16,15 @@ class Switch extends React.Component {
         super(props);
         this.state = {
             items: [
-                {asset_id:'00000001', management_id:'N00001', get_date:'2010-01-01', standard:'허브센터용 저장장치', year:5, spec:'NEXUS 5548P 2011년', location:'본관 1층 제2전산실-R04'},
+                {
+                    asset_id: '00000001',
+                    management_id: 'N00001',
+                    get_date: '2010-01-01',
+                    standard: '허브센터용 저장장치',
+                    year: 5,
+                    spec: 'NEXUS 5548P 2011년',
+                    location: '본관 1층 제2전산실-R04'
+                },
             ],
         };
     }

@@ -1,5 +1,5 @@
 import React from "react";
-import {Accordion, Header, Item, Segment, Divider} from "semantic-ui-react";
+import {Accordion, Divider, Header, Item, Segment} from "semantic-ui-react";
 import RackUseStatisticGroup from "../component/RackUseStatisticGroup";
 import RackSummaryTable from "../component/RackSummaryTable";
 import MountAsset from "../component/MountAsset";
@@ -60,7 +60,7 @@ class Rack extends React.Component {
                             <Item.Group>
                                 <Item>
                                     <Item.Content>
-                                        <Item.Header><AssetModal assetId={summary.assetId} /></Item.Header>
+                                        <Item.Header><AssetModal assetId={summary.assetId}/></Item.Header>
                                         <Item.Meta>rough descriptions</Item.Meta>
                                         <Item.Description>
                                             <RackUseStatisticGroup data={{

@@ -8,7 +8,7 @@ import ItemGroup from "../../component/ItemGroup";
 import TotalUseStatisticGroup from "../../component/TotalUseStatisticGroup";
 
 const temp = {
-    id:"test_id",
+    id: "test_id",
     service: {
         cpu: -1,
         san: -1,
