@@ -265,11 +265,15 @@ def parsing_asset():
         location, detail = val.split("-")
         size = 1
         core_num = assetServerSheet.row_values(row)[5]
+        if random.random() > 0.5:
+            on = True
+        else:
+            on = False
 
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
         spec_id = session.query(ServerSpecModel).filter_by(spec=spec_id).first().id
         location_id = session.query(DetailLocationModel).filter_by(detail=detail).first().id
-        newData = ServerModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, size=size, core_num=core_num)
+        newData = ServerModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, size=size, core_num=core_num, on=on)
         session.add(newData)
     session.commit()
 
@@ -280,11 +284,15 @@ def parsing_asset():
         val = assetSwitchSheet.row_values(row)[3]
         location, detail = val.split("-")
         size = 1
+        if random.random() > 0.5:
+            on = True
+        else:
+            on = False
 
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
         spec_id = session.query(SwitchSpecModel).filter_by(spec=spec_id).first().id
         location_id = session.query(DetailLocationModel).filter_by(detail=detail).first().id
-        newData = SwitchModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, size=size)
+        newData = SwitchModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, size=size, on=on)
         session.add(newData)
     session.commit()
 
@@ -382,6 +390,10 @@ def parsing_asset():
         specName = assetStorageSheet.row_values(row)[4]
         val = assetStorageSheet.row_values(row)[3]
         location, detail = val.split("-")
+        if random.random() > 0.5:
+            on = True
+        else:
+            on = False
 
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
         spec_id = session.query(StorageSpecNameModel).filter_by(spec_name=specName).first().id
@@ -389,7 +401,7 @@ def parsing_asset():
         location_id = session.query(LocationModel).filter_by(location=location).first().id
         for spec in storageSpecs:
             sepc_id = spec.id
-            newData = StorageModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id)
+            newData = StorageModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, on=on)
             session.add(newData)
     session.commit()
 
