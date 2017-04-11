@@ -11,5 +11,5 @@ class RackLocationForSwitchModel(RackLocationModel):
     __tablename__ = "rack_location_for_switch"
     id = Column(Integer, ForeignKey(RackLocationModel.id), primary_key=True, autoincrement=True)
     switch_id = Column(Integer, ForeignKey(SwitchModel.id))
-    switch = relationship('SwitchModel')
+    switch = relationship('SwitchModel', backref='rack_location_for_switch')
     rack_location = relationship('RackLocationModel')

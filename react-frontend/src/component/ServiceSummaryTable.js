@@ -5,7 +5,7 @@ import React from "react";
 import {Table} from "semantic-ui-react";
 
 const statisticShape = React.PropTypes.shape({
-    cpu: React.PropTypes.number,
+    core_num: React.PropTypes.number,
     san: React.PropTypes.number,
     nas: React.PropTypes.number,
     total: React.PropTypes.number,

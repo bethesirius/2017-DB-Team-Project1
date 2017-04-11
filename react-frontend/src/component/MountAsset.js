@@ -79,9 +79,9 @@ class MountAsset extends React.Component {
             .then((r) => {
                 this.setState({
                     unmounted_switches: r.objects.map( (obj) => { return {
-                        key: obj.id,
-                        value: obj.id,
-                        text: obj.id,
+                        key: obj.manage_num,
+                        value: obj.manage_num,
+                        text: obj.manage_num,
                         asset_size: obj.size,
                     }})
                 })
@@ -117,9 +117,9 @@ class MountAsset extends React.Component {
             .then((r) => {
                 this.setState({
                     unmounted_servers: r.objects.map( (obj) => { return {
-                        key: obj.id,
-                        value: obj.id,
-                        text: obj.id,
+                        key: obj.manage_num,
+                        value: obj.manage_num,
+                        text: obj.manage_num,
                         asset_size: obj.size,
                     }})
                 })
