@@ -8,7 +8,7 @@ import ServerTable from "./ServerTable";
 import SwitchTable from "./SwitchTable";
 import AssetTable from "./AssetTable";
 import StorageTable from "./StorageTable";
-import RackUseStatisticGroup from "./RackUseStatisticGroup";
+import RackTable from "./RackTable";
 import ServiceSummaryTable from "./ServiceSummaryTable";
 
 class ItemGroup extends React.Component {
@@ -70,7 +70,7 @@ ItemGroup.Storage = ({items, onDelete}) => (
 );
 ItemGroup.Rack = ({items, onDelete}) => (
     <ItemGroup
-        type={"Rack"} items={items} description={RackUseStatisticGroup}
+        type={"Rack"} items={items} description={RackTable}
         header={item => item.manage_num} onDelete={onDelete}
     />
 );
