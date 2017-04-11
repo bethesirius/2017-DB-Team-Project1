@@ -361,7 +361,6 @@ def parsing_asset():
                     break
                 start_index = start_index + 1
             start_index = (-1 * start_index) + 50
-            service_on_off = True
     
             if manage_num[0] == "N":
                 if session.query(DeviceModel).filter_by(manage_num=manage_num).count() == 0:
@@ -369,7 +368,7 @@ def parsing_asset():
                     continue
                 switch_id = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
                 switch_id = session.query(SwitchModel).filter_by(id=switch_id).first().id
-                newData = RackLocationForSwitchModel(start_index=start_index, location_id=location_id, service_id=service_id, service_on_off=service_on_off, switch_id=switch_id)
+                newData = RackLocationForSwitchModel(start_index=start_index, location_id=location_id, service_id=service_id, switch_id=switch_id)
                 session.add(newData)
                 session.commit()
 
@@ -379,7 +378,7 @@ def parsing_asset():
                     continue
                 server_id = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
                 server_id = session.query(ServerModel).filter_by(id=server_id).first().id
-                newData = RackLocationForServerModel(start_index=start_index, location_id=location_id, service_id=service_id, service_on_off=service_on_off, server_id=server_id)
+                newData = RackLocationForServerModel(start_index=start_index, location_id=location_id, service_id=service_id, server_id=server_id)
                 session.add(newData)
                 session.commit()
  
