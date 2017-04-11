@@ -1,5 +1,5 @@
 # 저장소
-from sqlalchemy import Column
+from sqlalchemy import Column, Boolean
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
@@ -17,5 +17,4 @@ class StorageModel(DeviceModel):
     spec = relationship('StorageSpecModel')
     location_id = Column(Integer, ForeignKey(LocationModel.id))
     location = relationship('LocationModel')
-
-
+    on = Column(Boolean)

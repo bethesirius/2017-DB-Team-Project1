@@ -1,5 +1,5 @@
 # 스위치
-from sqlalchemy import Column
+from sqlalchemy import Column, Boolean
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
@@ -18,3 +18,4 @@ class SwitchModel(DeviceModel):
     location_id = Column(Integer, ForeignKey(DetailLocationModel.id))
     location = relationship('DetailLocationModel', backref='switch')
     size = Column(Integer)
+    on = Column(Boolean)
