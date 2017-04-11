@@ -20,6 +20,16 @@ from app.table_model.device.rack_model import RackModel
 from app.table_model.device.server_model import ServerModel
 from app.table_model.device.storage_model import StorageModel
 from app.table_model.device.switch_model import SwitchModel
+from app.table_model.rack_location.device_info import DeviceInfo
+from app.table_model.rack_location.for_server_model import DeviceInfoForServerModel
+from app.table_model.rack_location.for_switch_model import DeviceInfoForSwitchModel
+from app.table_model.service.service_model import ServiceModel
+from app.table_model.service.service_name_model import ServiceNameModel
+from app.table_model.rack_location.rack_location_for_server_model import RackLocationForServerModel
+from app.table_model.rack_location.rack_location_for_switch_model import RackLocationForSwitchModel
+from app.table_model.rack_location.rack_location_model import RackLocationModel
+
+
 
 from sqlalchemy.orm import sessionmaker, scoped_session
 from app.orm.session import engine
@@ -39,11 +49,13 @@ def parsing_asset():
     assetRackSheet = x.sheet_by_name(ASSET_SHEETS[4])
     storageFile = xlrd.open_workbook(os.path.join(os.path.dirname(os.path.abspath(__file__)), "2_Storage-201703.xlsx"))
     storageSheet = storageFile.sheet_by_name('Sheet2')
+    ServiceFile = xlrd.open_workbook(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Service Resources-201703.xlsx"))
+    ServiceSheet = ServiceFile.sheet_by_name('2016.10자원현황')
 
     ncol = sheet.ncols
     nlow = sheet.nrows
     
-    """
+    """ 
     #####################################
     print("-------- "+ASSET_SHEETS[0]+" --------")
     print("Number of col: " + str(ncol))
@@ -125,14 +137,12 @@ def parsing_asset():
         spec_id = storageSheet.row_values(row)[0]
         if spec_id == '':
             continue
-        registration_date = storageSheet.row_values(row)[1]
         disk_spec = storageSheet.row_values(row)[2]
         disk_type_id = storageSheet.row_values(row)[3]
         volume = storageSheet.row_values(row)[4]
         spec_id = session.query(StorageSpecNameModel).filter_by(spec_name=spec_id).first().id
-        registration_date = datetime.datetime.strptime(registration_date, '%Y-%m-%d')
         disk_type_id = session.query(StorageSpecTypeModel).filter_by(spec_type=disk_type_id).first().id
-        newData = StorageSpecModel(registration_date=registration_date, disk_spec=disk_spec, volume=volume)
+        newData = StorageSpecModel(disk_spec=disk_spec, volume=volume)
         newData.spec_id = spec_id
         newData.disk_type_id = disk_type_id
         session.add(newData)
@@ -167,7 +177,33 @@ def parsing_asset():
         newData = SwitchSpecModel(spec=value)
         session.add(newData)
     session.commit()
-    """
+
+    value = set()
+    for row in range(1,23):
+        asset_id = assetRackSheet.row_values(row)[0]
+        manage_num = assetRackSheet.row_values(row)[1]
+        spec_id = assetRackSheet.row_values(row)[4]
+        rack_size = 42
+        asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
+        spec_id = session.query(RackSpecModel).filter_by(spec=spec_id).first().id
+        newData = RackModel(asset_id=asset_id, manage_num=manage_num, rack_size=rack_size, spec_id=spec_id)
+        session.add(newData)
+    session.commit()
+    
+    values = set()
+    for row in range(4,39):
+        val = ServiceSheet.row_values(row)[1]
+        values.add(val)
+    values.remove('') 
+    print(values)
+    for value in values:
+        newData = ServiceNameModel(service_name=value)
+        session.add(newData)
+    session.commit()
+    """ 
+    
+
+
     
     """
     #######################################################
@@ -201,22 +237,8 @@ def parsing_asset():
         newData.location_id = 
         session.add(newData)
     session.commit()
-    ############################################# 
-    """
-    
-    """ 
-    value = set()
-    for row in range(1,23):
-        asset_id = assetRackSheet.row_values(row)[0]
-        manage_num = assetRackSheet.row_values(row)[1]
-        spec_id = assetRackSheet.row_values(row)[4]
-        rack_size = 42
-        asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
-        spec_id = session.query(RackSpecModel).filter_by(spec=spec_id).first().id
-        newData = RackModel(asset_id=asset_id, manage_num=manage_num, rack_size=rack_size, spec_id=spec_id)
-        session.add(newData)
-    session.commit()
-    """
+
+
     values = set()
     for row in range(1,62):
         asset_id = assetStorageSheet.row_values(row)[0]
@@ -228,7 +250,6 @@ def parsing_asset():
         session.add(newData)
     session.commit()
  
-    """
     value = set()
     for row in range(1,535):
         asset_id = assetServerSheet.row_values(row)[0]
@@ -272,13 +293,10 @@ def parsing_asset():
         print(newData.spec_id)
         session.commit()
         print(7)
-    """
     
-   
 
-
-
- 
+    ############################################# 
+    """
 
     # print(sheet.cell_value(2, 2))
     # print()
