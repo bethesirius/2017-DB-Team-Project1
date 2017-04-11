@@ -3,29 +3,12 @@
  */
 import React from "react";
 import {browserHistory} from "react-router";
-import {SubmissionError} from "redux-form";
 import {Button, Dimmer, Form, Header, Loader, Segment} from "semantic-ui-react";
 import ServerCreateForm, {fieldNames as serverField} from "../../form/ServerCreateForm";
 import SwitchCreateForm, {fieldNames as switchField} from "../../form/SwitchCreateForm";
-import StorageCreateForm from "../../form/StorageCreateForm";
-import RackCreateForm from "../../form/RackCreateForm";
+import StorageCreateForm, {fieldNames as storageField} from "../../form/StorageCreateForm";
 import ItemGroup from "../../component/ItemGroup";
 import moment from "moment";
-
-const temp_rack = {
-    assetId: 'R00000',
-    size: 46,
-    servers: 5,
-    storages: 10,
-    networks: 1,
-    emptys: 20,
-    mounted: [{
-        assetId: 'S00000',
-        size: 2,
-        mount_lv: 1,
-        ip: '0.0.0.0',
-    }],
-};
 
 function zerofill(num, length) {
     return (num / Math.pow(10, length)).toFixed(length).substr(2);
@@ -61,11 +44,9 @@ class AssetEdit extends React.Component {
             server: {form: ServerCreateForm, submit: this.handleServerSubmit, list: [],},
             network: {form: SwitchCreateForm, submit: this.handleSwitchSubmit, list: [],},
             storage: {form: StorageCreateForm, submit: this.handleStorageSubmit, list: [],},
-            rack: {form: RackCreateForm, submit: this.handleRackSubmit, list: [],}
         };
     }
 
-    // getChildContext() {}
     componentDidMount() {
         this.setState({isFetching: true,});
         fetch(`/api/asset/${this.props.params.id}`).then(res => res.json()).then(message => {
@@ -76,143 +57,102 @@ class AssetEdit extends React.Component {
         })
     }
 
-    // componentWillUnmount(){}
-
-    _postDevice(url, onSuccess) {
-        return fetch(
-            url,
-        ).then(res => {
-            if (!res.ok) {
-                throw SubmissionError({_error: "Failed Fetch"});
-            }
-            return res.json();
-        }).then(json => {
-            onSuccess(json);
+    _handleDeviceSubmit = (fieldName, path, metaBody, listName, manageLabel, values, dispatch) => {
+        let asset_id = parseInt(this.props.params.id, 10);
+        const body = {};
+        Object.assign(body, {
+            asset_id,
+        }, metaBody(fieldName, values));
+        this.setState({isFetching: true});
+        return fetch(`/api/${path}`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json",},
+            body: JSON.stringify(body),
+        }).then(res => res.json()).then(message => {
+            let manage_num = `${manageLabel}${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
+            return fetch(`/api/${path}/${message.id}`, {
+                method: "PUT",
+                headers: {"Content-Type": "application/json",},
+                body: JSON.stringify({manage_num}),
+            });
+        }).then(res => res.json()).then(message => {
+            this.setState((state, props) => {
+                state.type = "none";
+                state[listName].list.push(message);
+                state.isFetching = false;
+                return state;
+            });
         }).catch(err => {
-            return Promise.reject(new SubmissionError({_error: `Failed Fetch by:${err}`}));
+            alert(err.message);
+            this.setState({isFetching: false});
         });
-    }
+    };
+    _handleDeviceDelete = (path, listName, e, value) => {
+        this.setState({isFetching: true});
+        fetch(`/api/${path}/${value}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        }).then(() => {
+            this.setState((state, props) => {
+                state[listName].list = state[listName].list.filter(item => item.id !== value);
+                state.isFetching = false;
+                return state;
+            });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
+    };
 
     handleServerSubmit = (values, dispatch) => {
-        let spec = values[serverField.spec];
-        let location = values[serverField.location];
-        let size = parseInt(values[serverField.size], 10);
-        let asset_id = parseInt(this.props.params.id, 10);
-        let core_num = parseInt(values[serverField.core_num], 10);
-        location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
-        spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
-
-        const body = {};
-        Object.assign(body, {
-            core_num,
-            asset_id,
-            size,
-        }, location, spec);
-        this.setState({isFetching: true});
-        return fetch("/api/server", {
-            method: "POST",
-            headers: {"Content-Type": "application/json",},
-            body: JSON.stringify(body),
-        }).then(res => res.json()).then(message => {
-            let manage_num = `S${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
-            return fetch(`/api/server/${message.id}`, {
-                method: "PUT",
-                headers: {"Content-Type": "application/json",},
-                body: JSON.stringify({manage_num}),
-            });
-        }).then(res => res.json()).then(message => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state.server.list.push(message);
-                state.isFetching = false;
-                return state;
-            });
-        }).catch(err => {
-            alert(err.message);
-            this.setState({isFetching: false});
-        });
+        return this._handleDeviceSubmit(serverField, "server", (fieldName, values) => {
+            let core_num = parseInt(values[fieldName.core_num], 10);
+            let size = parseInt(values[fieldName.size], 10);
+            let spec = values[fieldName.spec];
+            spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
+            let location = values[fieldName.location];
+            location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
+            return Object.assign({size, core_num,}, spec, location);
+        }, "server", "S", values, dispatch);
     };
     handleServerDelete = (e, {value}) => {
-        this.setState({isFetching: true});
-        fetch(`/api/server/${value}`, {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"}
-        }).then(() => {
-            this.setState((state, props) => {
-                state.server.list = state.server.list.filter(item => item.id !== value);
-                state.isFetching = false;
-                return state;
-            });
-        });
+        this._handleDeviceDelete("server", "server", e, value);
     };
     handleSwitchSubmit = (values, dispatch) => {
-        let spec = values[switchField.spec];
-        let location = values[switchField.location];
-        let size = parseInt(values[switchField.size], 10);
-        let asset_id = parseInt(this.props.params.id, 10);
-
-        const body = {};
-        Object.assign(body, {
-            asset_id,
-            size,
-        }, location, spec);
-        this.setState({isFetching: true});
-        return fetch("/api/switch", {
-            method: "POST",
-            headers: {"Content-Type": "application/json",},
-            body: JSON.stringify(body),
-        }).then(res => res.json()).then(message => {
-            let manage_num = `N${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
-            return fetch(`/api/switch/${message.id}`, {
-                method: "PUT",
-                headers: {"Content-Type": "application/json",},
-                body: JSON.stringify({manage_num}),
-            });
-        }).then(res => res.json()).then(message => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state.network.list.push(message);
-                state.isFetching = false;
-                return state;
-            });
-        }).catch(err => {
-            alert(err.message);
-            this.setState({isFetching: false});
-        });
+        return this._handleDeviceSubmit(switchField, "switch", (fieldName, values) => {
+            let size = parseInt(values[fieldName.size], 10);
+            let spec = values[fieldName.spec];
+            spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
+            let location = values[fieldName.location];
+            location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
+            return Object.assign({size,}, spec, location);
+        }, "network", "N", values, dispatch);
     };
     handleSwitchDelete = (e, {value}) => {
-        this.setState({isFetching: true});
-        fetch(`/api/switch/${value}`, {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"}
-        }).then(() => {
-            this.setState((state, props) => {
-                state.network.list = state.network.list.filter(item => item.id !== value);
-                state.isFetching = false;
-                return state;
-            });
-        });
+        this._handleDeviceDelete("switch", "network", e, value);
     };
     handleStorageSubmit = (values, dispatch) => {
-        return this._postDevice("/dummy_ok.json", (json) => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state.storage.list.push({
-                    id: Math.random(),
-                    core_num: Math.random(),
-                });
-                return state;
-            });
-        });
+        return this._handleDeviceSubmit(storageField, "storage", (fieldName, values) => {
+            let location = values[fieldName.location];
+            location = Number.isInteger(location) ? {location_id: location} : {location: {location: location}};
+            let spec = values[fieldName.spec];
+            if (!spec) { // create new storage spec
+                let spec_ = values[fieldName.new_spec.spec];
+                spec_ = Number.isInteger(spec_) ? {spec_id: spec_} : {spec: {spec_name: spec_}};
+                let disk_type = values[fieldName.new_spec.disk_type];
+                disk_type = Number.isInteger(disk_type) ? {disk_type_id: disk_type} : {disk_type: {spec_type: disk_type}};
+                let disk_spec = values[fieldName.new_spec.disk_spec];
+                let volume = parseFloat(values[fieldName.new_spec.volume]);
+                spec = Object.assign({disk_spec, volume}, disk_type, spec_);
+                spec = {spec};
+            } else { // use already exist spec
+                spec = {spec_id: spec};
+            }
+            return Object.assign({}, spec, location);
+        }, "storage", "D", values, dispatch);
     };
-    handleRackSubmit = (values, dispatch) => {
-        return this._postDevice("/dummy_ok.json", (json) => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state.rack.list.push(temp_rack);
-                return state;
-            });
-        });
+    handleStorageDelete = (e, {value}) => {
+        this._handleDeviceDelete("storage", "storage", e, value);
     };
     handleTypeChange = (e, {value}) => {
         this.setState({type: value,});
@@ -241,8 +181,7 @@ class AssetEdit extends React.Component {
                     <Header>자산:{asset_num}에 등록된 장비 목록</Header>
                     <ItemGroup.Server items={this.state.server.list} onDelete={this.handleServerDelete}/>
                     <ItemGroup.Switch items={this.state.network.list} onDelete={this.handleSwitchDelete}/>
-                    <ItemGroup.Storage items={this.state.storage.list}/>
-                    <ItemGroup.Rack items={this.state.rack.list} del_path="/api/rack"/>
+                    <ItemGroup.Storage items={this.state.storage.list} onDelete={this.handleStorageDelete}/>
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button
