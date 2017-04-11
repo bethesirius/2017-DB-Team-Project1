@@ -16,5 +16,5 @@ class SwitchModel(DeviceModel):
     spec_id = Column(Integer, ForeignKey(SwitchSpecModel.id))
     spec = relationship('SwitchSpecModel')
     location_id = Column(Integer, ForeignKey(DetailLocationModel.id))
-    location = relationship('DetailLocationModel')
+    location = relationship('DetailLocationModel', backref='switch')
     size = Column(Integer)
