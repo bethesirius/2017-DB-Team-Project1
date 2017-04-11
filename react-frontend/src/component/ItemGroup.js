@@ -7,6 +7,7 @@ import {Header, Item, Message, Segment} from "semantic-ui-react";
 import ServerTable from "./ServerTable";
 import SwitchTable from "./SwitchTable";
 import AssetTable from "./AssetTable";
+import StorageTable from "./StorageTable";
 import RackUseStatisticGroup from "./RackUseStatisticGroup";
 import ServiceSummaryTable from "./ServiceSummaryTable";
 
@@ -63,7 +64,7 @@ ItemGroup.Switch = ({items, onDelete}) => (
 );
 ItemGroup.Storage = ({items, onDelete}) => (
     <ItemGroup
-        type={"스토리지"} items={items} description={ServerTable}
+        type={"스토리지"} items={items} description={StorageTable}
         header={item => item.manage_num} onDelete={onDelete}
     />
 );
