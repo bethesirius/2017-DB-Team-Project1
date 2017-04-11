@@ -17,8 +17,8 @@ class StorageCreateForm extends React.Component {
     static formName = "storage";
     static fieldNames = {
         manage_num: "manage_num",
-        spec: "spec",
         location: "location",
+        spec: "spec",
         new_spec: {
             disk_spec: "disk_spec",
             disk_type: "disk_type",
@@ -29,7 +29,14 @@ class StorageCreateForm extends React.Component {
 
     static validate(values) {
         const errors = {};
-        validateExist(values,errors,StorageCreateForm.fieldNames);
+        if (values[StorageCreateForm.fieldNames.spec]) {
+            validateExist(values, errors, StorageCreateForm.fieldNames);
+        } else {
+            validateExist(values, errors, StorageCreateForm.fieldNames.new_spec);
+            if (!values[StorageCreateForm.fieldNames.location]) {
+                errors[StorageCreateForm.fieldNames.location] = "값이 필요 합니다.";
+            }
+        }
         return errors;
     }
 

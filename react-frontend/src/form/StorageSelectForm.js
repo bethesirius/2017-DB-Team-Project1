@@ -16,7 +16,7 @@ class StorageSelectForm extends React.Component {
 
     static formName = "storage";
     static fieldNames = {
-        deviceId: "deviceId",
+        manage_num: "manage_num",
         amount: "amount",
         usage: "usage",
     };
@@ -31,11 +31,11 @@ class StorageSelectForm extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
-        const {deviceId, amount, usage} = StorageSelectForm.fieldNames;
+        const {manage_num, amount, usage} = StorageSelectForm.fieldNames;
         return (
             <InteractiveForm reduxFormProps={this.props}>
                 <Segment attached={true}>
-                    <Field name={deviceId} component={FieldDropDown} label="스토리지 선택"/>
+                    <Field name={manage_num} component={FieldDropDown} label="스토리지 선택"/>
                     <FormGroup widths={"equal"}>
                         <Field name={amount} component={FieldLazyInput} label="할당량 (TB)"/>
                         <Field name={usage} component={FieldLazyInput} label="용도"/>

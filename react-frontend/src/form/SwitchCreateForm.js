@@ -13,7 +13,7 @@ class SwitchCreateForm extends React.Component {
 
     static formName = "switch";
     static fieldNames = {
-        deviceId: "deviceId",
+        manage_num: "manage_num",
         location: "location",
         spec: "spec",
         size: "size",
@@ -72,12 +72,12 @@ class SwitchCreateForm extends React.Component {
     };
 
     render() {
-        const {deviceId, location, spec, size} = SwitchCreateForm.fieldNames;
+        const {manage_num, location, spec, size} = SwitchCreateForm.fieldNames;
         return (
             <InteractiveForm reduxFormProps={this.props} loading={this.state.isFetching}>
                 <Segment attached={true}>
                     <FormGroup widths={"equal"}>
-                        <Field name={deviceId} component={FieldLazyInput} label="관리번호"/>
+                        <Field name={manage_num} component={FieldLazyInput} label="관리번호"/>
                         <Field name={size} component={FieldLazyInput} label="크기(Rack unit)"/>
                     </FormGroup>
                     <Field name={location} component={FieldDropDown} label="현재 위치" options={this.state.locations}

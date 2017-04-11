@@ -37,7 +37,6 @@ class AssetEdit extends React.Component {
                 {text: '서버', value: 'server',},
                 {text: '스위치', value: 'network',},
                 {text: '스토리지', value: 'storage',},
-                {text: '랙', value: 'rack',},
             ],
             asset: {},
             none: {form: () => <Segment attached={true}/>, submit: null, list: [],},

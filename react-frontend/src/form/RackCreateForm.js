@@ -16,7 +16,7 @@ class RackCreateForm extends React.Component {
 
     static formName = "rack";
     static fieldNames = {
-        deviceId: "deviceId",
+        manage_num: "manage_num",
         location: "location",
         spec: "spec",
         detail: "detail",
@@ -81,12 +81,12 @@ class RackCreateForm extends React.Component {
     };
 
     render() {
-        const {deviceId, location, spec, detail, size} = RackCreateForm.fieldNames;
+        const {manage_num, location, spec, detail, size} = RackCreateForm.fieldNames;
         return (
             <InteractiveForm reduxFormProps={this.props} loading={this.state.isFetching}>
                 <Segment attached={true}>
                     <FormGroup widths={"equal"}>
-                        <Field name={deviceId} component={FieldLazyInput} label="관리 번호"/>
+                        <Field name={manage_num} component={FieldLazyInput} label="관리 번호"/>
                         <Field name={detail} component={FieldLazyInput} label="Rack Code"/>
                         <Field name={size} component={FieldLazyInput} label="Rack Size"/>
                     </FormGroup>
