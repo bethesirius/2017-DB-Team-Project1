@@ -2,32 +2,11 @@
  * Created by rino0 on 2017-03-27.
  */
 import React from "react";
-import {Button, Dimmer, Loader, Segment} from "semantic-ui-react";
+import {Button, Dimmer, Header, Loader, Segment} from "semantic-ui-react";
 import {Link} from "react-router";
 import ItemGroup from "../../component/ItemGroup";
-
-
-const tempF = () => {
-    return fetch("/json/asset.json")
-        .then(res => res.json())
-        .then(json => Promise.all([
-            json,
-            fetch("/json/asset_name.json").then(res => res.json()),
-            fetch("/json/standard.json").then(res => res.json()),
-            fetch("/json/buy.json").then(res => res.json())
-        ]))
-        .then(([asset, name, std, buy]) => {
-            return {
-                id: asset.asset_num,
-                get_date: asset.get_date,
-                name: name.asset_name,
-                standard: std.standard_name,
-                years: asset.years,
-                price: asset.price,
-                buy: buy.buy_name,
-            };
-        });
-};
+import TotalUseStatisticGroup from "../../component/TotalUseStatisticGroup";
+import {format} from "currency-formatter";
 
 class AssetList extends React.Component {
     static propTypes = {};
@@ -38,21 +17,39 @@ class AssetList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isFetching: false,
             items: [],
+            statistic: [
+                {icon: "server", label: '자산 종류 수', value: 0},
+                {icon: "won", label: '총 금액', value: 0},
+            ]
         };
     }
 
     // getChildContext() {}
     componentDidMount() {
         this.setState({isFetching: true});
-        fetch("/json/asset_list.json").then(res => res.json()).then(json => {
-            const {objects} = json;
-            const assetF = tempF.bind(this);
-            Promise.all(objects.map(i => assetF())).then(lists => this.setState({
-                isFetching: false,
-                items: lists,
-            }));
-        })
+        fetch("/api/asset").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                this._updateState(message.objects);
+            }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
+    }
+
+    _updateState(items) {
+        let assetCount = items.length;
+        let totalPriceSum = items.reduce((prev, current) => {
+            return prev + current.price;
+        }, 0);
+        this.setState((state, props) => {
+            state.statistic[0].value = assetCount;
+            state.statistic[1].value = format(totalPriceSum, {code: "WON", precision: 0}).substring(1);
+            state.items = items;
+            state.isFetching = false;
+            return state;
+        });
     }
 
     // componentWillUnmount(){}
@@ -63,7 +60,8 @@ class AssetList extends React.Component {
                     <Loader size='massive'>Loading</Loader>
                 </Dimmer>
                 <Segment attached={true}>
-
+                    <Header>총 사용량</Header>
+                    <TotalUseStatisticGroup items={this.state.statistic}/>
                 </Segment>
                 <Button.Group attached='bottom'>
                     <Button as={Link} to="/asset/form" primary={true} icon="add" labelPosition='left'

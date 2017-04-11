@@ -4,7 +4,7 @@
 import React from "react";
 import {Field, reduxForm} from "redux-form";
 import {Button, FormGroup, Segment} from "semantic-ui-react";
-import {FieldLazyInput, InteractiveForm} from "./common";
+import {FieldLazyInput, InteractiveForm, validateExist} from "./common";
 
 class ServiceCreateForm extends React.Component {
     static propTypes = {
@@ -21,6 +21,7 @@ class ServiceCreateForm extends React.Component {
 
     static validate(values) {
         const errors = {};
+        validateExist(values,errors,ServiceCreateForm.fieldNames);
         return errors;
     }
 

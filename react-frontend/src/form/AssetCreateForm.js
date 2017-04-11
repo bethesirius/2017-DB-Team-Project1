@@ -4,7 +4,7 @@
 import React from "react";
 import {Field, reduxForm} from "redux-form";
 import {Button, FormGroup, Segment} from "semantic-ui-react";
-import {FieldDateInput, FieldDropDown, FieldLazyInput, InteractiveForm} from "./common";
+import {FieldDateInput, FieldDropDown, FieldLazyInput, InteractiveForm, validateExist} from "./common";
 
 class AssetCreateForm extends React.Component {
     static propTypes = {
@@ -44,6 +44,13 @@ class AssetCreateForm extends React.Component {
 
     static validate(values) {
         const errors = {};
+        validateExist(values, errors, AssetCreateForm.fieldNames);
+        if (!/^\d+$/.test(values[AssetCreateForm.fieldNames.price])) {
+            errors[AssetCreateForm.fieldNames.price] = "숫자만 입력 가능합니다.";
+        }
+        if (!/^\d+$/.test(values[AssetCreateForm.fieldNames.years])) {
+            errors[AssetCreateForm.fieldNames.years] = "숫자만 입력 가능합니다.";
+        }
         return errors;
     }
 
@@ -61,9 +68,9 @@ class AssetCreateForm extends React.Component {
     componentDidMount() {
         this.setState({isFetching: true});
         Promise.all([
-            fetch("/api/asset_name").then(res => res.json()),
-            fetch("/api/standard").then(res => res.json()),
-            fetch("/api/buy").then(res => res.json()),
+            fetch("/api/asset_name").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/standard").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/buy").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
         ]).then(([name, standard, buy]) => {
             this.setState((state, props) => {
                 state.names = name.objects.map(item => {
@@ -86,6 +93,9 @@ class AssetCreateForm extends React.Component {
                 });
                 state.isFetching = false;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     }
 

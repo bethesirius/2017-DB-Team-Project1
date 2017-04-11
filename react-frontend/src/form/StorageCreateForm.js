@@ -4,7 +4,7 @@
 import React from "react";
 import {Field, reduxForm} from "redux-form";
 import {Button, Divider, FormGroup, Segment} from "semantic-ui-react";
-import {FieldDropDown, FieldLazyInput, InteractiveForm} from "./common";
+import {FieldDropDown, FieldLazyInput, InteractiveForm, validateExist} from "./common";
 
 class StorageCreateForm extends React.Component {
     static propTypes = {
@@ -17,8 +17,8 @@ class StorageCreateForm extends React.Component {
     static formName = "storage";
     static fieldNames = {
         manage_num: "manage_num",
-        spec: "spec",
         location: "location",
+        spec: "spec",
         new_spec: {
             disk_spec: "disk_spec",
             disk_type: "disk_type",
@@ -29,6 +29,14 @@ class StorageCreateForm extends React.Component {
 
     static validate(values) {
         const errors = {};
+        if (values[StorageCreateForm.fieldNames.spec]) {
+            validateExist(values, errors, StorageCreateForm.fieldNames);
+        } else {
+            validateExist(values, errors, StorageCreateForm.fieldNames.new_spec);
+            if (!values[StorageCreateForm.fieldNames.location]) {
+                errors[StorageCreateForm.fieldNames.location] = "값이 필요 합니다.";
+            }
+        }
         return errors;
     }
 
@@ -47,10 +55,10 @@ class StorageCreateForm extends React.Component {
     componentDidMount() {
         this.setState({isFetching: true});
         Promise.all([
-            fetch("/api/storage_spec").then(res => res.json()),
-            fetch("/api/detail_location").then(res => res.json()),
-            fetch("/api/storage_spec_type").then(res => res.json()),
-            fetch("/api/storage_spec_name").then(res => res.json()),
+            fetch("/api/storage_spec").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/detail_location").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/storage_spec_type").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/storage_spec_name").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
         ]).then(([spec, location, spec_type, spec_name]) => {
             this.setState((state, props) => {
                 state.specs = spec.objects.map(item => {
@@ -63,11 +71,8 @@ class StorageCreateForm extends React.Component {
                 });
                 state.locations = location.objects.map(item => {
                     let location = item.location ? item.location.location : 'unknown';
-                    let detail = item.location
-                        ? item.location.detail ? item.location.detail : 'unknown'
-                        : 'unknown';
                     return {
-                        text: `${location}-${detail}`,
+                        text: `${location}`,
                         value: item.id
                     };
                 });
@@ -85,6 +90,9 @@ class StorageCreateForm extends React.Component {
                 });
                 state.isFetching = false;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     }
 
