@@ -324,14 +324,51 @@ def parsing_asset():
         ServiceList[color]=name
 
     for col in range(0,24):
-        col = (col*5)+2
-        rackName = RackSheet.row_values(4)[col]
-        print(rackName)
-        for row in range(7,49):
+        col = (col*5)+3
+        rackInfo = RackSheet.row_values(4)[col-2]
+        detail, manage_num = rackInfo.split(" - ")
+        location_id = session.query(DetailLocationModel).filter_by(detail=detail).first().id
+        for row in range(8,49):
             color = RackSheetOPX.cell(row=row, column=col).fill.start_color.index
+            print(row)
+            print(col)
+            manage_num = RackSheetOPX.cell(row=row, column=col).value
+            if manage_num is None:
+                continue
+            print(manage_num)
+            if color not in ServiceList:
+                print(manage_num + "does not exist service.")
+                continue
             name = ServiceList[color]
-            service_id = session.query(ServiceModel).filter_by(service_name=name).first().id
+            service_id = session.query(ServiceNameModel).filter_by(service_name=name).first().id
+
+            index = row
+            while index < 49:
+                if (manage_num != RackSheetOPX.cell(row=index, column=col).value) or (color != RackSheetOPX.cell(row=index, column=col).fill.start_color.index):
+                    break
+                index = index + 1
+            service_on_off = True
     
+            if manage_num[0] == "N":
+                if session.query(DeviceModel).filter_by(manage_num=manage_num).count() == 0:
+                    print(manage_num+"is passed!")
+                    continue
+                switch_id = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
+                switch_id = session.query(SwitchModel).filter_by(id=switch_id).first().id
+                newData = RackLocationForSwitchModel(switch_id=switch_id)
+                session.add(newData)
+                session.commit()
+
+            elif manage_num[0] == "S":
+                if session.query(DeviceModel).filter_by(manage_num=manage_num).count() == 0:
+                    print(manage_num+"is passed!")
+                    continue
+                server_id = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
+                server_id = session.query(ServerModel).filter_by(id=server_id).first().id
+                newData = RackLocationForServerModel(ip_v4=ip_v4, server_id=server_id)
+                session.add(newData)
+                session.commit()
+ 
     
 
 
