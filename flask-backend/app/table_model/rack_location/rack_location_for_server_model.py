@@ -11,5 +11,5 @@ class RackLocationForServerModel(RackLocationModel):
     __tablename__ = "rack_location_for_server"
     id = Column(Integer, ForeignKey(RackLocationModel.id), primary_key=True, autoincrement=True)
     server_id = Column(Integer, ForeignKey(ServerModel.id))
-    server = relationship('ServerModel')
+    server = relationship('ServerModel', backref='rack_location_for_server')
     rack_location = relationship('RackLocationModel')
