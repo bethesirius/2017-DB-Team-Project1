@@ -48,10 +48,10 @@ class StorageCreateForm extends React.Component {
     componentDidMount() {
         this.setState({isFetching: true});
         Promise.all([
-            fetch("/api/storage_spec").then(res => res.json()),
-            fetch("/api/detail_location").then(res => res.json()),
-            fetch("/api/storage_spec_type").then(res => res.json()),
-            fetch("/api/storage_spec_name").then(res => res.json()),
+            fetch("/api/storage_spec").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/detail_location").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/storage_spec_type").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/storage_spec_name").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
         ]).then(([spec, location, spec_type, spec_name]) => {
             this.setState((state, props) => {
                 state.specs = spec.objects.map(item => {

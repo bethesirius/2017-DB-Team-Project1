@@ -39,11 +39,11 @@ class AssetConfirm extends React.Component {
         let filters = [{name: "asset_id", op: "eq", val: parseInt(this.props.params.id, 10)}];
         filters = JSON.stringify({filters});
         return Promise.all([
-            fetch(`/api/asset/${this.props.params.id}`).then(res => res.json()),
-            fetch(`/api/server?q=${filters}`).then(res => res.json()),
-            fetch(`/api/switch?q=${filters}`).then(res => res.json()),
-            fetch(`/api/storage?q=${filters}`).then(res => res.json()),
-            fetch(`/api/rack?q=${filters}`).then(res => res.json()),
+            fetch(`/api/asset/${this.props.params.id}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch(`/api/server?q=${filters}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch(`/api/switch?q=${filters}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch(`/api/storage?q=${filters}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch(`/api/rack?q=${filters}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
         ]).then(([asset, server, network, storage, rack]) => {
             this.setState((state, props) => {
                 state.asset = asset;

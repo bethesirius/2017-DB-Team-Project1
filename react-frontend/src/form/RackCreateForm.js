@@ -41,8 +41,8 @@ class RackCreateForm extends React.Component {
     componentDidMount() {
         this.setState({isFetching: true});
         Promise.all([
-            fetch("/api/location").then(res => res.json()),
-            fetch("/api/rack_spec").then(res => res.json()),
+            fetch("/api/location").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/rack_spec").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
         ]).then(([location, spec]) => {
             this.setState((state, props) => {
                 state.locations = location.objects.map(item => {

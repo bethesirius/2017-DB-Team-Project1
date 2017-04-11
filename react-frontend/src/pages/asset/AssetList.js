@@ -29,9 +29,10 @@ class AssetList extends React.Component {
     // getChildContext() {}
     componentDidMount() {
         this.setState({isFetching: true});
-        fetch("/api/asset").then(res => res.json()).then(message => {
-            this._updateState(message.objects);
-        }).catch(err => {
+        fetch("/api/asset").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                this._updateState(message.objects);
+            }).catch(err => {
             alert(err.message);
             this.setState({isFetching: false});
         });

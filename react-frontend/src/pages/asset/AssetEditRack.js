@@ -50,12 +50,13 @@ class AssetEdit extends React.Component {
 
     componentDidMount() {
         this.setState({isFetching: true,});
-        fetch(`/api/asset/${this.props.params.id}`).then(res => res.json()).then(message => {
-            this.setState({
-                isFetching: false,
-                asset: message
-            });
-        }).catch(err => {
+        fetch(`/api/asset/${this.props.params.id}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                this.setState({
+                    isFetching: false,
+                    asset: message
+                });
+            }).catch(err => {
             alert(err.message);
             this.setState({isFetching: false});
         });
@@ -96,24 +97,26 @@ class AssetEdit extends React.Component {
             method: "POST",
             headers: {"Content-Type": "application/json",},
             body: JSON.stringify(body),
-        }).then(res => res.json()).then(message => {
-            let manage_num = `R${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.rack.id % 1000, 3)}`;
-            return fetch(`/api/rack/${message.rack.id}`, {
-                method: "PUT",
-                headers: {"Content-Type": "application/json",},
-                body: JSON.stringify({manage_num}),
+        }).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                let manage_num = `R${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.rack.id % 1000, 3)}`;
+                return fetch(`/api/rack/${message.rack.id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json",},
+                    body: JSON.stringify({manage_num}),
+                });
+            }).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                this.setState((state, props) => {
+                    state.type = "none";
+                    state.rack.list.push(message);
+                    state.isFetching = false;
+                    return state;
+                });
+            }).catch(err => {
+                alert(err.message);
+                this.setState({isFetching: false});
             });
-        }).then(res => res.json()).then(message => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state.rack.list.push(message);
-                state.isFetching = false;
-                return state;
-            });
-        }).catch(err => {
-            alert(err.message);
-            this.setState({isFetching: false});
-        });
     };
     handleRackDelete = (e, {value}) => {
         this._handleDeviceDelete("rack", "rack", e, value);
