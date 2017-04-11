@@ -3,6 +3,7 @@
  */
 import React from "react";
 import {Table} from "semantic-ui-react";
+import {format} from "currency-formatter";
 
 class AssetTable extends React.Component {
     static propTypes = {
@@ -62,7 +63,7 @@ class AssetTable extends React.Component {
                 <Table.Body>
                     <Table.Row>
                         <Table.Cell>기본 정보</Table.Cell>
-                        <Table.Cell textAlign='right'> {price} </Table.Cell>
+                        <Table.Cell textAlign='right'> {format(price, {code: "WON", precision: 0})} </Table.Cell>
                         <Table.Cell textAlign='right'>{years}</Table.Cell>
                         <Table.Cell>{get_date}</Table.Cell>
                     </Table.Row>
