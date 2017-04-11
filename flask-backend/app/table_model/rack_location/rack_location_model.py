@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Boolean
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy.orm import relationship
 
 from app import db
 from app.table_model.location.detail_location_model import DetailLocationModel
@@ -14,3 +15,4 @@ class RackLocationModel(db.Model):
     service_id = Column(Integer, ForeignKey(ServiceModel.id))
     service_on_off = Column(Boolean)
     index = Column(Integer)
+    service = relationship('ServiceModel')

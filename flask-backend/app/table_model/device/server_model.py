@@ -16,6 +16,6 @@ class ServerModel(DeviceModel):
     spec_id = Column(Integer, ForeignKey(ServerSpecModel.id))
     spec = relationship('ServerSpecModel')
     location_id = Column(Integer, ForeignKey(DetailLocationModel.id))
-    location = relationship('DetailLocationModel')
+    location = relationship('DetailLocationModel', backref='server')
     size = Column(Integer)
     core_num = Column(Integer)

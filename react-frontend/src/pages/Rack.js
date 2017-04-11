@@ -8,52 +8,66 @@ import AssetModal from "../component/AssetModal";
 
 class Rack extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.state={
+            rack:[{
+                assetId: 'R00000',
+                size: 46,
+                servers: 3,
+                networks: 7,
+                emptys: 24,
+                mounted: [{
+                    assetId: 'S00000',
+                    size: 2,
+                    mount_lv: 2,
+                    ip: '0.0.0.0',
+                    service: 'Admin',
+                }, {
+                    assetId: 'N00000',
+                    size: 2,
+                    mount_lv: 5,
+                    ip: '0.0.0.1',
+                    service: 'Admin',
+                }],
+            }, {
+                assetId: 'R00001',
+                size: 24,
+                servers: 5,
+                networks: 1,
+                emptys: 2,
+                mounted: [{
+                    assetId: 'S00001',
+                    size: 3,
+                    mount_lv: 1,
+                    ip: '0.0.1.0',
+                    service: 'Admin',
+                }, {
+                    assetId: 'N00001',
+                    size: 2,
+                    mount_lv: 7,
+                    ip: '0.0.1.1',
+                    service: 'Alice',
+                }],
+            }]
+        }
+    }
+
+    componentDidMount(){
+        this.getRackSummarys();
+    }
+
     getRackSummarys() {
-        return [{
-            assetId: 'R00000',
-            size: 46,
-            servers: 3,
-            storages: 5,
-            networks: 7,
-            emptys: 24,
-            mounted: [{
-                assetId: 'S00000',
-                size: 2,
-                mount_lv: 2,
-                ip: '0.0.0.0',
-                service: 'Admin',
-            }, {
-                assetId: 'N00000',
-                size: 2,
-                mount_lv: 5,
-                ip: '0.0.0.1',
-                service: 'Admin',
-            }],
-        }, {
-            assetId: 'R00001',
-            size: 24,
-            servers: 5,
-            storages: 10,
-            networks: 1,
-            emptys: 2,
-            mounted: [{
-                assetId: 'S00001',
-                size: 3,
-                mount_lv: 1,
-                ip: '0.0.1.0',
-                service: 'Admin',
-            }, {
-                assetId: 'N00001',
-                size: 2,
-                mount_lv: 7,
-                ip: '0.0.1.1',
-                service: 'Alice',
-            }],
-        }];
+        var reqHeaders= new Headers();
+        reqHeaders.append('Content-Type', 'application/json');
+
+        (() => fetch('/api/rack', reqHeaders)
+            .then((r) => r.json())
+        )()
     }
 
     render() {
-        const rackSummarys = this.getRackSummarys();
+        const {rack:rackSummarys} = this.state;
         return (
             <div>
                 <Accordion as={Segment} exclusive={false}>
@@ -69,7 +83,6 @@ class Rack extends React.Component {
                                         <Item.Description>
                                             <RackUseStatisticGroup data={{
                                                 servers: summary.servers,
-                                                storages: summary.storages,
                                                 networks: summary.networks,
                                                 emptys: summary.emptys,
                                             }}/>
