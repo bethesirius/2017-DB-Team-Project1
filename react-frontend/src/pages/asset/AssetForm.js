@@ -30,18 +30,12 @@ class AssetForm extends React.Component {
         children: React.PropTypes.node,
 
     };
-    // static defaultProps = {};
-    // static  childContextTypes = {};
-    // static contextTypes = {};
 
     constructor(props) {
         super(props);
         this.state = {};
     }
 
-    // getChildContext() {}
-    // componentDidMount(){}
-    // componentWillUnmount(){}
     render() {
         const {children, location: {pathname}} = this.props;
         return (

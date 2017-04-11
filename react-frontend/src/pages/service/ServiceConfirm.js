@@ -31,7 +31,7 @@ class ServiceConfirm extends React.Component {
     componentDidMount() {
         this.setState({isFetching: true});
         fetch("/json/asset.json")
-            .then(res => res.json())
+            .then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
             .then(() => {
                 this.setState({isFetching: false,});
             })

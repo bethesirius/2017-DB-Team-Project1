@@ -41,18 +41,20 @@ class AssetCreate extends React.Component {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
-        }).then(res => res.json()).then(message => {
-            let asset_num = `${moment(message.get_date).year() % 100}130${message.id % 1000}`;
-            return fetch(`/api/asset/${message.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({asset_num,}),
+        }).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                let asset_num = `${moment(message.get_date).year() % 100}130${message.id % 1000}`;
+                return fetch(`/api/asset/${message.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({asset_num,}),
+                });
+            }).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                browserHistory.push(`/asset/form/rack/${message.id}/${message.asset_num}`);
             });
-        }).then(res => res.json()).then(message => {
-            browserHistory.push(`/asset/form/rack/${message.id}/${message.asset_num}`);
-        });
     };
 
     render() {

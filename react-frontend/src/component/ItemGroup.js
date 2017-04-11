@@ -47,7 +47,7 @@ class ItemGroup extends React.Component {
 ItemGroup.Asset = ({items, onDelete}) => (
     <ItemGroup
         type={"자산"} items={items} description={AssetTable}
-        header={item => `자산 ID:${item.id}`} to="/asset" onDelete={onDelete}
+        header={item => `자산 ID:${item.asset_num}`} to="/asset" onDelete={onDelete}
     />
 );
 ItemGroup.Server = ({items, onDelete}) => (

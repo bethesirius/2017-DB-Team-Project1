@@ -37,7 +37,6 @@ class AssetEdit extends React.Component {
                 {text: '서버', value: 'server',},
                 {text: '스위치', value: 'network',},
                 {text: '스토리지', value: 'storage',},
-                {text: '랙', value: 'rack',},
             ],
             asset: {},
             none: {form: () => <Segment attached={true}/>, submit: null, list: [],},
@@ -49,12 +48,16 @@ class AssetEdit extends React.Component {
 
     componentDidMount() {
         this.setState({isFetching: true,});
-        fetch(`/api/asset/${this.props.params.id}`).then(res => res.json()).then(message => {
-            this.setState({
-                isFetching: false,
-                asset: message
-            });
-        })
+        fetch(`/api/asset/${this.props.params.id}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                this.setState({
+                    isFetching: false,
+                    asset: message
+                });
+            }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
     }
 
     _handleDeviceSubmit = (fieldName, path, metaBody, listName, manageLabel, values, dispatch) => {
@@ -68,24 +71,26 @@ class AssetEdit extends React.Component {
             method: "POST",
             headers: {"Content-Type": "application/json",},
             body: JSON.stringify(body),
-        }).then(res => res.json()).then(message => {
-            let manage_num = `${manageLabel}${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
-            return fetch(`/api/${path}/${message.id}`, {
-                method: "PUT",
-                headers: {"Content-Type": "application/json",},
-                body: JSON.stringify({manage_num}),
+        }).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                let manage_num = `${manageLabel}${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
+                return fetch(`/api/${path}/${message.id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json",},
+                    body: JSON.stringify({manage_num}),
+                });
+            }).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
+            .then(message => {
+                this.setState((state, props) => {
+                    state.type = "none";
+                    state[listName].list.push(message);
+                    state.isFetching = false;
+                    return state;
+                });
+            }).catch(err => {
+                alert(err.message);
+                this.setState({isFetching: false});
             });
-        }).then(res => res.json()).then(message => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state[listName].list.push(message);
-                state.isFetching = false;
-                return state;
-            });
-        }).catch(err => {
-            alert(err.message);
-            this.setState({isFetching: false});
-        });
     };
     _handleDeviceDelete = (path, listName, e, value) => {
         this.setState({isFetching: true});
@@ -111,7 +116,7 @@ class AssetEdit extends React.Component {
             let spec = values[fieldName.spec];
             spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
             let location = values[fieldName.location];
-            location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
+            location = Number.isInteger(location) ? {location_id: location} : {};
             return Object.assign({size, core_num,}, spec, location);
         }, "server", "S", values, dispatch);
     };
@@ -124,7 +129,7 @@ class AssetEdit extends React.Component {
             let spec = values[fieldName.spec];
             spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
             let location = values[fieldName.location];
-            location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
+            location = Number.isInteger(location) ? {location_id: location} : {};
             return Object.assign({size,}, spec, location);
         }, "network", "N", values, dispatch);
     };

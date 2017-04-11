@@ -4,7 +4,7 @@
 import React from "react";
 import {Field, reduxForm} from "redux-form";
 import {Button, FormGroup, Segment} from "semantic-ui-react";
-import {FieldDropDown, FieldLazyInput, InteractiveForm} from "./common";
+import {FieldDropDown, FieldLazyInput, InteractiveForm, validateExist} from "./common";
 
 class RackCreateForm extends React.Component {
     static propTypes = {
@@ -16,7 +16,7 @@ class RackCreateForm extends React.Component {
 
     static formName = "rack";
     static fieldNames = {
-        deviceId: "deviceId",
+        manage_num: "manage_num",
         location: "location",
         spec: "spec",
         detail: "detail",
@@ -25,6 +25,7 @@ class RackCreateForm extends React.Component {
 
     static validate(values) {
         const errors = {};
+        validateExist(values,errors,RackCreateForm.fieldNames);
         return errors;
     }
 
@@ -40,8 +41,8 @@ class RackCreateForm extends React.Component {
     componentDidMount() {
         this.setState({isFetching: true});
         Promise.all([
-            fetch("/api/location").then(res => res.json()),
-            fetch("/api/rack_spec").then(res => res.json()),
+            fetch("/api/location").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/rack_spec").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
         ]).then(([location, spec]) => {
             this.setState((state, props) => {
                 state.locations = location.objects.map(item => {
@@ -59,6 +60,9 @@ class RackCreateForm extends React.Component {
                 });
                 state.isFetching = false;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     }
 
@@ -77,12 +81,12 @@ class RackCreateForm extends React.Component {
     };
 
     render() {
-        const {deviceId, location, spec, detail, size} = RackCreateForm.fieldNames;
+        const {manage_num, location, spec, detail, size} = RackCreateForm.fieldNames;
         return (
             <InteractiveForm reduxFormProps={this.props} loading={this.state.isFetching}>
                 <Segment attached={true}>
                     <FormGroup widths={"equal"}>
-                        <Field name={deviceId} component={FieldLazyInput} label="관리 번호"/>
+                        <Field name={manage_num} component={FieldLazyInput} label="관리 번호"/>
                         <Field name={detail} component={FieldLazyInput} label="Rack Code"/>
                         <Field name={size} component={FieldLazyInput} label="Rack Size"/>
                     </FormGroup>

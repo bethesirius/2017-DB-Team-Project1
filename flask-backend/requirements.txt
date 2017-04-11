@@ -15,3 +15,4 @@ six==1.10.0
 SQLAlchemy==1.1.6
 SQLAlchemy-Utils==0.32.14
 Werkzeug==0.12.1
+openpyxl==2.4.5
