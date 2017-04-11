@@ -2,7 +2,7 @@
  * Created by rino0 on 2017-03-25.
  */
 import React from "react";
-import {Table} from "semantic-ui-react";
+import {Radio, Table} from "semantic-ui-react";
 
 class ServerTable extends React.Component {
     // const {id, device, core_num, spec_id, spec, location_id, location,} = message;
@@ -39,6 +39,7 @@ class ServerTable extends React.Component {
                 "volume": React.PropTypes.any,
             }),
             "spec_id": React.PropTypes.any,
+            "on": React.PropTypes.any,
         })
     };
     // static defaultProps = {};
@@ -47,8 +48,24 @@ class ServerTable extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            checked: props.data.on,
+        };
     }
+
+    handlePower = (e) => {
+        let path = "storage";
+        fetch(`/api/${path}/${this.props.data.id}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({on: !this.state.checked}),
+        }).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))
+        ).then(json => {
+            this.setState({
+                checked: json.on
+            });
+        });
+    };
 
     // getChildContext() {}
     // componentDidMount(){}
@@ -93,6 +110,12 @@ class ServerTable extends React.Component {
                     <Table.Row>
                         <Table.Cell>위치</Table.Cell>
                         <Table.Cell colSpan='5'>{location}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.Cell>장치 전원</Table.Cell>
+                        <Table.Cell colSpan='5'>
+                            <Radio toggle={true} checked={this.state.checked} onClick={this.handlePower}/>
+                        </Table.Cell>
                     </Table.Row>
                 </Table.Body>
             </Table>

@@ -95,17 +95,17 @@ class ServiceList extends React.Component {
                 return prev;
             }, {core_num: 0, san: 0, nas: 0, total: 0, tape: 0,});
             this.setState((state, props) => {
-                state.statistic_use[0].value = total_use.core_num;
-                state.statistic_use[1].value = total_use.san;
-                state.statistic_use[2].value = total_use.nas;
-                state.statistic_use[3].value = total_use.total;
-                state.statistic_use[4].value = total_use.tape;
+                state.statistic_use[0].value = Math.ceil(total_use.core_num);
+                state.statistic_use[1].value = Math.ceil(total_use.san);
+                state.statistic_use[2].value = Math.ceil(total_use.nas);
+                state.statistic_use[3].value = Math.ceil(total_use.total);
+                state.statistic_use[4].value = Math.ceil(total_use.tape);
 
-                state.statistic_not[0].value = total_not.core_num;
-                state.statistic_not[1].value = total_not.san;
-                state.statistic_not[2].value = total_not.nas;
-                state.statistic_not[3].value = total_not.total;
-                state.statistic_not[4].value = total_not.tape;
+                state.statistic_not[0].value = Math.ceil(total_not.core_num);
+                state.statistic_not[1].value = Math.ceil(total_not.san);
+                state.statistic_not[2].value = Math.ceil(total_not.nas);
+                state.statistic_not[3].value = Math.ceil(total_not.total);
+                state.statistic_not[4].value = Math.ceil(total_not.tape);
 
                 state.data = data;
                 state.isFetching = false;

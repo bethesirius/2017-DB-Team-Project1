@@ -41,6 +41,19 @@ class Storage extends React.Component {
         });
     }
 
+    handleDelete = (e, {value}) => {
+        this.setState({isFetching: true});
+        fetch(`/api/storage/${value}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        }).then(res => {
+            this._updateState(this.state.items.filter(item => item.id !== value));
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
+    };
+
     render() {
         const {items} = this.state;
         return (

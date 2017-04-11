@@ -77,7 +77,7 @@ ItemGroup.Rack = ({items, onDelete}) => (
 ItemGroup.Service = ({items, onDelete}) => (
     <ItemGroup
         type={"서비스"} items={items} description={ServiceSummaryTable}
-        header={item => item.id} to="/service" onDelete={onDelete}
+        header={item => item.service_name} to="/service" onDelete={onDelete}
     />
 );
 export default ItemGroup;
