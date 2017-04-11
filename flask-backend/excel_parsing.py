@@ -335,7 +335,10 @@ def parsing_asset():
                 continue
             print(manage_num)
             if color not in ServiceList:
-                print(manage_num + "does not exist service.")
+                print(manage_num + " does not exist service.")
+                continue
+            if session.query(ServiceNameModel).filter_by(service_name=name).count() == 0:
+                print(manage_num + " does not exist service.")
                 continue
             name = ServiceList[color]
             print(name)
