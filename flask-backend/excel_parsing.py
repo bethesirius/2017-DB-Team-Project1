@@ -64,6 +64,8 @@ def parsing_asset():
 
     sheetCols = 279
     assetRackSheetCols = 24
+    ServiceSheetRows = 41
+
     ncol = sheet.ncols
     nlow = sheet.nrows
     
@@ -202,7 +204,7 @@ def parsing_asset():
     session.commit()
     
     values = set()
-    for row in range(4,39):
+    for row in range(4,ServiceSheetRows):
         val = ServiceSheet.row_values(row)[1]
         values.add(val)
     values.remove('') 
@@ -318,12 +320,12 @@ def parsing_asset():
                 print(manage_num)
     #"""
     ServiceList = {}
-    for row in range(51, 64):
+    for row in range(51, 65):
         color = RackSheetOPX.cell(row=row, column=3).fill.start_color.index
         name = RackSheet.row_values(row-1)[2]
         ServiceList[color]=name
 
-    for col in range(0,24):
+    for col in range(0,23):
         col = (col*5)+3
         rackInfo = RackSheet.row_values(4)[col-2]
         detail, manage_num = rackInfo.split(" - ")
