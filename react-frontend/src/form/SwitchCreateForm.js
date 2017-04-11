@@ -47,9 +47,12 @@ class SwitchCreateForm extends React.Component {
         ]).then(([location, spec]) => {
             this.setState((state, props) => {
                 state.locations = location.objects.map(item => {
-                    let detail = item.location.detail ? item.location.detail : '';
+                    let location = item.location ? item.location.location : 'unknown';
+                    let detail = item.location
+                        ? item.location.detail ? item.location.detail : 'unknown'
+                        : 'unknown';
                     return {
-                        text: `${item.location.location}-${detail}`,
+                        text: `${location}-${detail}`,
                         value: item.id
                     };
                 });

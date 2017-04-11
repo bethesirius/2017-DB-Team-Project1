@@ -22,7 +22,7 @@ class StorageCreateForm extends React.Component {
         new_spec: {
             disk_spec: "disk_spec",
             disk_type: "disk_type",
-            spec: "spec",
+            spec: "spec2",
             volume: "volume",
         },
     };
@@ -62,9 +62,12 @@ class StorageCreateForm extends React.Component {
                     };
                 });
                 state.locations = location.objects.map(item => {
-                    let detail = item.location.detail ? item.location.detail : '';
+                    let location = item.location ? item.location.location : 'unknown';
+                    let detail = item.location
+                        ? item.location.detail ? item.location.detail : 'unknown'
+                        : 'unknown';
                     return {
-                        text: `${item.location.location}-${detail}`,
+                        text: `${location}-${detail}`,
                         value: item.id
                     };
                 });
