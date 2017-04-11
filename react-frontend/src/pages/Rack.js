@@ -61,8 +61,30 @@ class Rack extends React.Component {
         var reqHeaders= new Headers();
         reqHeaders.append('Content-Type', 'application/json');
 
-        (() => fetch('/api/rack', reqHeaders)
+        (() => fetch('/cheat/rack_info', reqHeaders)
             .then((r) => r.json())
+            .then((r) => {
+                let result= r.server.concat(r['switch']);
+                let rack= Array.from( new Set(result.map( (obj) => obj[0] ))).map( (rack_num) => {
+                    let devices= result.filter( (obj) => obj[0]=== rack_num)
+                    let mounted_devices= devices.map( (device) => {
+                        return {assetId: device[3],
+                            ip: device[2],
+                            size: device[4],
+                            mount_lv: device[5],
+                            service: device[6],}
+                    })
+                    return {
+                        assetId: rack_num,
+                        size: devices[0][1],
+                        servers: devices.filter( (device) => device[3][0]==='S').length,
+                        networks: devices.filter( (device) => device[3][0]==='N').length,
+                        emptys: devices[0][1]- devices.length,
+                        mounted: mounted_devices,
+                    }
+                });
+                this.setState({rack:rack});
+            })
         )()
     }
 

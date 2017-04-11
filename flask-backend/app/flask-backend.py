@@ -53,6 +53,71 @@ manager.create_api(RackLocationModel, methods=METHODS, results_per_page=1000, ma
 # def hello_world():
 #     return 'Hello World!'
 
+from app.orm.session import engine
+@app.route('/cheat/rack_info')
+def rack_info():
+    import json
+    json_result={}
+
+    result= engine.execute('select rack_device.manage_num as rack_num, rack_size, ip_v4, server_device.manage_num as server_num, size, start_index, service_name\
+ from (select manage_num, rack.id as rack_id, rack.rack_size as rack_size\
+ from rack, device\
+ where rack.id= device.id) as rack_device,\
+ (select ip_v4, server_id, size, detail_rack_id, start_index, service_name\
+ from service_name,\
+ (select ip_v4, server_ip.server_id, size, detail_rack_id, start_index, location_id, service_id\
+ from (select ip_v4, device_info_for_server.server_id as server_id\
+ from device_info, device_info_for_server\
+ where device_info.id = device_info_for_server.id) as server_ip,\
+ (select server_loc.server_id, server_detail_loc.size, detail_rack_id, start_index, location_id, service_id\
+ from (select server.id as server_id, detail_location.id as detail_location_id, server.size as size, detail_location.rack_id as detail_rack_id\
+ from server, detail_location \
+ where server.location_id= detail_location.id) as server_detail_loc,\
+ (select server.id as server_id, start_index, location_id, service_id\
+ from server,\
+ (select rack_location.location_id as rack_location_id, rack_location_for_server.server_id as rack_location_for_server_id, start_index, service_id\
+ from rack_location, rack_location_for_server\
+ where rack_location.id= rack_location_for_server.id) as rack_server\
+ where rack_server.rack_location_for_server_id= server.id) as server_loc\
+ where server_loc.server_id= server_detail_loc.server_id) as server_rack_index\
+ where server_rack_index.server_id= server_ip.server_id) as server_rack_service\
+ where service_id= service_name.id) as server_rack_service_name,\
+ (select manage_num, server.id as server_id\
+ from server, device\
+ where server.id= device.id) as server_device\
+ where server_rack_service_name.detail_rack_id= rack_device.rack_id and server_device.server_id= server_rack_service_name.server_id')
+    server_result= result.fetchall()
+    json_result['server']=list(map(lambda x: [x[0], x[1], x[2], x[3], x[4], x[5], x[6]], server_result))
+
+    result= engine.execute('select rack_device.manage_num as rack_num, rack_size, ip_v4, switch_device.manage_num as switch_num, size, start_index\
+ from (select manage_num, rack.id as rack_id, rack.rack_size as rack_size\
+ from rack, device\
+ where rack.id= device.id) as rack_device,\
+ (select ip_v4, switch_ip.switch_id as switch_id, size, detail_rack_id, start_index, location_id\
+ from (select ip_v4, device_info_for_switch.switch_id as switch_id\
+ from device_info, device_info_for_switch\
+ where device_info.id = device_info_for_switch.id) as switch_ip,\
+ (select switch_loc.switch_id, switch_detail_loc.size, detail_rack_id, start_index, location_id\
+ from (select switch.id as switch_id, detail_location.id as detail_location_id, switch.size as size, detail_location.rack_id as detail_rack_id\
+ from switch, detail_location \
+ where switch.location_id= detail_location.id) as switch_detail_loc,\
+ (select switch.id as switch_id, start_index, location_id\
+ from switch,\
+ (select rack_location.location_id as rack_location_id, rack_location_for_switch.switch_id as rack_location_for_switch_id, start_index\
+ from rack_location, rack_location_for_switch\
+ where rack_location.id= rack_location_for_switch.id) as rack_switch\
+ where rack_switch.rack_location_for_switch_id= switch.id) as switch_loc\
+ where switch_loc.switch_id= switch_detail_loc.switch_id) as switch_rack_index\
+ where switch_rack_index.switch_id= switch_ip.switch_id) as switch_rack_service,\
+ (select manage_num, switch.id as switch_id\
+ from switch, device\
+ where switch.id= device.id) as switch_device\
+ where switch_rack_service.detail_rack_id= rack_device.rack_id and switch_device.switch_id= switch_rack_service.switch_id')
+    switch_result= result.fetchall()
+    json_result['switch']=list(map(lambda x: [x[0], x[1], x[2], x[3], x[4], x[5], ''], switch_result))
+
+    return json.dumps(json_result)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
