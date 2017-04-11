@@ -3,9 +3,8 @@
  */
 import React from "react";
 import {browserHistory} from "react-router";
-import {SubmissionError} from "redux-form";
 import {Button, Dimmer, Form, Header, Loader, Segment} from "semantic-ui-react";
-import RackCreateForm from "../../form/RackCreateForm";
+import RackCreateForm, {fieldNames} from "../../form/RackCreateForm";
 import ItemGroup from "../../component/ItemGroup";
 import moment from "moment";
 
@@ -74,51 +73,6 @@ class AssetEdit extends React.Component {
         })
     }
 
-    _postDevice(url, onSuccess) {
-        return fetch(
-            url,
-        ).then(res => {
-            if (!res.ok) {
-                throw SubmissionError({_error: "Failed Fetch"});
-            }
-            return res.json();
-        }).then(json => {
-            onSuccess(json);
-        }).catch(err => {
-            return Promise.reject(new SubmissionError({_error: `Failed Fetch by:${err}`}));
-        });
-    }
-
-    _handleDeviceSubmit = (fieldName, path, metaBody, listName, manageLabel, values, dispatch) => {
-        let asset_id = parseInt(this.props.params.id, 10);
-        const body = {};
-        Object.assign(body, {
-            asset_id,
-        }, metaBody(fieldName, values));
-        this.setState({isFetching: true});
-        return fetch(`/api/${path}`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json",},
-            body: JSON.stringify(body),
-        }).then(res => res.json()).then(message => {
-            let manage_num = `${manageLabel}${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
-            return fetch(`/api/${path}/${message.id}`, {
-                method: "PUT",
-                headers: {"Content-Type": "application/json",},
-                body: JSON.stringify({manage_num}),
-            });
-        }).then(res => res.json()).then(message => {
-            this.setState((state, props) => {
-                state.type = "none";
-                state[listName].list.push(message);
-                state.isFetching = false;
-                return state;
-            });
-        }).catch(err => {
-            alert(err.message);
-            this.setState({isFetching: false});
-        });
-    };
     _handleDeviceDelete = (path, listName, e, value) => {
         this.setState({isFetching: true});
         fetch(`/api/${path}/${value}`, {
@@ -137,12 +91,40 @@ class AssetEdit extends React.Component {
     };
 
     handleRackSubmit = (values, dispatch) => {
-        return this._postDevice("/dummy_ok.json", (json) => {
+        let asset_id = parseInt(this.props.params.id, 10);
+        let location = values[fieldNames.location];
+        location = Number.isInteger(location) ? {location_id: location} : {location: {location: location}};
+        let spec = values[fieldNames.spec];
+        spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
+        let detail = values[fieldNames.detail];
+        let rack_size = parseInt(values[fieldNames.size], 10);
+        let rack = Object.assign({rack_size, asset_id}, spec,);
+        rack = {rack};
+
+        const body = {};
+        Object.assign(body, {detail,}, rack, location);
+        this.setState({isFetching: true});
+        return fetch(`/api/detail_location`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json",},
+            body: JSON.stringify(body),
+        }).then(res => res.json()).then(message => {
+            let manage_num = `R${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.rack.id % 1000, 3)}`;
+            return fetch(`/api/rack/${message.rack.id}`, {
+                method: "PUT",
+                headers: {"Content-Type": "application/json",},
+                body: JSON.stringify({manage_num}),
+            });
+        }).then(res => res.json()).then(message => {
             this.setState((state, props) => {
                 state.type = "none";
-                state.rack.list.push(temp_rack);
+                state.rack.list.push(message);
+                state.isFetching = false;
                 return state;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     };
     handleRackDelete = (e, {value}) => {
