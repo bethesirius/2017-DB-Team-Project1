@@ -318,7 +318,7 @@ def parsing_asset():
                 print(manage_num)
     #"""
     ServiceList = {}
-    for row in range(51, 65):
+    for row in range(51, 64):
         color = RackSheetOPX.cell(row=row, column=3).fill.start_color.index
         name = RackSheet.row_values(row-1)[2]
         ServiceList[color]=name
@@ -337,10 +337,10 @@ def parsing_asset():
             if color not in ServiceList:
                 print(manage_num + " does not exist service.")
                 continue
+            name = ServiceList[color]
             if session.query(ServiceNameModel).filter_by(service_name=name).count() == 0:
                 print(manage_num + " does not exist service.")
                 continue
-            name = ServiceList[color]
             print(name)
             service_id = session.query(ServiceNameModel).filter_by(service_name=name).first().id
 
