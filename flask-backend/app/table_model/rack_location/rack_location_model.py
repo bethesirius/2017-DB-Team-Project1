@@ -14,5 +14,5 @@ class RackLocationModel(db.Model):
     location_id = Column(Integer, ForeignKey(DetailLocationModel.id))
     service_id = Column(Integer, ForeignKey(ServiceNameModel.id))
     service_on_off = Column(Boolean)
-    index = Column(Integer)
+    start_index = Column(Integer)
     service_name = relationship('ServiceNameModel')
