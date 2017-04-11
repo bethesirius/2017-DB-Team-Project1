@@ -86,6 +86,9 @@ class AssetCreateForm extends React.Component {
                 });
                 state.isFetching = false;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     }
 

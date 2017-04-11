@@ -56,9 +56,7 @@ class ServerCreateForm extends React.Component {
             this.setState((state, props) => {
                 state.locations = location.objects.map(item => {
                     let location = item.location ? item.location.location : 'unknown';
-                    let detail = item.location
-                        ? item.location.detail ? item.location.detail : 'unknown'
-                        : 'unknown';
+                    let detail = item.detail;
                     return {
                         text: `${location}-${detail}`,
                         value: item.id
@@ -74,13 +72,6 @@ class ServerCreateForm extends React.Component {
             });
         });
     }
-
-    handleAddLocation = (e, {value}) => {
-        this.setState((state, props) => {
-            state.locations.push({value: value, text: value});
-            return state;
-        });
-    };
 
     handleAddSpec = (e, {value}) => {
         this.setState((state, props) => {
@@ -101,7 +92,7 @@ class ServerCreateForm extends React.Component {
                         <Field name={size} component={FieldLazyInput} label="크기(Rack unit)"/>
                     </FormGroup>
                     <Field name={location} component={FieldDropDown} label="현재 위치" options={this.state.locations}
-                           onAddItem={this.handleAddLocation}/>
+                           allowAdditions={false}/>
                     <Field name={spec} component={FieldDropDown} label="규격" options={this.state.specs}
                            onAddItem={this.handleAddSpec}/>
                 </Segment>

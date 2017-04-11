@@ -54,7 +54,10 @@ class AssetEdit extends React.Component {
                 isFetching: false,
                 asset: message
             });
-        })
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
     }
 
     _handleDeviceSubmit = (fieldName, path, metaBody, listName, manageLabel, values, dispatch) => {
@@ -111,7 +114,7 @@ class AssetEdit extends React.Component {
             let spec = values[fieldName.spec];
             spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
             let location = values[fieldName.location];
-            location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
+            location = Number.isInteger(location) ? {location_id: location} : {};
             return Object.assign({size, core_num,}, spec, location);
         }, "server", "S", values, dispatch);
     };
@@ -124,7 +127,7 @@ class AssetEdit extends React.Component {
             let spec = values[fieldName.spec];
             spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
             let location = values[fieldName.location];
-            location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
+            location = Number.isInteger(location) ? {location_id: location} : {};
             return Object.assign({size,}, spec, location);
         }, "network", "N", values, dispatch);
     };

@@ -63,11 +63,8 @@ class StorageCreateForm extends React.Component {
                 });
                 state.locations = location.objects.map(item => {
                     let location = item.location ? item.location.location : 'unknown';
-                    let detail = item.location
-                        ? item.location.detail ? item.location.detail : 'unknown'
-                        : 'unknown';
                     return {
-                        text: `${location}-${detail}`,
+                        text: `${location}`,
                         value: item.id
                     };
                 });
@@ -85,6 +82,9 @@ class StorageCreateForm extends React.Component {
                 });
                 state.isFetching = false;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     }
 

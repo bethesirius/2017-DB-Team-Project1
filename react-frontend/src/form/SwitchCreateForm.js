@@ -10,9 +10,6 @@ class SwitchCreateForm extends React.Component {
     static propTypes = {
         onSubmit: React.PropTypes.func.isRequired,
     };
-    // static defaultProps = {};
-    // static  childContextTypes = {};
-    // static contextTypes = {};
 
     static formName = "switch";
     static fieldNames = {
@@ -27,8 +24,6 @@ class SwitchCreateForm extends React.Component {
         return errors;
     }
 
-    // getChildContext() {}
-    // componentWillUnmount(){}
     constructor(props) {
         super(props);
         this.state = {
@@ -48,9 +43,7 @@ class SwitchCreateForm extends React.Component {
             this.setState((state, props) => {
                 state.locations = location.objects.map(item => {
                     let location = item.location ? item.location.location : 'unknown';
-                    let detail = item.location
-                        ? item.location.detail ? item.location.detail : 'unknown'
-                        : 'unknown';
+                    let detail = item.detail;
                     return {
                         text: `${location}-${detail}`,
                         value: item.id
@@ -64,15 +57,11 @@ class SwitchCreateForm extends React.Component {
                 });
                 state.isFetching = false;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     }
-
-    handleAddLocation = (e, {value}) => {
-        this.setState((state, props) => {
-            state.locations.push({value: value, text: value});
-            return state;
-        });
-    };
 
     handleAddSpec = (e, {value}) => {
         this.setState((state, props) => {
@@ -82,7 +71,7 @@ class SwitchCreateForm extends React.Component {
     };
 
     render() {
-        const {deviceId, location, spec,size} = SwitchCreateForm.fieldNames;
+        const {deviceId, location, spec, size} = SwitchCreateForm.fieldNames;
         return (
             <InteractiveForm reduxFormProps={this.props} loading={this.state.isFetching}>
                 <Segment attached={true}>
@@ -91,7 +80,7 @@ class SwitchCreateForm extends React.Component {
                         <Field name={size} component={FieldLazyInput} label="크기(Rack unit)"/>
                     </FormGroup>
                     <Field name={location} component={FieldDropDown} label="현재 위치" options={this.state.locations}
-                           onAddItem={this.handleAddLocation}/>
+                           allowAdditions={false}/>
                     <Field name={spec} component={FieldDropDown} label="규격" options={this.state.specs}
                            onAddItem={this.handleAddSpec}/>
                     <Button.Group attached={"bottom"}>

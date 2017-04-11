@@ -55,7 +55,10 @@ class AssetEdit extends React.Component {
                 isFetching: false,
                 asset: message
             });
-        })
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
     }
 
     _handleDeviceDelete = (path, listName, e, value) => {
