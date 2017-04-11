@@ -21,11 +21,13 @@ class Rack extends React.Component {
                 size: 2,
                 mount_lv: 2,
                 ip: '0.0.0.0',
+                service: 'Admin',
             }, {
                 assetId: 'N00000',
                 size: 2,
                 mount_lv: 5,
                 ip: '0.0.0.1',
+                service: 'Admin',
             }],
         }, {
             assetId: 'R00001',
@@ -36,14 +38,16 @@ class Rack extends React.Component {
             emptys: 2,
             mounted: [{
                 assetId: 'S00001',
-                size: 2,
-                mount_lv: 3,
+                size: 3,
+                mount_lv: 1,
                 ip: '0.0.1.0',
+                service: 'Admin',
             }, {
                 assetId: 'N00001',
                 size: 2,
                 mount_lv: 7,
                 ip: '0.0.1.1',
+                service: 'Alice',
             }],
         }];
     }
