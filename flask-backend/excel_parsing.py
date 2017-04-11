@@ -323,17 +323,14 @@ def parsing_asset():
         name = RackSheet.row_values(row-1)[2]
         ServiceList[color]=name
 
-    
     for col in range(0,24):
         col = (col*5)+2
-        name = RackSheet.row_values(4)[col]
-        print(name)
+        rackName = RackSheet.row_values(4)[col]
+        print(rackName)
         for row in range(7,49):
-            print(col)
-            print(row)
-            i=RackSheetOPX.cell(row=row, column=col).fill.start_color.index
-            print(i)
-    
+            color = RackSheetOPX.cell(row=row, column=col).fill.start_color.index
+            name = ServiceList[color]
+            service_id = session.query(ServiceModel).filter_by(service_name=name).first().id
     
     
 
