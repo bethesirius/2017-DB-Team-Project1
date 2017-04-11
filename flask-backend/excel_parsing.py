@@ -1,5 +1,6 @@
 import os
 import datetime
+import random
 
 import xlrd as xlrd
 from openpyxl import load_workbook
@@ -69,7 +70,7 @@ def parsing_asset():
     ncol = sheet.ncols
     nlow = sheet.nrows
     
-    #""" 
+     
     #####################################
     print("-------- "+ASSET_SHEETS[0]+" --------")
     print("Number of col: " + str(ncol))
@@ -318,7 +319,7 @@ def parsing_asset():
                 session.commit()
             else: 
                 print(manage_num)
-    #"""
+    
     ServiceList = {}
     for row in range(51, 65):
         color = RackSheetOPX.cell(row=row, column=3).fill.start_color.index
@@ -375,9 +376,22 @@ def parsing_asset():
                 session.commit()
  
     
-    
+    for row in range(1,10):
+        asset_id = assetStorageSheet.row_values(row)[0]
+        manage_num = assetStorageSheet.row_values(row)[1]
+        specName = assetStorageSheet.row_values(row)[4]
+        val = assetStorageSheet.row_values(row)[3]
+        location, detail = val.split("-")
 
-
+        asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
+        spec_id = session.query(StorageSpecNameModel).filter_by(spec_name=specName).first().id
+        storageSpecs = session.query(StorageSpecModel).filter_by(spec_id=spec_id).all()
+        location_id = session.query(LocationModel).filter_by(location=location).first().id
+        for spec in storageSpecs:
+            sepc_id = spec.id
+            newData = StorageModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id)
+            session.add(newData)
+    session.commit()
 
 if __name__ == '__main__':
     parsing_asset()
