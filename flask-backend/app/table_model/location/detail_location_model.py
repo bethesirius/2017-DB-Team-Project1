@@ -2,6 +2,7 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy.orm import relationship
 
 from app import db
 from app.table_model.device.rack_model import RackModel
@@ -12,5 +13,7 @@ class DetailLocationModel(db.Model):
     __tablename__ = "detail_location"
     id = Column(Integer, primary_key=True, autoincrement=True)
     location_id = Column(Integer, ForeignKey(LocationModel.id))
+    location = relationship('LocationModel')
     detail = Column(String(100))
     rack_id = Column(Integer, ForeignKey(RackModel.id))
+    rack = relationship('RackModel')

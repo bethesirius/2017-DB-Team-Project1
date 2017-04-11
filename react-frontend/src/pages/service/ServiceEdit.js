@@ -59,7 +59,7 @@ class ServiceEdit extends React.Component {
                 state.type = "none";
                 state.server.list.push({
                     id: Math.random(),
-                    cpu: Math.random(),
+                    core_num: Math.random(),
                 });
                 return state;
             });
@@ -71,7 +71,7 @@ class ServiceEdit extends React.Component {
                 state.type = "none";
                 state.volume.list.push({
                     id: Math.random(),
-                    cpu: Math.random(),
+                    core_num: Math.random(),
                 });
                 return state;
             });

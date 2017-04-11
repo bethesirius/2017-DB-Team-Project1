@@ -14,7 +14,6 @@ class StorageSpecModel(db.Model):
     __tablename__ = "storage_spec"
     id = Column(Integer, primary_key=True, autoincrement=True)
     spec_id = Column(Integer, ForeignKey(StorageSpecNameModel.id))
-    registration_date = Column(DateTime)
     disk_spec = Column(String(100))
     disk_type_id = Column(Integer, ForeignKey(StorageSpecTypeModel.id))
     volume = Column(Float)

@@ -1,7 +1,12 @@
 @import "~semantic-ui-css/semantic.min.css";
+@import "~react-datepicker/dist/react-datepicker.css";
 
 body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+}
+
+.my-date > div {
+    width: 100% !important;
 }

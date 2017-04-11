@@ -52,7 +52,7 @@ class ServiceSummaryTable extends React.Component {
                 <Table.Body>
                     <Table.Row>
                         <Table.Cell>On Service</Table.Cell>
-                        <Table.Cell>{service.cpu}</Table.Cell>
+                        <Table.Cell>{service.core_num}</Table.Cell>
                         <Table.Cell>{service.san}</Table.Cell>
                         <Table.Cell>{service.nas}</Table.Cell>
                         <Table.Cell>{service.total}</Table.Cell>
@@ -60,7 +60,7 @@ class ServiceSummaryTable extends React.Component {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Not Service</Table.Cell>
-                        <Table.Cell>{not.cpu}</Table.Cell>
+                        <Table.Cell>{not.core_num}</Table.Cell>
                         <Table.Cell>{not.san}</Table.Cell>
                         <Table.Cell>{not.nas}</Table.Cell>
                         <Table.Cell>{not.total}</Table.Cell>
