@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 from app.table_model.device.device_model import DeviceModel
 from app.table_model.device.spec.storage.storage_spec_model import StorageSpecModel
-from table_model.location.location_model import LocationModel
+from app.table_model.location.location_model import LocationModel
 
 
 class StorageModel(DeviceModel):
