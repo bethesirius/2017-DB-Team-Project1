@@ -64,8 +64,6 @@ class AssetEdit extends React.Component {
             rack: {form: RackCreateForm, submit: this.handleRackSubmit, list: [],}
         };
     }
-
-    // getChildContext() {}
     componentDidMount() {
         this.setState({isFetching: true,});
         fetch(`/api/asset/${this.props.params.id}`).then(res => res.json()).then(message => {
@@ -75,8 +73,6 @@ class AssetEdit extends React.Component {
             });
         })
     }
-
-    // componentWillUnmount(){}
 
     _postDevice(url, onSuccess) {
         return fetch(
@@ -93,7 +89,7 @@ class AssetEdit extends React.Component {
         });
     }
 
-    _handleDeviceSubmit = (fieldName, path, metaBody, listName, hasLocation, values, dispatch) => {
+    _handleDeviceSubmit = (fieldName, path, metaBody, listName, manageLabel, values, dispatch) => {
         let asset_id = parseInt(this.props.params.id, 10);
         const body = {};
         Object.assign(body, {
@@ -105,7 +101,7 @@ class AssetEdit extends React.Component {
             headers: {"Content-Type": "application/json",},
             body: JSON.stringify(body),
         }).then(res => res.json()).then(message => {
-            let manage_num = `S${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
+            let manage_num = `${manageLabel}${zerofill(moment(this.state.asset.get_date).year() % 100, 2)}${zerofill(message.id % 1000, 3)}`;
             return fetch(`/api/${path}/${message.id}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json",},
@@ -149,7 +145,7 @@ class AssetEdit extends React.Component {
             let location = values[fieldName.location];
             location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
             return Object.assign({size, core_num,}, spec, location);
-        }, "server", true, values, dispatch);
+        }, "server", "S", values, dispatch);
     };
     handleServerDelete = (e, {value}) => {
         this._handleDeviceDelete("server", "server", e, value);
@@ -162,7 +158,7 @@ class AssetEdit extends React.Component {
             let location = values[fieldName.location];
             location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
             return Object.assign({size,}, spec, location);
-        }, "network", true, values, dispatch);
+        }, "network", "N", values, dispatch);
     };
     handleSwitchDelete = (e, {value}) => {
         this._handleDeviceDelete("switch", "network", e, value);
@@ -185,7 +181,7 @@ class AssetEdit extends React.Component {
                 spec = {spec_id: spec};
             }
             return Object.assign({}, spec, location);
-        }, "storage", false, values, dispatch);
+        }, "storage", "D", values, dispatch);
     };
     handleStorageDelete = (e, {value}) => {
         this._handleDeviceDelete("storage", "storage", e, value);
