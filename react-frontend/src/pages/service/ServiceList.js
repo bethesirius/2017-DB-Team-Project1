@@ -48,7 +48,7 @@ class ServiceList extends React.Component {
                 server.objects.forEach((item, index, src) => {
                     let s_name_id = item.service_name.id;
                     if (s_name_id === service_name_id) {
-                        if (item.on) {
+                        if (item.server.on) {
                             use.core_num += item.server.core_num;
                         } else {
                             not.core_num += item.server.core_num;

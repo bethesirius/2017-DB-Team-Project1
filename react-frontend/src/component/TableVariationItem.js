@@ -3,7 +3,7 @@
  */
 import React from "react";
 import {Link} from "react-router";
-import {Button, Icon, Item, Label, Radio} from "semantic-ui-react";
+import {Button, Icon, Item, Label} from "semantic-ui-react";
 
 class TableVariationItem extends React.Component {
     static propTypes = {
