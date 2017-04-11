@@ -388,7 +388,7 @@ def parsing_asset():
         manage_num = assetStorageSheet.row_values(row)[1]
         specName = assetStorageSheet.row_values(row)[4]
         val = assetStorageSheet.row_values(row)[3]
-        location, detail = val.split("-")
+        location = val.split("-")
         if random.random() > 0.5:
             on = True
         else:
@@ -397,7 +397,7 @@ def parsing_asset():
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
         spec_id = session.query(StorageSpecNameModel).filter_by(spec_name=specName).first().id
         storageSpecs = session.query(StorageSpecModel).filter_by(spec_id=spec_id).all()
-        location_id = session.query(LocationModel).filter_by(location=location).first().id
+        location_id = session.query(LocationModel).filter_by(location=location[0]).first().id
         for spec in storageSpecs:
             sepc_id = spec.id
             newData = StorageModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, on=on)
