@@ -318,7 +318,7 @@ def parsing_asset():
                 print(manage_num)
     #"""
     ServiceList = {}
-    for row in range(51, 66):
+    for row in range(51, 65):
         color = RackSheetOPX.cell(row=row, column=3).fill.start_color.index
         name = RackSheet.row_values(row-1)[2]
         ServiceList[color]=name
