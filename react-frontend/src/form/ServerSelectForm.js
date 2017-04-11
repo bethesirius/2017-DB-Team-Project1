@@ -4,7 +4,7 @@
 import React from "react";
 import {Field, reduxForm} from "redux-form";
 import {Button, FormGroup, Segment} from "semantic-ui-react";
-import {FieldDropDown, InteractiveForm} from "./common";
+import {FieldDropDown, InteractiveForm, validateExist} from "./common";
 
 class ServerSelectForm extends React.Component {
     static propTypes = {
@@ -21,6 +21,7 @@ class ServerSelectForm extends React.Component {
 
     static validate(values) {
         const errors = {};
+        validateExist(values,errors,ServerSelectForm.fieldNames);
         return errors;
     }
 

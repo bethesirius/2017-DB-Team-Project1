@@ -152,6 +152,13 @@ export class InteractiveForm extends React.PureComponent {
     }
 }
 
+export const validateExist = (values, errors, fieldNames) => {
+    Object.keys(fieldNames).forEach(item => {
+        if (typeof item === "string" && values[item] === undefined) {
+            errors[item]="값이 필요 합니다.";
+        }
+    });
+};
 
 export const LRFieldLazyTextArea = ({input: {onChange, onBlur,}, meta, label, rows, hasTip, ...custom}) => (
     <Form.Field error={meta.touched && meta.invalid}>
