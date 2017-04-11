@@ -8,21 +8,6 @@ import RackCreateForm, {fieldNames} from "../../form/RackCreateForm";
 import ItemGroup from "../../component/ItemGroup";
 import moment from "moment";
 
-const temp_rack = {
-    assetId: 'R00000',
-    size: 46,
-    servers: 5,
-    storages: 10,
-    networks: 1,
-    emptys: 20,
-    mounted: [{
-        assetId: 'S00000',
-        size: 2,
-        mount_lv: 1,
-        ip: '0.0.0.0',
-    }],
-};
-
 function zerofill(num, length) {
     return (num / Math.pow(10, length)).toFixed(length).substr(2);
 }
