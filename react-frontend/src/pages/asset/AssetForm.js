@@ -7,6 +7,7 @@ import {Link} from "react-router";
 
 const stepPaths = [
     "/asset/form/create",
+    "/asset/form/rack",
     "/asset/form/edit",
     "/asset/form/confirm",
 ];
@@ -47,8 +48,9 @@ class AssetForm extends React.Component {
             <div >
                 <Step.Group fluid={true} ordered={true}>
                     <LinkStep to={stepPaths[0]} pathname={pathname} title="자산 생성"/>
-                    <LinkStep to={stepPaths[1]} pathname={pathname} title="장비 등록"/>
-                    <LinkStep to={stepPaths[2]} pathname={pathname} title="결과 확인"/>
+                    <LinkStep to={stepPaths[1]} pathname={pathname} title="Rack 등록"/>
+                    <LinkStep to={stepPaths[2]} pathname={pathname} title="장비 등록"/>
+                    <LinkStep to={stepPaths[3]} pathname={pathname} title="결과 확인"/>
                 </Step.Group>
                 {children}
             </div>

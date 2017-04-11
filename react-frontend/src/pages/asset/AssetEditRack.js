@@ -3,12 +3,26 @@
  */
 import React from "react";
 import {browserHistory} from "react-router";
+import {SubmissionError} from "redux-form";
 import {Button, Dimmer, Form, Header, Loader, Segment} from "semantic-ui-react";
-import ServerCreateForm, {fieldNames as serverField} from "../../form/ServerCreateForm";
-import SwitchCreateForm, {fieldNames as switchField} from "../../form/SwitchCreateForm";
-import StorageCreateForm, {fieldNames as storageField} from "../../form/StorageCreateForm";
+import RackCreateForm from "../../form/RackCreateForm";
 import ItemGroup from "../../component/ItemGroup";
 import moment from "moment";
+
+const temp_rack = {
+    assetId: 'R00000',
+    size: 46,
+    servers: 5,
+    storages: 10,
+    networks: 1,
+    emptys: 20,
+    mounted: [{
+        assetId: 'S00000',
+        size: 2,
+        mount_lv: 1,
+        ip: '0.0.0.0',
+    }],
+};
 
 function zerofill(num, length) {
     return (num / Math.pow(10, length)).toFixed(length).substr(2);
@@ -20,7 +34,7 @@ class AssetEdit extends React.Component {
     };
     handleNext = (event) => {
         event.preventDefault();
-        browserHistory.push(`/asset/form/confirm/${this.props.params.id}`);
+        browserHistory.push(`/asset/form/edit/${this.props.params.id}/${this.props.params.asset_num}`);
     };
 
     // static defaultProps = {};
@@ -34,16 +48,19 @@ class AssetEdit extends React.Component {
             type: "none",
             options: [
                 {text: "--- 추가할 장비를 선택하세요 ---", value: "none"},
-                {text: '서버', value: 'server',},
-                {text: '스위치', value: 'network',},
-                {text: '스토리지', value: 'storage',},
                 {text: '랙', value: 'rack',},
             ],
             asset: {},
-            none: {form: () => <Segment attached={true}/>, submit: null, list: [],},
-            server: {form: ServerCreateForm, submit: this.handleServerSubmit, list: [],},
-            network: {form: SwitchCreateForm, submit: this.handleSwitchSubmit, list: [],},
-            storage: {form: StorageCreateForm, submit: this.handleStorageSubmit, list: [],},
+            none: {
+                form: () => (
+                    <Segment attached={true}>
+                        추가 할 Rack 이 없다면 바로 다음으로 진행 하셔도 좋습니다.
+                    </Segment>
+                ),
+                submit: null,
+                list: [],
+            },
+            rack: {form: RackCreateForm, submit: this.handleRackSubmit, list: [],}
         };
     }
 
@@ -55,6 +72,21 @@ class AssetEdit extends React.Component {
                 asset: message
             });
         })
+    }
+
+    _postDevice(url, onSuccess) {
+        return fetch(
+            url,
+        ).then(res => {
+            if (!res.ok) {
+                throw SubmissionError({_error: "Failed Fetch"});
+            }
+            return res.json();
+        }).then(json => {
+            onSuccess(json);
+        }).catch(err => {
+            return Promise.reject(new SubmissionError({_error: `Failed Fetch by:${err}`}));
+        });
     }
 
     _handleDeviceSubmit = (fieldName, path, metaBody, listName, manageLabel, values, dispatch) => {
@@ -104,55 +136,17 @@ class AssetEdit extends React.Component {
         });
     };
 
-    handleServerSubmit = (values, dispatch) => {
-        return this._handleDeviceSubmit(serverField, "server", (fieldName, values) => {
-            let core_num = parseInt(values[fieldName.core_num], 10);
-            let size = parseInt(values[fieldName.size], 10);
-            let spec = values[fieldName.spec];
-            spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
-            let location = values[fieldName.location];
-            location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
-            return Object.assign({size, core_num,}, spec, location);
-        }, "server", "S", values, dispatch);
+    handleRackSubmit = (values, dispatch) => {
+        return this._postDevice("/dummy_ok.json", (json) => {
+            this.setState((state, props) => {
+                state.type = "none";
+                state.rack.list.push(temp_rack);
+                return state;
+            });
+        });
     };
-    handleServerDelete = (e, {value}) => {
-        this._handleDeviceDelete("server", "server", e, value);
-    };
-    handleSwitchSubmit = (values, dispatch) => {
-        return this._handleDeviceSubmit(switchField, "switch", (fieldName, values) => {
-            let size = parseInt(values[fieldName.size], 10);
-            let spec = values[fieldName.spec];
-            spec = Number.isInteger(spec) ? {spec_id: spec} : {spec: {spec: spec}};
-            let location = values[fieldName.location];
-            location = Number.isInteger(location) ? {location_id: location} : {location: {location: {location: location}}};
-            return Object.assign({size,}, spec, location);
-        }, "network", "N", values, dispatch);
-    };
-    handleSwitchDelete = (e, {value}) => {
-        this._handleDeviceDelete("switch", "network", e, value);
-    };
-    handleStorageSubmit = (values, dispatch) => {
-        return this._handleDeviceSubmit(storageField, "storage", (fieldName, values) => {
-            let location = values[fieldName.location];
-            location = Number.isInteger(location) ? {location_id: location} : {location: {location: location}};
-            let spec = values[fieldName.spec];
-            if (!spec) { // create new storage spec
-                let spec_ = values[fieldName.new_spec.spec];
-                spec_ = Number.isInteger(spec_) ? {spec_id: spec_} : {spec: {spec_name: spec_}};
-                let disk_type = values[fieldName.new_spec.disk_type];
-                disk_type = Number.isInteger(disk_type) ? {disk_type_id: disk_type} : {disk_type: {spec_type: disk_type}};
-                let disk_spec = values[fieldName.new_spec.disk_spec];
-                let volume = parseFloat(values[fieldName.new_spec.volume]);
-                spec = Object.assign({disk_spec, volume}, disk_type, spec_);
-                spec = {spec};
-            } else { // use already exist spec
-                spec = {spec_id: spec};
-            }
-            return Object.assign({}, spec, location);
-        }, "storage", "D", values, dispatch);
-    };
-    handleStorageDelete = (e, {value}) => {
-        this._handleDeviceDelete("storage", "storage", e, value);
+    handleRackDelete = (e, {value}) => {
+        this._handleDeviceDelete("rack", "rack", e, value);
     };
     handleTypeChange = (e, {value}) => {
         this.setState({type: value,});
@@ -179,9 +173,7 @@ class AssetEdit extends React.Component {
                 </Segment>
                 <Segment attached={true}>
                     <Header>자산:{asset_num}에 등록된 장비 목록</Header>
-                    <ItemGroup.Server items={this.state.server.list} onDelete={this.handleServerDelete}/>
-                    <ItemGroup.Switch items={this.state.network.list} onDelete={this.handleSwitchDelete}/>
-                    <ItemGroup.Storage items={this.state.storage.list} onDelete={this.handleStorageDelete}/>
+                    <ItemGroup.Rack items={this.state.rack.list} onDelete={this.handleRackDelete}/>
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button

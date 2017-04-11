@@ -15,7 +15,7 @@ import Switch from "./pages/Switch";
 import Storage from "./pages/Storage";
 import Rack from "./pages/Rack";
 import {ServiceConfirm, ServiceCreate, ServiceEdit, ServiceForm, ServiceList} from "./pages/service";
-import {AssetConfirm, AssetCreate, AssetEdit, AssetForm, AssetList} from "./pages/asset";
+import {AssetConfirm, AssetCreate, AssetEdit, AssetEditRack, AssetForm, AssetList} from "./pages/asset";
 import NotFound from "./pages/NotFound";
 
 const store = createStore(reducers, composeWithDevTools(
@@ -35,6 +35,7 @@ ReactDOM.render(
                     <Route path="form" component={AssetForm}>
                         <IndexRedirect to="create"/>
                         <Route path="create" component={AssetCreate}/>
+                        <Route path="rack/:id/:asset_num" component={AssetEditRack}/>
                         <Route path="edit/:id/:asset_num" component={AssetEdit}/>
                         <Route path="confirm/:id" component={AssetConfirm}/>
                     </Route>
