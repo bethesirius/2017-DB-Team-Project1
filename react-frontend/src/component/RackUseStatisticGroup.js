@@ -8,7 +8,6 @@ class RackUseStatisticGroup extends React.Component {
     static propTypes = {
         data: React.PropTypes.shape({
             servers: React.PropTypes.number,
-            storages: React.PropTypes.number,
             networks: React.PropTypes.number,
             emptys: React.PropTypes.number,
         }),
@@ -23,10 +22,9 @@ class RackUseStatisticGroup extends React.Component {
     // componentDidMount(){}
     // componentWillUnmount(){}
     render() {
-        const {data: {servers, storages, networks, emptys}} = this.props;
+        const {data: {servers, networks, emptys}} = this.props;
         const items = [
             {icon: "server", label: 'SERVER', value: servers},
-            {icon: "database", label: 'STORAGE', value: storages},
             {icon: "move", label: 'NETWORK', value: networks},
             {icon: "add", label: 'EMPTY', value: emptys},
         ];
