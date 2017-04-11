@@ -67,7 +67,7 @@ def parsing_asset():
     ncol = sheet.ncols
     nlow = sheet.nrows
     
-    """ 
+    #""" 
     #####################################
     print("-------- "+ASSET_SHEETS[0]+" --------")
     print("Number of col: " + str(ncol))
@@ -316,7 +316,7 @@ def parsing_asset():
                 session.commit()
             else: 
                 print(manage_num)
-    """
+    #"""
     ServiceList = {}
     for row in range(51, 66):
         color = RackSheetOPX.cell(row=row, column=3).fill.start_color.index
@@ -330,8 +330,6 @@ def parsing_asset():
         location_id = session.query(DetailLocationModel).filter_by(detail=detail).first().id
         for row in range(8,49):
             color = RackSheetOPX.cell(row=row, column=col).fill.start_color.index
-            print(row)
-            print(col)
             manage_num = RackSheetOPX.cell(row=row, column=col).value
             if manage_num is None:
                 continue
@@ -340,13 +338,15 @@ def parsing_asset():
                 print(manage_num + "does not exist service.")
                 continue
             name = ServiceList[color]
+            print(name)
             service_id = session.query(ServiceNameModel).filter_by(service_name=name).first().id
 
-            index = row
-            while index < 49:
-                if (manage_num != RackSheetOPX.cell(row=index, column=col).value) or (color != RackSheetOPX.cell(row=index, column=col).fill.start_color.index):
+            start_index = row
+            while start_index < 49:
+                if (manage_num != RackSheetOPX.cell(row=start_index, column=col).value) or (color != RackSheetOPX.cell(row=start_index, column=col).fill.start_color.index):
                     break
-                index = index + 1
+                start_index = start_index + 1
+            start_index = (-1 * start_index) + 50
             service_on_off = True
     
             if manage_num[0] == "N":
@@ -355,7 +355,7 @@ def parsing_asset():
                     continue
                 switch_id = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
                 switch_id = session.query(SwitchModel).filter_by(id=switch_id).first().id
-                newData = RackLocationForSwitchModel(switch_id=switch_id)
+                newData = RackLocationForSwitchModel(start_index=start_index, location_id=location_id, service_id=service_id, service_on_off=service_on_off, switch_id=switch_id)
                 session.add(newData)
                 session.commit()
 
@@ -365,111 +365,13 @@ def parsing_asset():
                     continue
                 server_id = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
                 server_id = session.query(ServerModel).filter_by(id=server_id).first().id
-                newData = RackLocationForServerModel(ip_v4=ip_v4, server_id=server_id)
+                newData = RackLocationForServerModel(start_index=start_index, location_id=location_id, service_id=service_id, service_on_off=service_on_off, server_id=server_id)
                 session.add(newData)
                 session.commit()
  
     
-
-
-
-    
-    """
-    #######################################################
-    #으아아앙 이건ㄴ 이따가 다시 꼭 봐서 으아ㅓ이ㅏㅇ해야함
-    values = set()
-    values_detail_location = set()
-    for row in range(1,23):
-        val = assetRackSheet.row_values(row)[3]
-        location, detail_location = val.split("-")
-        values.add(location)
-        values_detail_location.add(detail_location)
-    for row in range(1,535):
-        val = assetServerSheet.row_values(row)[3]
-        location, detail_location = val.split("-")
-        values.add(location)
-        values_detail_location.add(detail_location)
-    for row in range(1,62):
-        val = assetSwitchSheet.row_values(row)[3]
-        location, detail_location = val.split("-")
-        values.add(location)
-        values_detail_location.add(detail_location)
-    print(values)
-    print(values_detail_location)
-    for value in values:
-        newData = LocationModel(location=value)
-        session.add(newData)
-    session.commit()
-    for value in values_detail_location:
-        location_id = session.query(LocationModel).filter_by(spec_type=disk_type_id).first().id
-        newData = DetailLocationModel(detail=value)
-        newData.location_id = 
-        session.add(newData)
-    session.commit()
-
-
-    values = set()
-    for row in range(1,62):
-        asset_id = assetStorageSheet.row_values(row)[0]
-        manage_num = assetStorageSheet.row_values(row)[1]
-        spec_id = assetStorageSheet.row_values(row)[4]
-        asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
-        spec_id = session.query(StorageSpecModel).filter_by(spec_id=spec_id).first().id
-        newData = StorageModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id)
-        session.add(newData)
-    session.commit()
- 
-    value = set()
-    for row in range(1,535):
-        asset_id = assetServerSheet.row_values(row)[0]
-        manage_num = assetServerSheet.row_values(row)[1]
-        asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
-        newData = DeviceModel(manage_num=manage_num)
-        newData.asset_id = asset_id
-        session.add(newData)
-    session.commit()
-    value = set()
-    for row in range(1,62):
-        asset_id = assetSwitchSheet.row_values(row)[0]
-        manage_num = assetSwitchSheet.row_values(row)[1]
-        asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
-        newData = DeviceModel(manage_num=manage_num)
-        newData.asset_id = asset_id
-        session.add(newData)
-    session.commit()
-    
-    
-    for row in range(1,23):
-        manage_num = assetRackSheet.row_values(row)[1]
-        rack_size = 42
-        print(manage_num)
-        spec_id = assetRackSheet.row_values(row)[4]
-        print(session.query(DeviceModel).filter_by(manage_num=manage_num).first())
-        manage_num = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
-        print(1)
-        spec_id = session.query(RackSpecModel).filter_by(spec=spec_id).first().id
-        print(2)
-        newData = RackModel(rack_size=3)
-        print(3)
-        newData.id = manage_num
-        print(4)
-        newData.spec_id = spec_id
-        print(5)
-        session.add(newData)
-        print(newData)
-        print(newData.id)
-        print(newData.rack_size)
-        print(newData.spec_id)
-        session.commit()
-        print(7)
     
 
-    ############################################# 
-    """
-
-    # print(sheet.cell_value(2, 2))
-    # print()
-    pass
 
 
 if __name__ == '__main__':
