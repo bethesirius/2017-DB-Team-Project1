@@ -2,42 +2,55 @@
  * Created by rino0 on 2017-03-27.
  */
 import React from "react";
-import {Header, Segment} from "semantic-ui-react";
+import {Dimmer, Header, Loader, Segment} from "semantic-ui-react";
 import TotalUseStatisticGroup from "../component/TotalUseStatisticGroup";
 import ItemGroup from "../component/ItemGroup";
 
 class Storage extends React.Component {
     static propTypes = {};
-    // static defaultProps = {};
-    // static  childContextTypes = {};
-    // static contextTypes = {};
 
     constructor(props) {
         super(props);
         this.state = {
-            items: [
-                {id: 1, cpu: 16},
-                {id: 2, cpu: 8},
-                {id: 3, cpu: 4},
-                {id: 4, cpu: 2},
-                {id: 5, cpu: 1},
-            ],
+            isFetching: false,
+            items: [],
+            statistic: [
+                {icon: "server", label: '스토리지 수', value: 0},
+            ]
         };
     }
 
-    // getChildContext() {}
-    // componentDidMount(){}
-    // componentWillUnmount(){}
+    componentDidMount() {
+        this.setState({isFetching: true});
+        fetch("/api/storage").then(res => res.json()).then(message => {
+            this._updateState(message.objects);
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
+    }
+    _updateState(items) {
+        let storageCount = items.length;
+        this.setState((state, props) => {
+            state.statistic[0].value = storageCount;
+            state.items = items;
+            state.isFetching = false;
+            return state;
+        });
+    }
     render() {
         const {items} = this.state;
         return (
-            <div>
+            <Dimmer.Dimmable as="div">
+                <Dimmer active={this.state.isFetching}>
+                    <Loader size='massive'>Loading</Loader>
+                </Dimmer>
                 <Segment>
                     <Header>총 사용량</Header>
-                    <TotalUseStatisticGroup />
+                    <TotalUseStatisticGroup items={this.state.statistic}/>
                 </Segment>
-                <ItemGroup.Storage items={items}/>
-            </div>
+                <ItemGroup.Storage items={items} onDelete={this.handleDelete}/>
+            </Dimmer.Dimmable>
         );
     }
 }

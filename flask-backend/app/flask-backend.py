@@ -21,6 +21,7 @@ from app.table_model.rack_location.for_server_model import DeviceInfoForServerMo
 from app.table_model.rack_location.for_switch_model import DeviceInfoForSwitchModel
 from app.table_model.rack_location.rack_location_for_server_model import RackLocationForServerModel
 from app.table_model.rack_location.rack_location_for_switch_model import RackLocationForSwitchModel
+from app.table_model.rack_location.rack_location_model import RackLocationModel
 
 METHODS = ['GET', 'POST', 'DELETE', 'PUT']
 
@@ -46,6 +47,7 @@ manager.create_api(DeviceInfoForSwitchModel, methods=METHODS, results_per_page=1
 manager.create_api(DeviceInfo, methods=METHODS, results_per_page=1000, max_results_per_page=1000)
 manager.create_api(RackLocationForServerModel, methods=METHODS, results_per_page=1000, max_results_per_page=1000)
 manager.create_api(RackLocationForSwitchModel, methods=METHODS, results_per_page=1000, max_results_per_page=1000)
+manager.create_api(RackLocationModel, methods=METHODS, results_per_page=1000, max_results_per_page=1000)
 
 # @app.route('/')
 # def hello_world():

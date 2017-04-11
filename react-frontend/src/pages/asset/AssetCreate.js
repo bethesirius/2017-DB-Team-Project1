@@ -51,7 +51,7 @@ class AssetCreate extends React.Component {
                 body: JSON.stringify({asset_num,}),
             });
         }).then(res => res.json()).then(message => {
-            browserHistory.push(`/asset/form/edit/${message.id}/${message.asset_num}`);
+            browserHistory.push(`/asset/form/rack/${message.id}/${message.asset_num}`);
         });
     };
 

@@ -15,5 +15,3 @@ class RackModel(DeviceModel):
     spec_id = Column(Integer, ForeignKey(RackSpecModel.id))
     spec = relationship('RackSpecModel')
     rack_size = Column(Integer)
-
-

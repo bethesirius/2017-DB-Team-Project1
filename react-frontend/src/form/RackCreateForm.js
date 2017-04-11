@@ -4,7 +4,7 @@
 import React from "react";
 import {Field, reduxForm} from "redux-form";
 import {Button, FormGroup, Segment} from "semantic-ui-react";
-import {FieldLazyInput, InteractiveForm} from "./common";
+import {FieldDropDown, FieldLazyInput, InteractiveForm} from "./common";
 
 class RackCreateForm extends React.Component {
     static propTypes = {
@@ -19,6 +19,8 @@ class RackCreateForm extends React.Component {
         deviceId: "deviceId",
         location: "location",
         spec: "spec",
+        detail: "detail",
+        size: "size",
     };
 
     static validate(values) {
@@ -26,19 +28,68 @@ class RackCreateForm extends React.Component {
         return errors;
     }
 
-    // getChildContext() {}
-    // componentDidMount(){}
-    // componentWillUnmount(){}
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFetching: false,
+            locations: [],
+            specs: [],
+        };
+    }
+
+    componentDidMount() {
+        this.setState({isFetching: true});
+        Promise.all([
+            fetch("/api/location").then(res => res.json()),
+            fetch("/api/rack_spec").then(res => res.json()),
+        ]).then(([location, spec]) => {
+            this.setState((state, props) => {
+                state.locations = location.objects.map(item => {
+                    let location = item.location;
+                    return {
+                        text: location,
+                        value: item.id,
+                    };
+                });
+                state.specs = spec.objects.map(item => {
+                    return {
+                        text: item.spec,
+                        value: item.id
+                    };
+                });
+                state.isFetching = false;
+            });
+        });
+    }
+
+    handleAddLocation = (e, {value}) => {
+        this.setState((state, props) => {
+            state.locations.push({value: value, text: value});
+            return state;
+        });
+    };
+
+    handleAddSpec = (e, {value}) => {
+        this.setState((state, props) => {
+            state.specs.push({value: value, text: value});
+            return state;
+        });
+    };
+
     render() {
-        const {deviceId, location, spec} = RackCreateForm.fieldNames;
+        const {deviceId, location, spec, detail, size} = RackCreateForm.fieldNames;
         return (
-            <InteractiveForm reduxFormProps={this.props}>
+            <InteractiveForm reduxFormProps={this.props} loading={this.state.isFetching}>
                 <Segment attached={true}>
                     <FormGroup widths={"equal"}>
-                        <Field name={deviceId} component={FieldLazyInput} label="자산번호"/>
+                        <Field name={deviceId} component={FieldLazyInput} label="관리 번호"/>
+                        <Field name={detail} component={FieldLazyInput} label="Rack Code"/>
+                        <Field name={size} component={FieldLazyInput} label="Rack Size"/>
                     </FormGroup>
-                    <Field name={location} component={FieldLazyInput} label="현재 위치"/>
-                    <Field name={spec} component={FieldLazyInput} label="규격"/>
+                    <Field name={location} component={FieldDropDown} label="현재 위치" options={this.state.locations}
+                           onAddItem={this.handleAddLocation}/>
+                    <Field name={spec} component={FieldDropDown} label="규격" options={this.state.specs}
+                           onAddItem={this.handleAddSpec}/>
                 </Segment>
                 <Button.Group attached={"bottom"}>
                     <Button primary={true} content={"다음으로"} icon='right arrow' labelPosition='right'/>
