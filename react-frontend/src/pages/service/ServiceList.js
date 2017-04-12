@@ -33,7 +33,7 @@ class ServiceList extends React.Component {
     // getChildContext() {}
     componentDidMount() {
         this.setState({isFetching: true});
-        Promise.all([
+        Promise.delay(1400).then(() => Promise.all([
             fetch("/api/service_name").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
             fetch("/api/storage").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
             fetch("/api/rack_location_for_server").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
@@ -112,7 +112,7 @@ class ServiceList extends React.Component {
                 state.isFetching = false;
                 return state;
             });
-        }).catch(err => {
+        })).catch(err => {
             alert(err.message);
             this.setState({isFetching: false});
         });

@@ -67,7 +67,7 @@ class AssetCreateForm extends React.Component {
     // getChildContext() {}
     componentDidMount() {
         this.setState({isFetching: true});
-        Promise.all([
+        Promise.delay(1400).then(() => Promise.all([
             fetch("/api/asset_name").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
             fetch("/api/standard").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
             fetch("/api/buy").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
@@ -93,7 +93,7 @@ class AssetCreateForm extends React.Component {
                 });
                 state.isFetching = false;
             });
-        }).catch(err => {
+        })).catch(err => {
             alert(err.message);
             this.setState({isFetching: false});
         });

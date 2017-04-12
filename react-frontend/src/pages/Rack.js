@@ -25,7 +25,7 @@ class Rack extends React.Component {
         var reqHeaders= new Headers();
         reqHeaders.append('Content-Type', 'application/json');
 
-        (() => Promise.all([
+        Promise.delay(1400).then(() => Promise.all([
             fetch('/cheat/rack_info', reqHeaders).then((r) => r.json()),
             fetch('/api/rack', reqHeaders).then((r) => r.json())])
             .then(([r, r2]) => {
@@ -65,7 +65,7 @@ class Rack extends React.Component {
                     isFetching:false,
                 });
             })
-        )()
+        );
     }
 
     handleSearchQuery(data){

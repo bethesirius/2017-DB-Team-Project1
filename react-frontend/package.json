@@ -6,6 +6,7 @@
     "react-scripts": "0.9.5"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "currency-formatter": "^1.2.0",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.18.1",

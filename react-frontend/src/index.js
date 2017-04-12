@@ -8,16 +8,18 @@ import {browserHistory, IndexRedirect, IndexRoute, Route, Router} from "react-ro
 // -- import main component --
 import reducers from "./redux";
 import "./index.css";
-
+import Promise from "bluebird";
 import App from "./pages/App";
 import Server from "./pages/Server";
 import Switch from "./pages/Switch";
 import Storage from "./pages/Storage";
 import Rack from "./pages/Rack";
-import {ServiceConfirm, ServiceCreate, ServiceSelectServer, ServiceForm, ServiceList} from "./pages/service";
+import {ServiceConfirm, ServiceCreate, ServiceForm, ServiceList, ServiceSelectServer} from "./pages/service";
 import {AssetConfirm, AssetCreate, AssetEdit, AssetEditRack, AssetForm, AssetList} from "./pages/asset";
 import NotFound from "./pages/NotFound";
+import FrontPage from "./pages/FrontPage";
 import {ServiceSelectStorage} from "./pages/service/index";
+window.Promise = Promise;
 
 const store = createStore(reducers, composeWithDevTools(
     // other store enhancers if any
@@ -30,7 +32,7 @@ ReactDOM.render(
     <Provider store={store}>
         <Router history={history}>
             <Route path="/" component={App}>
-                <IndexRoute component={NotFound}/>
+                <IndexRoute component={FrontPage}/>
                 <Route path="asset">
                     <IndexRoute component={AssetList}/>
                     <Route path="form" component={AssetForm}>
