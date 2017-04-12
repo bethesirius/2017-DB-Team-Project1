@@ -143,7 +143,7 @@ class MountAsset extends React.Component {
     }
 
     render(){
-        const {unmounted_switches, unmounted_servers, empty_lv}= this.state;
+        const {unmounted_switches, unmounted_servers}= this.state;
         const unmounted_assets= unmounted_switches.concat(unmounted_servers);
         const content=(
             <Modal.Content>

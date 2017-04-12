@@ -49,7 +49,7 @@ class Rack extends React.Component {
                     }
                 });
 
-                let zero_rack_num= r2.objects.map( (rack) => rack.manage_num ).filter( (rack_num) => Array.from( new Set(result.map( (obj) => obj[0] ))).indexOf(rack_num)==-1);
+                let zero_rack_num= r2.objects.map( (rack) => rack.manage_num ).filter( (rack_num) => Array.from( new Set(result.map( (obj) => obj[0] ))).indexOf(rack_num)===-1);
                 let zero_racks=r2.objects.filter((obj) => zero_rack_num.indexOf(obj.manage_num)>-1);
                 rack= rack.concat(zero_racks.map((zero_rack) => {return {
                     assetId: zero_rack.manage_num,
@@ -78,7 +78,7 @@ class Rack extends React.Component {
         const {rack:rackSummarys, search_query, isFetching} = this.state;
         return (
             <Dimmer.Dimmable as="div">
-                    <Dimmer active= {isFetching}>
+                    <Dimmer active={isFetching}>
                         <Loader />
                     </Dimmer>
                 <Accordion as={Segment} exclusive={false}>
