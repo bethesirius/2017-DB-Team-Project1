@@ -1,5 +1,5 @@
 import React from "react";
-import {Accordion, Divider, Header, Item, Segment} from "semantic-ui-react";
+import {Accordion, Divider, Header, Item, Segment, Input, Container, Dimmer, Loader} from "semantic-ui-react";
 import RackUseStatisticGroup from "../component/RackUseStatisticGroup";
 import RackSummaryTable from "../component/RackSummaryTable";
 import MountAsset from "../component/MountAsset";
@@ -11,45 +11,9 @@ class Rack extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            rack:[{
-                assetId: 'R00000',
-                size: 46,
-                servers: 3,
-                networks: 7,
-                emptys: 24,
-                mounted: [{
-                    assetId: 'S00000',
-                    size: 2,
-                    mount_lv: 2,
-                    ip: '0.0.0.0',
-                    service: 'Admin',
-                }, {
-                    assetId: 'N00000',
-                    size: 2,
-                    mount_lv: 5,
-                    ip: '0.0.0.1',
-                    service: 'Admin',
-                }],
-            }, {
-                assetId: 'R00001',
-                size: 24,
-                servers: 5,
-                networks: 1,
-                emptys: 2,
-                mounted: [{
-                    assetId: 'S00001',
-                    size: 3,
-                    mount_lv: 1,
-                    ip: '0.0.1.0',
-                    service: 'Admin',
-                }, {
-                    assetId: 'N00001',
-                    size: 2,
-                    mount_lv: 7,
-                    ip: '0.0.1.1',
-                    service: 'Alice',
-                }],
-            }]
+            search_query:"",
+            rack:[],
+            isFetching: true,
         }
     }
 
@@ -61,9 +25,10 @@ class Rack extends React.Component {
         var reqHeaders= new Headers();
         reqHeaders.append('Content-Type', 'application/json');
 
-        (() => fetch('/cheat/rack_info', reqHeaders)
-            .then((r) => r.json())
-            .then((r) => {
+        (() => Promise.all([
+            fetch('/cheat/rack_info', reqHeaders).then((r) => r.json()),
+            fetch('/api/rack', reqHeaders).then((r) => r.json())])
+            .then(([r, r2]) => {
                 let result= r.server.concat(r['switch']);
                 let rack= Array.from( new Set(result.map( (obj) => obj[0] ))).map( (rack_num) => {
                     let devices= result.filter( (obj) => obj[0]=== rack_num)
@@ -83,18 +48,47 @@ class Rack extends React.Component {
                         mounted: mounted_devices,
                     }
                 });
-                this.setState({rack:rack});
+
+                let zero_rack_num= r2.objects.map( (rack) => rack.manage_num ).filter( (rack_num) => Array.from( new Set(result.map( (obj) => obj[0] ))).indexOf(rack_num)==-1);
+                let zero_racks=r2.objects.filter((obj) => zero_rack_num.indexOf(obj.manage_num)>-1);
+                rack= rack.concat(zero_racks.map((zero_rack) => {return {
+                    assetId: zero_rack.manage_num,
+                    size: zero_rack.rack_size,
+                    servers: 0,
+                    networks: 0,
+                    emptys: zero_rack.rack_size,
+                    mounted: [],
+                }})).sort( (a,b) => a.assetId.localeCompare(b.assetId));
+
+                this.setState({
+                    rack:rack,
+                    isFetching:false,
+                });
             })
         )()
     }
 
+    handleSearchQuery(data){
+        this.setState({
+            search_query:data.value
+        })
+    }
+
     render() {
-        const {rack:rackSummarys} = this.state;
+        const {rack:rackSummarys, search_query, isFetching} = this.state;
         return (
-            <div>
+            <Dimmer.Dimmable as="div">
+                    <Dimmer active= {isFetching}>
+                        <Loader />
+                    </Dimmer>
                 <Accordion as={Segment} exclusive={false}>
-                    <Header>등록된 Rack</Header>
-                    {rackSummarys.map((summary) => ([
+                    <Header>
+                        <Container textAlign='left'>등록된 Rack</Container>
+                        <Container textAlign='right'>
+                            <Input placeholder='Search...' onChange={ (ev, data) => this.handleSearchQuery(data) }/>
+                        </Container>
+                    </Header>
+                    {rackSummarys.filter( (summary) => summary.assetId.search(search_query)>-1 ).map((summary) => ([
                         <Divider/>,
                         <Accordion.Title key={summary.assetId}>
                             <Item.Group>
@@ -113,7 +107,7 @@ class Rack extends React.Component {
                                 </Item>
                                 <Item>
                                     <Item.Content>
-                                        <Item.Header><MountAsset/><UnmountAsset/></Item.Header>
+                                        <Item.Header><MountAsset summary={summary} /><UnmountAsset/></Item.Header>
                                     </Item.Content>
                                 </Item>
                             </Item.Group>
@@ -123,7 +117,7 @@ class Rack extends React.Component {
                         </Accordion.Content>
                     ]))}{/* React JSX에서 map 쓸때 key 사용 필수. */}
                 </Accordion>
-            </div>
+            </Dimmer.Dimmable>
         );
     }
 }
