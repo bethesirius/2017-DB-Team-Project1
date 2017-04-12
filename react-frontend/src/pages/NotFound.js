@@ -4,7 +4,7 @@ class NotFound extends React.Component {
     render() {
         return (
             <div>
-                THE PAGE IS NOT FOUND
+                시간이 부족해서 못 만들었음.
             </div>
         );
     }

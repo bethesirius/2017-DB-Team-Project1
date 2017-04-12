@@ -1,10 +1,11 @@
 import React from "react";
+import {Image} from "semantic-ui-react";
 
 class NotFound extends React.Component {
     render() {
         return (
             <div>
-                THE PAGE IS NOT FOUND
+                <Image src='/img/wallpaper.jpg' fluid={true}/>
             </div>
         );
     }
