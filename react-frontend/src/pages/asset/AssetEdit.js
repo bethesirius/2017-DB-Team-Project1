@@ -156,19 +156,16 @@ class AssetEdit extends React.Component {
         return this._handleDeviceSubmit(storageField, "storage", (fieldName, values) => {
             let location = values[fieldName.location];
             location = Number.isInteger(location) ? {location_id: location} : {location: {location: location}};
-            let spec = values[fieldName.spec];
-            if (!spec) { // create new storage spec
-                let spec_ = values[fieldName.new_spec.spec];
-                spec_ = Number.isInteger(spec_) ? {spec_id: spec_} : {spec: {spec_name: spec_}};
-                let disk_type = values[fieldName.new_spec.disk_type];
-                disk_type = Number.isInteger(disk_type) ? {disk_type_id: disk_type} : {disk_type: {spec_type: disk_type}};
-                let disk_spec = values[fieldName.new_spec.disk_spec];
-                let volume = parseFloat(values[fieldName.new_spec.volume]);
-                spec = Object.assign({disk_spec, volume}, disk_type, spec_);
-                spec = {spec};
-            } else { // use already exist spec
-                spec = {spec_id: spec};
-            }
+
+            let spec_ = values[fieldName.new_spec.spec];
+            spec_ = Number.isInteger(spec_) ? {spec_id: spec_} : {spec: {spec_name: spec_}};
+            let disk_type = values[fieldName.new_spec.disk_type];
+            disk_type = Number.isInteger(disk_type) ? {disk_type_id: disk_type} : {disk_type: {spec_type: disk_type}};
+            let disk_spec = values[fieldName.new_spec.disk_spec];
+            let volume = parseFloat(values[fieldName.new_spec.volume]);
+            let spec = Object.assign({disk_spec, volume}, disk_type, spec_);
+            spec = {spec};
+
             return Object.assign({}, spec, location);
         }, "storage", "D", values, dispatch);
     };

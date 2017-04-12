@@ -3,22 +3,18 @@
  */
 import React from "react";
 import {Field, reduxForm} from "redux-form";
-import {Button, Divider, FormGroup, Segment} from "semantic-ui-react";
+import {Button, FormGroup, Segment} from "semantic-ui-react";
 import {FieldDropDown, FieldLazyInput, InteractiveForm, validateExist} from "./common";
 
 class StorageCreateForm extends React.Component {
     static propTypes = {
         onSubmit: React.PropTypes.func.isRequired,
     };
-    // static defaultProps = {};
-    // static  childContextTypes = {};
-    // static contextTypes = {};
 
     static formName = "storage";
     static fieldNames = {
         manage_num: "manage_num",
         location: "location",
-        spec: "spec",
         new_spec: {
             disk_spec: "disk_spec",
             disk_type: "disk_type",
@@ -29,14 +25,8 @@ class StorageCreateForm extends React.Component {
 
     static validate(values) {
         const errors = {};
-        if (values[StorageCreateForm.fieldNames.spec]) {
-            validateExist(values, errors, StorageCreateForm.fieldNames);
-        } else {
-            validateExist(values, errors, StorageCreateForm.fieldNames.new_spec);
-            if (!values[StorageCreateForm.fieldNames.location]) {
-                errors[StorageCreateForm.fieldNames.location] = "값이 필요 합니다.";
-            }
-        }
+        validateExist(values, errors, StorageCreateForm.fieldNames);
+        validateExist(values, errors, StorageCreateForm.fieldNames.new_spec);
         return errors;
     }
 
@@ -45,7 +35,6 @@ class StorageCreateForm extends React.Component {
         this.state = {
             isFetching: false,
             locations: [],
-            specs: [],
             spec_names: [],
             spec_types: [],
         };
@@ -55,20 +44,11 @@ class StorageCreateForm extends React.Component {
     componentDidMount() {
         this.setState({isFetching: true});
         Promise.all([
-            fetch("/api/storage_spec").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
             fetch("/api/detail_location").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
             fetch("/api/storage_spec_type").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
             fetch("/api/storage_spec_name").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
-        ]).then(([spec, location, spec_type, spec_name]) => {
+        ]).then(([location, spec_type, spec_name]) => {
             this.setState((state, props) => {
-                state.specs = spec.objects.map(item => {
-                    let spec_type = item.disk_type ? item.disk_type.spec_type : 'unknown';
-                    let spec_name = item.spec ? item.spec.spec_name : 'unknown';
-                    return {
-                        text: `[${spec_type}]${spec_name}/${item.disk_spec}`,
-                        value: item.id
-                    };
-                });
                 state.locations = location.objects.map(item => {
                     let location = item.location ? item.location.location : 'unknown';
                     return {
@@ -116,7 +96,7 @@ class StorageCreateForm extends React.Component {
     };
 
     render() {
-        const {manage_num, spec, new_spec, location} = StorageCreateForm.fieldNames;
+        const {manage_num, new_spec, location} = StorageCreateForm.fieldNames;
         return (
             <InteractiveForm reduxFormProps={this.props} loading={this.state.isFetching}>
                 <Segment attached={true}>
@@ -125,11 +105,6 @@ class StorageCreateForm extends React.Component {
                     </FormGroup>
                     <Field name={location} component={FieldDropDown} label="현재 위치" options={this.state.locations}
                            onAddItem={this.handleAddLocation}/>
-                    <Field name={spec} component={FieldDropDown} label="규격" options={this.state.specs}
-                           allowAdditions={false}/>
-                    <Divider/>
-                    <p>원하는 규격이 없을 경우 아래를 채워 새로 만들 수 있습니다.</p>
-                    <p>새 규격을 만들려면, 기존 규격을 선택하지 말아주세요. 선택시 기존 규격을 우선합니다.</p>
                     <FormGroup widths={"equal"}>
                         <Field name={new_spec.disk_spec} component={FieldLazyInput} label="디스크 사양"/>
                         <Field name={new_spec.volume} component={FieldLazyInput} label="할당단위크기 (GB)"/>
