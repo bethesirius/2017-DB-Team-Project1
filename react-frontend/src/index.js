@@ -29,7 +29,6 @@ ReactDOM.render(
     <Provider store={store}>
         <Router history={history}>
             <Route path="/" component={App}>
-                <IndexRedirect to="asset/form"/>
                 <Route path="asset">
                     <IndexRoute component={AssetList}/>
                     <Route path="form" component={AssetForm}>
