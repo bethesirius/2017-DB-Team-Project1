@@ -1,5 +1,5 @@
 # 자산 번호
-from sqlalchemy import Column
+from sqlalchemy import Column, BigInteger
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -22,6 +22,6 @@ class AssetModel(db.Model):
     standard_id = Column(Integer, ForeignKey(StandardModel.id))
     standard = relationship("StandardModel")
     years = Column(Integer)
-    price = Column(Integer)
+    price = Column(BigInteger)
     buy = Column(Integer, ForeignKey(BuyModel.id))
     buy_ = relationship("BuyModel")

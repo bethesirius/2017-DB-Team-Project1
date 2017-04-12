@@ -13,6 +13,9 @@ class ServiceEdit extends React.Component {
     static propTypes = {};
     handleNext = (event) => {
         event.preventDefault();
+        if (this.state.removeLeaveHook) {
+            this.state.removeLeaveHook();
+        }
         browserHistory.push(`/service/form/confirm/${this.props.params.id}`);
     };
     // static defaultProps = {};
@@ -35,8 +38,23 @@ class ServiceEdit extends React.Component {
     }
 
     // getChildContext() {}
-    // componentDidMount(){}
-    // componentWillUnmount(){}
+    componentDidMount() {
+        const {router, route} = this.props;
+        window.onbeforeunload = this.handleLeavePage;
+        this.setState({
+            isFetching: true,
+            removeLeaveHook: router.setRouteLeaveHook(route, this.handleLeavePage),
+        });
+    }
+
+    handleLeavePage = () => {
+        return "입력이 완료 되지 않았습니다!. 계속하시겠습니까?";
+    };
+
+    componentWillUnmount() {
+        window.onbeforeunload = null; // remove listener.
+    }
+
 
     _postDevice(url, onSuccess) {
         return fetch(

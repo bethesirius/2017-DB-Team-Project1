@@ -1,5 +1,6 @@
 import os
 import datetime
+import random
 
 import xlrd as xlrd
 from openpyxl import load_workbook
@@ -64,10 +65,12 @@ def parsing_asset():
 
     sheetCols = 279
     assetRackSheetCols = 24
+    ServiceSheetRows = 41
+
     ncol = sheet.ncols
     nlow = sheet.nrows
     
-    #""" 
+     
     #####################################
     print("-------- "+ASSET_SHEETS[0]+" --------")
     print("Number of col: " + str(ncol))
@@ -202,7 +205,7 @@ def parsing_asset():
     session.commit()
     
     values = set()
-    for row in range(4,39):
+    for row in range(4,ServiceSheetRows):
         val = ServiceSheet.row_values(row)[1]
         values.add(val)
     values.remove('') 
@@ -262,11 +265,15 @@ def parsing_asset():
         location, detail = val.split("-")
         size = 1
         core_num = assetServerSheet.row_values(row)[5]
+        if random.random() > 0.5:
+            on = True
+        else:
+            on = False
 
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
         spec_id = session.query(ServerSpecModel).filter_by(spec=spec_id).first().id
         location_id = session.query(DetailLocationModel).filter_by(detail=detail).first().id
-        newData = ServerModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, size=size, core_num=core_num)
+        newData = ServerModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, size=size, core_num=core_num, on=on)
         session.add(newData)
     session.commit()
 
@@ -277,11 +284,15 @@ def parsing_asset():
         val = assetSwitchSheet.row_values(row)[3]
         location, detail = val.split("-")
         size = 1
+        if random.random() > 0.5:
+            on = True
+        else:
+            on = False
 
         asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
         spec_id = session.query(SwitchSpecModel).filter_by(spec=spec_id).first().id
         location_id = session.query(DetailLocationModel).filter_by(detail=detail).first().id
-        newData = SwitchModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, size=size)
+        newData = SwitchModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, size=size, on=on)
         session.add(newData)
     session.commit()
 
@@ -316,14 +327,14 @@ def parsing_asset():
                 session.commit()
             else: 
                 print(manage_num)
-    #"""
+    
     ServiceList = {}
-    for row in range(51, 64):
+    for row in range(51, 65):
         color = RackSheetOPX.cell(row=row, column=3).fill.start_color.index
         name = RackSheet.row_values(row-1)[2]
         ServiceList[color]=name
 
-    for col in range(0,24):
+    for col in range(0,23):
         col = (col*5)+3
         rackInfo = RackSheet.row_values(4)[col-2]
         detail, manage_num = rackInfo.split(" - ")
@@ -350,7 +361,6 @@ def parsing_asset():
                     break
                 start_index = start_index + 1
             start_index = (-1 * start_index) + 50
-            service_on_off = True
     
             if manage_num[0] == "N":
                 if session.query(DeviceModel).filter_by(manage_num=manage_num).count() == 0:
@@ -358,7 +368,7 @@ def parsing_asset():
                     continue
                 switch_id = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
                 switch_id = session.query(SwitchModel).filter_by(id=switch_id).first().id
-                newData = RackLocationForSwitchModel(start_index=start_index, location_id=location_id, service_id=service_id, service_on_off=service_on_off, switch_id=switch_id)
+                newData = RackLocationForSwitchModel(start_index=start_index, location_id=location_id, service_id=service_id, switch_id=switch_id)
                 session.add(newData)
                 session.commit()
 
@@ -368,14 +378,31 @@ def parsing_asset():
                     continue
                 server_id = session.query(DeviceModel).filter_by(manage_num=manage_num).first().id
                 server_id = session.query(ServerModel).filter_by(id=server_id).first().id
-                newData = RackLocationForServerModel(start_index=start_index, location_id=location_id, service_id=service_id, service_on_off=service_on_off, server_id=server_id)
+                newData = RackLocationForServerModel(start_index=start_index, location_id=location_id, service_id=service_id, server_id=server_id)
                 session.add(newData)
                 session.commit()
  
     
-    
+    for row in range(1,10):
+        asset_id = assetStorageSheet.row_values(row)[0]
+        manage_num = assetStorageSheet.row_values(row)[1]
+        specName = assetStorageSheet.row_values(row)[4]
+        val = assetStorageSheet.row_values(row)[3]
+        location = val.split("-")
+        if random.random() > 0.5:
+            on = True
+        else:
+            on = False
 
-
+        asset_id = session.query(AssetModel).filter_by(asset_num=asset_id).first().id
+        spec_id = session.query(StorageSpecNameModel).filter_by(spec_name=specName).first().id
+        storageSpecs = session.query(StorageSpecModel).filter_by(spec_id=spec_id).all()
+        location_id = session.query(LocationModel).filter_by(location=location[0]).first().id
+        for spec in storageSpecs:
+            sepc_id = spec.id
+            newData = StorageModel(asset_id=asset_id, manage_num=manage_num, spec_id=spec_id, location_id=location_id, on=on)
+            session.add(newData)
+    session.commit()
 
 if __name__ == '__main__':
     parsing_asset()

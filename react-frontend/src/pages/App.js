@@ -38,7 +38,7 @@ class App extends React.Component {
                     <ReactCSSTransitionGroup
                         component="div"
                         className="trans-content"
-                        transitionName="urban-mask-1"
+                        transitionName="example"
                         transitionAppear={true}
                         transitionAppearTimeout={1400}
                         transitionEnterTimeout={1400}
