@@ -19,7 +19,6 @@ class ServiceSummaryTable extends React.Component {
             not: statisticShape,
         })
     };
-    // static defaultProps = {};
     // static  childContextTypes = {};
     // static contextTypes = {};
 
@@ -53,18 +52,18 @@ class ServiceSummaryTable extends React.Component {
                     <Table.Row>
                         <Table.Cell>On Service</Table.Cell>
                         <Table.Cell>{service.core_num}</Table.Cell>
-                        <Table.Cell>{service.san}</Table.Cell>
-                        <Table.Cell>{service.nas}</Table.Cell>
-                        <Table.Cell>{service.total}</Table.Cell>
-                        <Table.Cell>{service.tape}</Table.Cell>
+                        <Table.Cell>{service.san.toFixed(3)}</Table.Cell>
+                        <Table.Cell>{service.nas.toFixed(3)}</Table.Cell>
+                        <Table.Cell>{service.total.toFixed(3)}</Table.Cell>
+                        <Table.Cell>{service.tape.toFixed(3)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Not Service</Table.Cell>
                         <Table.Cell>{not.core_num}</Table.Cell>
-                        <Table.Cell>{not.san}</Table.Cell>
-                        <Table.Cell>{not.nas}</Table.Cell>
-                        <Table.Cell>{not.total}</Table.Cell>
-                        <Table.Cell>{not.tape}</Table.Cell>
+                        <Table.Cell>{not.san.toFixed(3)}</Table.Cell>
+                        <Table.Cell>{not.nas.toFixed(3)}</Table.Cell>
+                        <Table.Cell>{not.total.toFixed(3)}</Table.Cell>
+                        <Table.Cell>{not.tape.toFixed(3)}</Table.Cell>
                     </Table.Row>
                 </Table.Body>
             </Table>

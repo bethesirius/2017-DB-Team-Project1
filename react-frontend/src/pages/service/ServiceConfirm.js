@@ -9,19 +9,16 @@ import TableVariationItem from "../../component/TableVariationItem";
 import ServiceSummaryTable from "../../component/ServiceSummaryTable";
 
 class ServiceConfirm extends React.Component {
-    static propTypes = {};
-
-
-    // static defaultProps = {};
-    // static  childContextTypes = {};
-    // static contextTypes = {};
-
     constructor(props) {
         super(props);
         this.state = {
             isFetching: false,
+            service_name: "",
             isDeleteConfirmOpen: false,
-            service: {service: {}, not: {}}, //todo modify this.
+            service: {
+                service: {core_num: 0, san: 0, nas: 0, total: 0, tape: 0,},
+                not: {core_num: 0, san: 0, nas: 0, total: 0, tape: 0,},
+            },
             server: {list: [],},
             volume: {list: [],},
         };
@@ -30,14 +27,58 @@ class ServiceConfirm extends React.Component {
     // getChildContext() {}
     componentDidMount() {
         this.setState({isFetching: true});
-        fetch("/json/asset.json")
-            .then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
-            .then(() => {
-                this.setState({isFetching: false,});
-            })
-            .catch(err => {
-                this.setState({isFetching: false});
+        const service_name_id = parseInt(this.props.params.id, 10);
+        Promise.all([
+            fetch(`/api/service_name/${service_name_id}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/storage").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/rack_location_for_server").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+            fetch("/api/storage_spec_type").then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다."))),
+        ]).then(([{service_name, service}, storage, server, type]) => {
+            this.setState((state, props) => {
+                let services = service;
+                let use = {core_num: 0, san: 0, nas: 0, total: 0, tape: 0,};
+                let not = {core_num: 0, san: 0, nas: 0, total: 0, tape: 0,};
+                server.objects.forEach((item, index, src) => {
+                    let s_name_id = item.service_name.id;
+                    if (s_name_id === service_name_id) {
+                        state.server.list.push(item.server);
+                        if (item.server.on) {
+                            use.core_num += item.server.core_num;
+                        } else {
+                            not.core_num += item.server.core_num;
+                        }
+                    }
+                });
+                storage.objects.forEach((item, index, src) => {
+                    services.forEach((service, i, src) => {
+                        if (service.storage_spec_id === item.spec_id) {
+                            type.objects.forEach((t) => {
+                                if (item.spec.disk_type_id === t.id) {
+                                    state.volume.list.push(item);
+                                    if (item.on) {
+                                        use[t.spec_type.toLowerCase()] += service.used_size;
+                                    } else {
+                                        not[t.spec_type.toLowerCase()] += service.used_size;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
+                use.total = use.san + use.nas;
+                not.total = not.san + not.nas;
+
+                state.service_name = service_name;
+                state.service.service = use;
+                state.service.not = not;
+                state.isFetching = false;
+                return state;
             });
+
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
     }
 
     // componentWillUnmount(){}
@@ -56,20 +97,29 @@ class ServiceConfirm extends React.Component {
     };
     handleDeleteConfirm = (event) => {
         event.preventDefault();
-        this.setState({isDeleteConfirmOpen: false});
-        // todo do fetch API DELTE.
+        this.setState({isDeleteConfirmOpen: false, isFetching: true});
+        fetch(`/api/service_name/${this.props.params.id}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        }).then(res => {
+            this.setState({isFetching: false});
+            browserHistory.push(`/service/`);
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
     };
 
     render() {
-        const {params: {id},} = this.props;
         return (
             <Dimmer.Dimmable as="div">
                 <Dimmer active={this.state.isFetching}>
                     <Loader size='massive'>Loading</Loader>
                 </Dimmer>
                 <Segment attached={true}>
-                    <TableVariationItem header={id} description={<ServiceSummaryTable data={this.state.service}/>}/>
-                    <Header>서비스:{id}에 등록된 장비 목록</Header>
+                    <TableVariationItem header={this.state.service_name}
+                                        description={<ServiceSummaryTable data={this.state.service}/>}/>
+                    <Header>서비스:{this.state.service_name}에 등록된 장비 목록</Header>
                     <ItemGroup.Server items={this.state.server.list}/>
                     <ItemGroup.Storage items={this.state.volume.list}/>
                     <Confirm

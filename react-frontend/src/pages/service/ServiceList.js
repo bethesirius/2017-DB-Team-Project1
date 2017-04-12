@@ -73,6 +73,7 @@ class ServiceList extends React.Component {
                 use.total = use.san + use.nas;
                 not.total = not.san + not.nas;
                 return {
+                    id: item.id,
                     service_name,
                     service: use,
                     not,
