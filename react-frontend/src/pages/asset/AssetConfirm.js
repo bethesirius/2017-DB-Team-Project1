@@ -86,7 +86,7 @@ class AssetConfirm extends React.Component {
             headers: {"Content-Type": "application/json"}
         }).then(res => {
             this.setState({isFetching: false});
-            browserHistory.push(`/asset/`);
+            browserHistory.push(`/asset`);
         }).catch(err => {
             alert(err.message);
             this.setState({isFetching: false});

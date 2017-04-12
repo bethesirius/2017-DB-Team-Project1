@@ -103,7 +103,7 @@ class ServiceConfirm extends React.Component {
             headers: {"Content-Type": "application/json"}
         }).then(res => {
             this.setState({isFetching: false});
-            browserHistory.push(`/service/`);
+            browserHistory.push(`/service`);
         }).catch(err => {
             alert(err.message);
             this.setState({isFetching: false});
