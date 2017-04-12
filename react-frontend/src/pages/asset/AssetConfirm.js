@@ -80,8 +80,17 @@ class AssetConfirm extends React.Component {
     };
     handleDeleteConfirm = (event) => {
         event.preventDefault();
-        this.setState({isDeleteConfirmOpen: false});
-        // todo do fetch API DELTE.
+        this.setState({isDeleteConfirmOpen: false, isFetching: true});
+        fetch(`/api/asset/${this.props.params.id}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        }).then(res => {
+            this.setState({isFetching: false});
+            browserHistory.push(`/asset/`);
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
+        });
     };
 
     handleDeviceDelete = (type, e, {value}) => {
