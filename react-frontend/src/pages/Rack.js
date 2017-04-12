@@ -25,9 +25,10 @@ class Rack extends React.Component {
         var reqHeaders= new Headers();
         reqHeaders.append('Content-Type', 'application/json');
 
-        (() => fetch('/cheat/rack_info', reqHeaders)
-            .then((r) => r.json())
-            .then((r) => {
+        (() => Promise.all([
+            fetch('/cheat/rack_info', reqHeaders).then((r) => r.json()),
+            fetch('/api/rack', reqHeaders).then((r) => r.json())])
+            .then(([r, r2]) => {
                 let result= r.server.concat(r['switch']);
                 let rack= Array.from( new Set(result.map( (obj) => obj[0] ))).map( (rack_num) => {
                     let devices= result.filter( (obj) => obj[0]=== rack_num)
@@ -47,6 +48,18 @@ class Rack extends React.Component {
                         mounted: mounted_devices,
                     }
                 });
+
+                let zero_rack_num= r2.objects.map( (rack) => rack.manage_num ).filter( (rack_num) => Array.from( new Set(result.map( (obj) => obj[0] ))).indexOf(rack_num)==-1);
+                let zero_racks=r2.objects.filter((obj) => zero_rack_num.indexOf(obj.manage_num)>-1);
+                rack= rack.concat(zero_racks.map((zero_rack) => {return {
+                    assetId: zero_rack.manage_num,
+                    size: zero_rack.rack_size,
+                    servers: 0,
+                    networks: 0,
+                    emptys: zero_rack.rack_size,
+                    mounted: [],
+                }})).sort( (a,b) => a.assetId.localeCompare(b.assetId));
+
                 this.setState({
                     rack:rack,
                     isFetching:false,
