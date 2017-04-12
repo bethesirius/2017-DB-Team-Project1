@@ -20,6 +20,9 @@ class AssetEdit extends React.Component {
     };
     handleNext = (event) => {
         event.preventDefault();
+        if (this.state.removeLeaveHook) {
+            this.state.removeLeaveHook();
+        }
         browserHistory.push(`/asset/form/confirm/${this.props.params.id}`);
     };
 
@@ -47,7 +50,12 @@ class AssetEdit extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({isFetching: true,});
+        const {router, route} = this.props;
+        window.onbeforeunload = this.handleLeavePage;
+        this.setState({
+            isFetching: true,
+            removeLeaveHook: router.setRouteLeaveHook(route, this.handleLeavePage),
+        });
         fetch(`/api/asset/${this.props.params.id}`).then(res => res.ok ? res.json() : Promise.reject(new Error("서버에서 요청을 거절 했습니다.")))
             .then(message => {
                 this.setState({
@@ -58,6 +66,14 @@ class AssetEdit extends React.Component {
             alert(err.message);
             this.setState({isFetching: false});
         });
+    }
+
+    handleLeavePage = () => {
+        return "입력이 완료 되지 않았습니다!. 계속하시겠습니까?";
+    };
+
+    componentWillUnmount() {
+        window.onbeforeunload = null; // remove listener.
     }
 
     _handleDeviceSubmit = (fieldName, path, metaBody, listName, manageLabel, values, dispatch) => {
