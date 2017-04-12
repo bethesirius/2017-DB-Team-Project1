@@ -3,6 +3,7 @@ import { Header, Confirm, Icon, Dropdown, Modal, Input } from 'semantic-ui-react
 class MountAsset extends React.Component {
     static propTypes = {
         assetId: React.PropTypes.string,
+        summary: React.PropTypes.any,
     }
 
     constructor(props) {
@@ -46,31 +47,19 @@ class MountAsset extends React.Component {
             IP: '',
         });
     }
-    getUnmountedAssets(){//TODO
+    getUnmountedAssets(){
         var reqHeaders= new Headers();
         reqHeaders.append('Content-Type', 'application/json');
 
         (() => fetch('/api/rack_location_for_switch', reqHeaders)
             .then((r) => r.json())
-            .then((r) => r.objects.map( (obj) => obj.device_info_id ))
+            .then((r) => r.objects.map( (obj) => obj['switch'].id))
             .then((r) => {
                 let filters={
                     filters:[{
-                       name:"switch_id",
+                       name:"id",
                        op:"not_in",
                        val:r,
-                    }]
-                }
-                return fetch('/api/device_info_for_switch?q='+JSON.stringify(filters), reqHeaders);
-            })
-            .then((r) => r.json())
-            .then((r) => r.objects.map( (obj) => obj.switch_id ))
-            .then((r) => {
-                let filters={
-                    filters:[{
-                        name:"id",
-                        op:"in",
-                        val:r,
                     }]
                 }
                 return fetch('/api/switch?q='+JSON.stringify(filters), reqHeaders);
@@ -79,9 +68,9 @@ class MountAsset extends React.Component {
             .then((r) => {
                 this.setState({
                     unmounted_switches: r.objects.map( (obj) => { return {
-                        key: obj.manage_num,
-                        value: obj.manage_num,
-                        text: obj.manage_num,
+                        key: obj.device.manage_num,
+                        value: obj.device.manage_num,
+                        text: obj.device.manage_num,
                         asset_size: obj.size,
                     }})
                 })
@@ -90,25 +79,13 @@ class MountAsset extends React.Component {
 
         (() => fetch('/api/rack_location_for_server', reqHeaders)
             .then((r) => r.json())
-            .then((r) => r.objects.map( (obj) => obj.device_info_id ))
+            .then((r) => r.objects.map( (obj) => obj.server.id ))
             .then((r) => {
                 let filters={
                     filters:[{
-                       name:"server_id",
+                       name:"id",
                        op:"not_in",
                        val:r,
-                    }]
-                }
-                return fetch('/api/device_info_for_server?q='+JSON.stringify(filters), reqHeaders);
-            })
-            .then((r) => r.json())
-            .then((r) => r.objects.map( (obj) => obj.server_id ))
-            .then((r) => {
-                let filters={
-                    filters:[{
-                        name:"id",
-                        op:"in",
-                        val:r,
                     }]
                 }
                 return fetch('/api/server?q='+JSON.stringify(filters), reqHeaders);
@@ -117,9 +94,9 @@ class MountAsset extends React.Component {
             .then((r) => {
                 this.setState({
                     unmounted_servers: r.objects.map( (obj) => { return {
-                        key: obj.manage_num,
-                        value: obj.manage_num,
-                        text: obj.manage_num,
+                        key: obj.device.manage_num,
+                        value: obj.device.manage_num,
+                        text: obj.device.manage_num,
                         asset_size: obj.size,
                     }})
                 })
@@ -127,21 +104,20 @@ class MountAsset extends React.Component {
         )();
     }
 
-    getEmptyLv() {//TODO
-        return [
-            {key: 'lv1', value: 1, text: 1},
-            {key: 'lv2', value: 2, text: 2},
-            {key: 'lv3', value: 3, text: 3},
-            {key: 'lv4', value: 4, text: 4},
-            {key: 'lv7', value: 7, text: 7},
-            {key: 'lv8', value: 8, text: 8},
-        ]
+    getEmptyLv() {
+        return this.props.summary.mounted.map( (device) => device.mount_lv ).map( (lv) => {
+            return {
+                key: 'lv'+lv,
+                value: lv,
+                test: lv,
+            }
+        }).sort( (a, b) => a.value-b.value );
     }
     handleAssetSelect(ev, data){
         const {unmounted_switches, unmounted_servers, empty_lv}= this.state;
         const unmounted_assets= unmounted_switches.concat(unmounted_servers);
         const selected_asset= unmounted_assets.find( (asset) => asset.key===data.value );
-        const candidate_lv= empty_lv.map( (lv) => lv.value ).sort();
+        const candidate_lv= empty_lv.map( (lv) => lv.value );
         var valid_lv= [];
         candidate_lv.forEach( (e) => {
             var cur_lv= e;
