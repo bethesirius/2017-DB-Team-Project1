@@ -38,7 +38,7 @@ class App extends React.Component {
                     <ReactCSSTransitionGroup
                         component="div"
                         className="trans-content"
-                        transitionName="example"
+                        transitionName="slide-bottom"  
                         transitionAppear={true}
                         transitionAppearTimeout={1400}
                         transitionEnterTimeout={1400}
