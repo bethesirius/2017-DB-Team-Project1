@@ -28,7 +28,7 @@ class App extends React.Component {
                         <LinkMenuItem name='server' to="/server" pathname={pathname}/>
                         <LinkMenuItem name='storage' to="/storage" pathname={pathname}/>
                         <Menu.Menu position='right'>
-                            <LinkMenuItem name='aboutUs' to="/bar" pathname={pathname}/>
+                            <LinkMenuItem name='aboutUs' to="/about" pathname={pathname}/>
                         </Menu.Menu>
                     </Container>
                 </Menu>

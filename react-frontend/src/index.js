@@ -17,6 +17,7 @@ import Rack from "./pages/Rack";
 import {ServiceConfirm, ServiceCreate, ServiceEdit, ServiceForm, ServiceList} from "./pages/service";
 import {AssetConfirm, AssetCreate, AssetEdit, AssetEditRack, AssetForm, AssetList} from "./pages/asset";
 import NotFound from "./pages/NotFound";
+import {ServiceSelectStorage} from "./pages/service/index";
 
 const store = createStore(reducers, composeWithDevTools(
     // other store enhancers if any
@@ -29,6 +30,7 @@ ReactDOM.render(
     <Provider store={store}>
         <Router history={history}>
             <Route path="/" component={App}>
+                <IndexRoute component={NotFound}/>
                 <Route path="asset">
                     <IndexRoute component={AssetList}/>
                     <Route path="form" component={AssetForm}>
@@ -45,6 +47,7 @@ ReactDOM.render(
                     <Route path="form" component={ServiceForm}>
                         <IndexRedirect to="create"/>
                         <Route path="create" component={ServiceCreate}/>
+                        <Route path="storage/:id" component={ServiceSelectStorage}/>
                         <Route path="edit/:id" component={ServiceEdit}/>
                         <Route path="confirm/:id" component={ServiceConfirm}/>
                     </Route>
