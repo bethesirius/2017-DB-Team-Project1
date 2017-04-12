@@ -57,7 +57,11 @@ class StorageSelectForm extends React.Component {
                     };
                 });
                 state.isFetching = false;
+                return state;
             });
+        }).catch(err => {
+            alert(err.message);
+            this.setState({isFetching: false});
         });
     }
 
@@ -65,7 +69,7 @@ class StorageSelectForm extends React.Component {
     render() {
         const {storage_spec_id, used_size, usage} = StorageSelectForm.fieldNames;
         return (
-            <InteractiveForm reduxFormProps={this.props}>
+            <InteractiveForm reduxFormProps={this.props} loading={this.state.isFetching}>
                 <Segment attached={true}>
                     <Field name={storage_spec_id} component={FieldDropDown} label="스토리지 선택" options={this.state.specs}/>
                     <FormGroup widths={"equal"}>

@@ -8,7 +8,7 @@ import {Link} from "react-router";
 const stepPaths = [
     "/service/form/create",
     "/service/form/storage",
-    "/service/form/edit",
+    "/service/form/server",
     "/service/form/confirm",
 ];
 
@@ -50,7 +50,7 @@ class ServiceForm extends React.Component {
                 <Step.Group fluid={true} ordered={true}>
                     <LinkStep to={stepPaths[0]} pathname={pathname} title="서비스 선택/생성"/>
                     <LinkStep to={stepPaths[1]} pathname={pathname} title="스토리지 선택"/>
-                    <LinkStep to={stepPaths[2]} pathname={pathname} title="장비 등록"/>
+                    <LinkStep to={stepPaths[2]} pathname={pathname} title="서버 선택"/>
                     <LinkStep to={stepPaths[3]} pathname={pathname} title="결과 확인"/>
                 </Step.Group>
                 {children}
