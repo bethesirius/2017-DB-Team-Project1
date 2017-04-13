@@ -19,5 +19,6 @@ class StorageSpecModel(db.Model):
     disk_spec = Column(String(100))
     disk_type_id = Column(Integer, ForeignKey(StorageSpecTypeModel.id))
     disk_type = relationship('StorageSpecTypeModel')
-    unit_size = Column(Float)
     volume = Column(Float)
+    # unit_size = Column(Float)
+
