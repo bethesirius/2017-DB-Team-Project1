@@ -1,3 +1,5 @@
+from flask import render_template
+
 from app import manager, app
 from app.table_model.device.device_model import DeviceModel
 from app.table_model.device.switch_model import SwitchModel
@@ -53,9 +55,10 @@ manager.create_api(RackLocationModel, methods=METHODS, results_per_page=1000, ma
 manager.create_api(ServiceModel, methods=METHODS, results_per_page=1000, max_results_per_page=1000)
 manager.create_api(ServiceNameModel, methods=METHODS, results_per_page=1000, max_results_per_page=1000)
 
-# @app.route('/')
-# def hello_world():
-#     return 'Hello World!'
+
+@app.route('/temp')
+def hello_world():
+    return render_template("index.html")
 
 from app.orm.session import engine
 @app.route('/cheat/rack_info')
