@@ -56,7 +56,7 @@ manager.create_api(ServiceModel, methods=METHODS, results_per_page=1000, max_res
 manager.create_api(ServiceNameModel, methods=METHODS, results_per_page=1000, max_results_per_page=1000)
 
 
-@app.route('/temp')
+@app.route('/temp', methods=['GET'])
 def hello_world():
     return render_template("index.html")
 
